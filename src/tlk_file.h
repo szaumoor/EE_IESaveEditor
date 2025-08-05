@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <optional>
+#include "xref.h"
 
 using std::optional;
 
@@ -13,11 +14,11 @@ namespace
     #pragma pack(push, 1)
     struct TlkFileHeader
     {
-        char signature[4];
-        char version[4];
+        CharArray<4> signature; // "TLK "
+        CharArray<4> version;   // "V1.0"
         uint16_t language_id;
-        int32_t entry_count;
-        int32_t offset_to_str_data;
+        uint32_t entry_count;
+        uint32_t offset_to_str_data;
     };
     #pragma pack(pop)
 
@@ -25,7 +26,7 @@ namespace
     struct TlkFileEntry
     {
         uint16_t entry_flags;
-        char resref[8];
+        CharArray<8> resref;
         uint32_t volume;
         uint32_t pitch;
         uint32_t offset_to_string;
@@ -51,7 +52,7 @@ class TlkFile
 public:
     explicit TlkFile(const char* path) noexcept;
     explicit operator bool() const noexcept { return state == TlkFileState::ReadableAndValid; }
-    optional<std::string> at_index( int32_t index ) const;
+    optional<std::string> at_index( uint32_t index ) const;
     TlkFileState get_state() const noexcept { return state; }
 };
 
