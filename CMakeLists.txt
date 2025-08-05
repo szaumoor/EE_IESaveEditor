@@ -1,0 +1,57 @@
+﻿cmake_minimum_required (VERSION 3.8)
+
+if (POLICY CMP0141)
+  cmake_policy(SET CMP0141 NEW)
+  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+endif()
+
+project ("EESaveEditorBackend")
+
+enable_testing()
+
+file(GLOB CHOC_SRC
+    "src/choc/containers/*.h"
+    "src/choc/math/*.h"
+    "src/choc/platform/*.h"
+    "src/choc/text/*.h"
+    "src/choc/threading/*.h"
+    "src/choc/memory/*.h"
+)
+
+add_executable (EESaveEditorBackend
+	"src/offsets.h"
+    "src/biff_files.cpp"
+    "src/tlk_file.h"
+    "src/tlk_file.cpp"
+    ${CHOC_SRC}
+   "src/gam_file.h"
+   "src/gam_file.cpp"
+ "src/exceptions.h")
+
+ add_executable(tlk_file_test
+    tests/tlk_file_tests.cpp
+    src/tlk_file.cpp
+    src/tlk_file.h
+)
+
+ target_link_libraries(tlk_file_test
+    PRIVATE
+    GTest::gtest_main
+)
+
+include(GoogleTest)
+gtest_discover_tests(tlk_file_test)
+
+if (CMAKE_VERSION VERSION_GREATER 3.12)
+  set_property(TARGET EESaveEditorBackend PROPERTY CXX_STANDARD 23)
+endif()
+
+include(FetchContent)
+
+FetchContent_Declare(
+  googletest
+  URL https://github.com/google/googletest/archive/refs/heads/main.zip
+)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
