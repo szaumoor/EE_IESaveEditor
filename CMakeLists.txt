@@ -26,7 +26,7 @@ add_executable (EESaveEditorBackend
     ${CHOC_SRC}
    "src/gam_file.h"
    "src/gam_file.cpp"
- "src/exceptions.h")
+ "src/exceptions.h" "src/cre_file.h" "src/xref.h")
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp

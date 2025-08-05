@@ -7,7 +7,7 @@
 #include <iterator>
 #include "exceptions.h"
 
-TlkFile::TlkFile( const char* path )
+TlkFile::TlkFile( const char* path ) noexcept
     : header( {} )
 {
     std::ifstream tlk( path, std::ios::binary );
@@ -15,8 +15,8 @@ TlkFile::TlkFile( const char* path )
     {
         state = TlkFileState::Readable;
         tlk.read( reinterpret_cast<char*>(&header), sizeof( TlkFileHeader ) );
-        bool valid_signature = std::string( header.signature, 4 ) == "TLK ";
-        bool valid_version = std::string( header.version, 4 ) == "V1  ";
+        const bool valid_signature = header.signature.to_string() == "TLK ";
+        const bool valid_version = header.version.to_string() == "V1  ";
 
         if ( valid_signature && valid_version )
             state = TlkFileState::ReadableAndValid;
@@ -49,13 +49,13 @@ TlkFile::TlkFile( const char* path )
 
 }
 
-optional<std::string> TlkFile::at_index(const int32_t index) const
+optional<std::string> TlkFile::at_index(const uint32_t index) const
 {
     if (state != TlkFileState::ReadableAndValid)
         throw InvalidStateOperationError( "TlkFile is not readable and valid." );
 
-    const auto length = static_cast<int32_t>(cached_strings.size());
-    if (index < 0 || index >= length) {
+    const auto length = static_cast<uint32_t>(cached_strings.size());
+    if (index >= length) {
         return std::nullopt;
     }
 

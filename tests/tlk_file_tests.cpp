@@ -1,11 +1,10 @@
 #include <gtest/gtest.h>
 #include "../src/tlk_file.h"
-#include <stdexcept>
 #include <fstream>
 #include <filesystem>
 #include <optional>
-#include "../src/choc/text/choc_StringUtilities.h"
 #include <iostream>
+#include "../src/xref.h"
 
 TEST( TlkFileTest, TlkIsUnreadableTest ) {
     EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() ==
@@ -33,8 +32,8 @@ TEST( TlkFileTest, TlkIsMalformedSignature ) {
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne ) {
     TlkFile tlk( "dialog.tlk" );
-    EXPECT_TRUE( tlk.get_state() == TlkFileState::ReadableAndValid);
-    auto result = tlk.at_index( 1 );
+    EXPECT_EQ( tlk.get_state(), TlkFileState::ReadableAndValid);
+    const auto result = tlk.at_index( 1 );
     EXPECT_TRUE( result.has_value() );
     EXPECT_TRUE( *result == "No, I'm sorry, none of them sound familiar." );
 }
