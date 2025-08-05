@@ -19,7 +19,7 @@ file(GLOB CHOC_SRC
 )
 
 add_executable (EESaveEditorBackend
-	"src/offsets.h"
+	
     "src/biff_files.cpp"
     "src/tlk_file.h"
     "src/tlk_file.cpp"
