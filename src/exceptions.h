@@ -11,5 +11,4 @@ public:
         : std::logic_error( what_arg ) {}
 };
 
-
 #endif

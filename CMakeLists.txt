@@ -18,15 +18,17 @@ file(GLOB CHOC_SRC
     "src/choc/memory/*.h"
 )
 
-add_executable (EESaveEditorBackend
-	
+add_library (EESaveEditorBackend
     "src/biff_files.cpp"
     "src/tlk_file.h"
     "src/tlk_file.cpp"
     ${CHOC_SRC}
    "src/gam_file.h"
    "src/gam_file.cpp"
- "src/exceptions.h" "src/cre_file.h" "src/xref.h")
+   "src/exceptions.h"
+   "src/cre_file.h"
+   "src/xref.h"
+)
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp

@@ -16,11 +16,7 @@ namespace
         CharArray<4> version;              // 0x0004
         uint32_t game_time;                // 0x0008
         uint16_t selected_formation;       // 0x000C
-        uint16_t formation_1;              // 0x000E
-        uint16_t formation_2;              // 0x0010
-        uint16_t formation_3;              // 0x0012
-        uint16_t formation_4;              // 0x0014
-        uint16_t formation_5;              // 0x0016
+        uint16_t formations[5];            // 0x000E - 0x0016
         uint32_t party_gold;               // 0x0018
         int16_t active_area_player_id;     // 0x001C
         uint16_t weather_bitfield;         // 0x001E
@@ -32,12 +28,12 @@ namespace
         uint32_t npc_nonparty_count;       // 0x0034
         uint32_t global_vars_offset;       // 0x0038
         uint32_t global_vars_count;        // 0x003C
-        CharArray<8> main_area;            // 0x0040
+        Resref world_area;                 // 0x0040
         uint32_t familiar_extra_offset;    // 0x0048
         uint32_t journal_count;            // 0x004C
         uint32_t journal_offset;           // 0x0050
         uint32_t party_reputation;         // 0x0054
-        CharArray<8> current_area;         // 0x0058
+        Resref master_area;                // 0x0058
         uint32_t gui_flags;                // 0x0060
         uint32_t loading_progress;         // 0x0064
         uint32_t familiar_info_offset;     // 0x0068
@@ -47,8 +43,8 @@ namespace
         uint32_t pocket_locs_offset;       // 0x0078
         uint32_t pocket_locs_count;        // 0x007C
         uint32_t zoom_level;               // 0x0080
-        CharArray<8> rnd_encounter_area;   // 0x0084
-        CharArray<8> current_campaign;     // 0x008C
+        Resref rnd_encounter_area;         // 0x0084
+        Resref current_campaign;           // 0x008C
         uint32_t familiar_owner;           // 0x0094
         CharArray<20> rnd_encounter_entry; // 0x0098
     };
@@ -57,39 +53,27 @@ namespace
     #pragma pack(push, 1)
     struct GamCharacterData
     {
-        uint16_t character_selection;
-        uint16_t party_order;
-        uint32_t cre_offset;
-        uint32_t cre_size;
-        CharArray<8> character_name;
-        uint32_t orientation;
-        CharArray<8> current_area;
-        uint16_t x_coord;
-        uint16_t y_coord;
-        uint16_t viewing_rect_x;
-        uint16_t viewing_rect_y;
-        uint16_t modal_action;
-        uint16_t happiness;
-        uint32_t interacted_npc_count[24];
-        uint16_t quick_weapon_slot_1;
-        uint16_t quick_weapon_slot_2;
-        uint16_t quick_weapon_slot_3;
-        uint16_t quick_weapon_slot_4;
-        uint16_t quick_weapon_ability_1;
-        uint16_t quick_weapon_ability_2;
-        uint16_t quick_weapon_ability_3;
-        uint16_t quick_weapon_ability_4;
-        CharArray<8> quick_spell_resource_1;
-        CharArray<8> quick_spell_resource_2;
-        CharArray<8> quick_spell_resource_3;
-        uint16_t quick_item_slot_1;
-        uint16_t quick_item_slot_2;
-        uint16_t quick_item_slot_3;
-        uint16_t quick_item_ability_1;
-        uint16_t quick_item_ability_2;
-        uint16_t quick_item_ability_3;
-        CharArray<32> name;
-        uint32_t talk_count;
+        uint16_t character_selection;            // 0x0000
+        uint16_t party_order;                    // 0x0002
+        uint32_t cre_offset;                     // 0x0004
+        uint32_t cre_size;                       // 0x0008
+        CharArray<8> character_name;             // 0x000C
+        uint32_t orientation;                    // 0x0014
+        Resref current_area;                     // 0x0018
+        uint16_t x_coord;                        // 0x0020
+        uint16_t y_coord;                        // 0x0022
+        uint16_t viewing_rect_x;                 // 0x0024
+        uint16_t viewing_rect_y;                 // 0x0026
+        uint16_t modal_action;                   // 0x0028
+        uint16_t happiness;                      // 0x002A
+        uint32_t unused[25];                     // 0x002C – 0x088
+        uint16_t quick_weapon_slots[4];          // 0x008C - 0x0092
+        uint16_t quick_weapon_abilities[4];      // 0x0094 - 0x009A
+        Resref quick_spell_resources[3];         // 0x009C - 0x00AC
+        uint16_t quick_spell_slots[3];           // 0x00B4 - 0x00B8
+        uint16_t quick_spell_abilities[3];       // 0x00BA - 0x00BE
+        CharArray<32> name;                      // 0x00C0
+        uint32_t talk_count;                     // 0x00E0
         uint8_t character_stats[116];
         uint8_t voice_set[8];
     };
@@ -157,7 +141,7 @@ namespace
     #pragma pack(push, 1)
     struct GamPocketPlaneInfo
     {
-        char area[8];            // 0x0000
+        Resref area;             // 0x0000
         uint16_t x_coord;        // 0x0008
         uint16_t y_coord;        // 0x000A
     };

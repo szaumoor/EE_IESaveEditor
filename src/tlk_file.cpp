@@ -7,6 +7,9 @@
 #include <iterator>
 #include "exceptions.h"
 
+constexpr const char* TLK_FILE_SIGNATURE = "TLK ";
+constexpr const char* TLK_FILE_VERSION = "V1  ";
+
 TlkFile::TlkFile( const char* path ) noexcept
     : header( {} )
 {
@@ -15,8 +18,8 @@ TlkFile::TlkFile( const char* path ) noexcept
     {
         state = TlkFileState::Readable;
         tlk.read( reinterpret_cast<char*>(&header), sizeof( TlkFileHeader ) );
-        const bool valid_signature = header.signature.to_string() == "TLK ";
-        const bool valid_version = header.version.to_string() == "V1  ";
+        const bool valid_signature = header.signature.to_string() == TLK_FILE_SIGNATURE;
+        const bool valid_version = header.version.to_string() == TLK_FILE_VERSION;
 
         if ( valid_signature && valid_version )
             state = TlkFileState::ReadableAndValid;
@@ -55,9 +58,8 @@ optional<std::string> TlkFile::at_index(const uint32_t index) const
         throw InvalidStateOperationError( "TlkFile is not readable and valid." );
 
     const auto length = static_cast<uint32_t>(cached_strings.size());
-    if (index >= length) {
+    if (index >= length)
         return std::nullopt;
-    }
 
     return std::string(cached_strings[index]);
 }
