@@ -15,7 +15,7 @@ namespace
     struct TlkFileHeader
     {
         CharArray<4> signature; // "TLK "
-        CharArray<4> version;   // "V1.0"
+        CharArray<4> version;   // "V1  "
         uint16_t language_id;
         uint32_t entry_count;
         uint32_t offset_to_str_data;

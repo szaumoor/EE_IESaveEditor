@@ -4,7 +4,6 @@
 #include <filesystem>
 #include <optional>
 #include <iostream>
-#include "../src/xref.h"
 
 TEST( TlkFileTest, TlkIsUnreadableTest ) {
     EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() ==

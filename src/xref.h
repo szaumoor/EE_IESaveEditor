@@ -7,7 +7,7 @@
 #pragma pack(push, 1)
 struct Strref
 {
-    int32_t value;
+    uint32_t value;
 };
 #pragma pack(pop)
 
@@ -19,6 +19,17 @@ struct CharArray
     std::string to_string() const
     {
         return std::string(value, Length);
+    }
+};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+struct Resref
+{
+    CharArray<8> value;
+    std::string to_string() const
+    {
+        return value.to_string();
     }
 };
 #pragma pack(pop)
