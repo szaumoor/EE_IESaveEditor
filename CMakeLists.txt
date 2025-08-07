@@ -19,7 +19,7 @@ file(GLOB CHOC_SRC
 )
 
 add_library (EESaveEditorBackend
-    "src/biff_files.cpp"
+    "src/biff_files.h"
     "src/tlk_file.h"
     "src/tlk_file.cpp"
     ${CHOC_SRC}

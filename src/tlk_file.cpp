@@ -1,13 +1,15 @@
-#include "tlk_file.h"
-#include <string>
-#include <optional>
-#include <fstream>
-#include <vector>
-#include <iterator>
+#include "aliases.h"
 #include "exceptions.h"
+#include "tlk_file.h"
+
+#include <fstream>
+#include <iterator>
+#include <optional>
+#include <string>
+#include <vector>
 
 constexpr const char* TLK_FILE_SIGNATURE = "TLK ";
-constexpr const char* TLK_FILE_VERSION = "V1  ";
+constexpr const char* TLK_FILE_VERSION   = "V1  ";
 
 TlkFile::TlkFile( const char* path ) noexcept
     : header( {} )
@@ -48,7 +50,6 @@ TlkFile::TlkFile( const char* path ) noexcept
             }
         }
     }
-
 }
 
 optional<std::string> TlkFile::at_index(const u32 index) const
