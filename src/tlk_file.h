@@ -2,12 +2,14 @@
 #define TLK_FILE_H
 
 #include "aliases.h"
-#include <vector>
-#include <string>
-#include <optional>
 #include "helper_structs.h"
 
+#include <optional>
+#include <string>
+#include <vector>
+
 using std::optional;
+using std::vector;
 
 namespace
 {
@@ -46,8 +48,8 @@ enum class TlkFileState
 class TlkFile
 {
     TlkFileHeader header;
-    std::vector<TlkFileEntry> entries;
-    std::vector<std::string> cached_strings;
+    vector<TlkFileEntry> entries;
+    vector<std::string> cached_strings;
     TlkFileState state = TlkFileState::Unreadable;
 public:
     explicit TlkFile(const char* path) noexcept;

@@ -2,8 +2,9 @@
 #define GAM_FILE_H
 
 #include "aliases.h"
+#include "helper_structs.h"
+
 #include <vector>
-#include "xref.h"
 
 using std::vector;
 
@@ -12,29 +13,29 @@ namespace
     #pragma pack(push, 1)
     struct GamHeader
     {
-        CharArray<4> signature;            // 0x0000
-        CharArray<4> version;              // 0x0004
-        u32 game_time;                     // 0x0008
-        u16 selected_formation;           // 0x000C
-        u16 formations[5];                // 0x000E - 0x0016
-        u32 party_gold;                   // 0x0018
-        i16 active_area_player_id;       // 0x001C
-        u16 weather_bitfield;            // 0x001E
-        u32 npc_party_offset;            // 0x0020
-        u32 npc_party_count;             // 0x0024
-        u32 party_inv_offset;            // 0x0028
-        u32 party_inv_count;             // 0x002C
-        u32 npc_nonparty_offset;        // 0x0030
-        u32 npc_nonparty_count;         // 0x0034
+        CharArray<4> signature;        // 0x0000
+        CharArray<4> version;          // 0x0004
+        u32 game_time;                 // 0x0008
+        u16 selected_formation;        // 0x000C
+        u16 formations[5];             // 0x000E - 0x0016
+        u32 party_gold;                // 0x0018
+        i16 active_area_player_id;     // 0x001C
+        u16 weather_bitfield;          // 0x001E
+        u32 npc_party_offset;          // 0x0020
+        u32 npc_party_count;           // 0x0024
+        u32 party_inv_offset;          // 0x0028
+        u32 party_inv_count;           // 0x002C
+        u32 npc_nonparty_offset;       // 0x0030
+        u32 npc_nonparty_count;        // 0x0034
         u32 global_vars_offset;        // 0x0038
         u32 global_vars_count;         // 0x003C
-        Resref world_area;              // 0x0040
+        Resref world_area;             // 0x0040
         u32 familiar_extra_offset;     // 0x0048
         u32 journal_count;             // 0x004C
         u32 journal_offset;            // 0x0050
         u32 party_reputation;          // 0x0054
-        Resref master_area;             // 0x0058
-        u32 gui_flags;                  // 0x0060
+        Resref master_area;            // 0x0058
+        u32 gui_flags;                 // 0x0060
         u32 loading_progress;          // 0x0064
         u32 familiar_info_offset;      // 0x0068
         u32 stored_locs_offset;        // 0x006C
@@ -46,7 +47,7 @@ namespace
         Resref rnd_encounter_area;     // 0x0084
         Resref current_campaign;       // 0x008C
         u32 familiar_owner;            // 0x0094
-        CharArray<20> rnd_encounter_entry; // 0x0098
+        CharArray<32> rnd_encounter_entry; // 0x0098
     };
     #pragma pack(pop)
 

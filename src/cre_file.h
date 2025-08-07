@@ -1,8 +1,15 @@
 #ifndef CRE_FILE_H
 #define CRE_FILE_H
 
-#include "xref.h"
 #include "aliases.h"
+#include "eff_files.h"
+#include "helper_structs.h"
+
+#include <array>
+#include <vector>
+
+using std::vector;
+using std::array;
 
 namespace
 {
@@ -154,6 +161,30 @@ namespace
         u32 memorized;     // 0x0008 bit0: memorized, bit1: disabled
     };
     #pragma pack(pop)
+
+    #pragma pack(push, 1)
+    struct CreInventoryItem
+    {
+        Resref item;          // 0x0000
+        u8 item_expiration_0; // 0x0008
+        u8 item_expiration_1; // 0x0009
+        u16 charges[3];       // 0x000A - 0x000E
+        u32 flags;            // 0x000C
+    };
+    #pragma pack(pop)
 }
+
+struct CreFile
+{
+    CreHeader header;
+
+    vector<CreKnownSpell> known_spells;
+    vector<CreSpellMemorizationInfo> memorization_infos;
+    vector<CreSpellMemorizedSpell> memorized_spells;
+    vector<EmbeddedEffFileV2> effects;
+    vector<CreInventoryItem> items;
+
+    array<u16, 40> item_slots;
+};
 
 #endif
