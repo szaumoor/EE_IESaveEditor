@@ -23,9 +23,7 @@ struct EffFileV1
     u32 saving_throw_bonus;    // 0x28
     u32 special;               // 0x2C
 };
-#pragma pack(pop)
 
-#pragma pack(push, 1)
 struct EffFileV2Header
 {
     CharArray<4> signature;    // 0x00 "EFF "
@@ -33,7 +31,6 @@ struct EffFileV2Header
 };
 #pragma pack(pop)
 
-#pragma pack(push, 1)
 struct EmbeddedEffFileV2
 {
     EffFileV2Header header;      // 0x00 usually empty strings in embedded effs

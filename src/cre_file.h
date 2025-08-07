@@ -131,18 +131,14 @@ namespace
         u32 effects_count;                 // 0x02c8
         Resref dialog_file;                // 0x02cc
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct CreKnownSpell
     {
         Resref spell;         // 0x0000
         u16 spell_level;      // 0x0008
         u16 spell_type;       // 0x000A
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct CreSpellMemorizationInfo
     {
         u16 spell_level;                 // 0x0000
@@ -152,17 +148,13 @@ namespace
         u32 index;                       // 0x0008
         u32 memorized_count;             // 0x000C
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct CreSpellMemorizedSpell
     {
         Resref spell;      // 0x0000
         u32 memorized;     // 0x0008 bit0: memorized, bit1: disabled
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct CreInventoryItem
     {
         Resref item;          // 0x0000
