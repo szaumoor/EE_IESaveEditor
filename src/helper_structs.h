@@ -1,18 +1,18 @@
 #ifndef XREF_FILE_H
 #define XREF_FILE_H
 
-#include <cstdint>
+#include "aliases.h"
 #include <string>
 
 #pragma pack(push, 1)
 struct Strref
 {
-    uint32_t value;
+    u32 value;
 };
 #pragma pack(pop)
 
 #pragma pack(push, 1)
-template<int Length>
+template<u32 Length>
 struct CharArray
 {
     char value[Length];
