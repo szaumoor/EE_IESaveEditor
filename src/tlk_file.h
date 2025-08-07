@@ -22,9 +22,7 @@ namespace
         u32 entry_count;
         u32 offset_to_str_data;
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct TlkFileEntry
     {
         u16 entry_flags;

@@ -62,9 +62,7 @@ namespace {
         i32 count_of_tileset_entries;
         i32 offset_to_fileset_entries;
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct FilesetEntry
     {
         i32 resource_locator;
@@ -73,9 +71,7 @@ namespace {
         ResourceType resource_type;
         i16 unknown;
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct TilesetEntry
     {
         i32 resource_locator;
