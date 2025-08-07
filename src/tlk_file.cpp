@@ -1,5 +1,4 @@
 #include "tlk_file.h"
-#include <cstdint>
 #include <string>
 #include <optional>
 #include <fstream>
@@ -44,7 +43,7 @@ TlkFile::TlkFile( const char* path ) noexcept
             for ( size_t i = 0; i < entries.size(); ++i )
             {
                 const auto& entry = entries[i];
-                const uint32_t offset = entry.offset_to_string;
+                const u32 offset = entry.offset_to_string;
                 cached_strings[i] = std::string( &string_data[offset], entry.string_length );
             }
         }
@@ -52,12 +51,12 @@ TlkFile::TlkFile( const char* path ) noexcept
 
 }
 
-optional<std::string> TlkFile::at_index(const uint32_t index) const
+optional<std::string> TlkFile::at_index(const u32 index) const
 {
     if (state != TlkFileState::ReadableAndValid)
         throw InvalidStateOperationError( "TlkFile is not readable and valid." );
 
-    const auto length = static_cast<uint32_t>(cached_strings.size());
+    const auto length = static_cast<u32>(cached_strings.size());
     if (index >= length)
         return std::nullopt;
 

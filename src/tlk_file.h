@@ -1,11 +1,11 @@
 #ifndef TLK_FILE_H
 #define TLK_FILE_H
 
-#include <cstdint>
+#include "aliases.h"
 #include <vector>
 #include <string>
 #include <optional>
-#include "xref.h"
+#include "helper_structs.h"
 
 using std::optional;
 
@@ -16,21 +16,21 @@ namespace
     {
         CharArray<4> signature; // "TLK "
         CharArray<4> version;   // "V1  "
-        uint16_t language_id;
-        uint32_t entry_count;
-        uint32_t offset_to_str_data;
+        u16 language_id;
+        u32 entry_count;
+        u32 offset_to_str_data;
     };
     #pragma pack(pop)
 
     #pragma pack(push, 1)
     struct TlkFileEntry
     {
-        uint16_t entry_flags;
+        u16 entry_flags;
         CharArray<8> resref;
-        uint32_t volume;
-        uint32_t pitch;
-        uint32_t offset_to_string;
-        uint32_t string_length;
+        u32 volume;
+        u32 pitch;
+        u32 offset_to_string;
+        u32 string_length;
     };
     #pragma pack(pop)
 }
@@ -52,7 +52,7 @@ class TlkFile
 public:
     explicit TlkFile(const char* path) noexcept;
     explicit operator bool() const noexcept { return state == TlkFileState::ReadableAndValid; }
-    optional<std::string> at_index( uint32_t index ) const;
+    optional<std::string> at_index( u32 index ) const;
     TlkFileState get_state() const noexcept { return state; }
 };
 
