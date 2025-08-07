@@ -49,9 +49,7 @@ namespace
         u32 familiar_owner;            // 0x0094
         CharArray<32> rnd_encounter_entry; // 0x0098
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct GamCharacterData
     {
         u16 character_selection;            // 0x0000
@@ -78,9 +76,7 @@ namespace
         u8 character_stats[116];
         u8 voice_set[8];
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct GamGlobalVariables
     {
         CharArray<32> variable_name;     // 0x0000
@@ -91,9 +87,7 @@ namespace
         double double_value;       // 0x002C
         CharArray<32> script_name_value; // 0x0034
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct GamJournalEntry
     {
         Strref journal_text;             // 0x0000
@@ -103,9 +97,7 @@ namespace
         u8 journal_section_flags;   // 0x000A
         u8 location_flag;           // 0x000B
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct GamFamiliarInfo
     {
         char lawful_good_familiar[8];       // 0x0000
@@ -128,18 +120,14 @@ namespace
         u32 le_familiar_count[9];      // 0x0184 – 0x0204
         u32 ce_familiar_count[9];      // 0x022C – 0x0248
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct GamStoredLocationsInfo
     {
         Resref area;        // 0x0000
         u16 x_coord;        // 0x0008
         u16 y_coord;        // 0x000A
     };
-    #pragma pack(pop)
 
-    #pragma pack(push, 1)
     struct GamPocketPlaneInfo
     {
         Resref area;        // 0x0000

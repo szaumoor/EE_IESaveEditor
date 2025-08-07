@@ -9,9 +9,7 @@ struct Strref
 {
     u32 value;
 };
-#pragma pack(pop)
 
-#pragma pack(push, 1)
 template<u32 Length>
 struct CharArray
 {
@@ -21,9 +19,7 @@ struct CharArray
         return std::string(value, Length);
     }
 };
-#pragma pack(pop)
 
-#pragma pack(push, 1)
 struct Resref
 {
     CharArray<8> value;
