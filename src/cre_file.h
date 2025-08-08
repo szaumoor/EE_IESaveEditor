@@ -168,14 +168,13 @@ namespace
 
 struct CreFile
 {
+private:
     CreHeader header;
-
     vector<CreKnownSpell> known_spells;
     vector<CreSpellMemorizationInfo> memorization_infos;
     vector<CreSpellMemorizedSpell> memorized_spells;
     vector<EmbeddedEffFileV2> effects;
     vector<CreInventoryItem> items;
-
     array<u16, 40> item_slots;
 };
 

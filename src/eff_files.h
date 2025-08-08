@@ -29,7 +29,6 @@ struct EffFileV2Header
     CharArray<4> signature;    // 0x00 "EFF "
     CharArray<4> version;      // 0x04 "V2.0"
 };
-#pragma pack(pop)
 
 struct EmbeddedEffFileV2
 {

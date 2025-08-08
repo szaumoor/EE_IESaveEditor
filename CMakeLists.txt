@@ -28,7 +28,7 @@ add_library (EESaveEditorBackend
    "src/exceptions.h"
    "src/cre_file.h"
    "src/helper_structs.h"
- "src/eff_files.h" "src/aliases.h")
+ "src/eff_files.h" "src/aliases.h" "src/ie_files.h")
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp

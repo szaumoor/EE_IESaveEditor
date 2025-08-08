@@ -3,6 +3,7 @@
 
 #include "aliases.h"
 #include "helper_structs.h"
+#include "ie_files.h"
 
 #include <optional>
 #include <string>
@@ -10,6 +11,7 @@
 
 using std::optional;
 using std::vector;
+using namespace rp::files;
 
 namespace
 {
@@ -35,25 +37,16 @@ namespace
     #pragma pack(pop)
 }
 
-enum class TlkFileState
+class TlkFile : public IEFile
 {
-    Unreadable,
-    Readable,
-    ReadableButMalformed,
-    ReadableAndValid
-};
-
-class TlkFile
-{
+private:
     TlkFileHeader header;
     vector<TlkFileEntry> entries;
     vector<std::string> cached_strings;
-    TlkFileState state = TlkFileState::Unreadable;
 public:
     explicit TlkFile(const char* path) noexcept;
-    explicit operator bool() const noexcept { return state == TlkFileState::ReadableAndValid; }
     optional<std::string> at_index( u32 index ) const;
-    TlkFileState get_state() const noexcept { return state; }
+    void check_for_malformation() noexcept override;
 };
 
 #endif // TLK_FILE_H
