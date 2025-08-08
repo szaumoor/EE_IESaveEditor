@@ -14,6 +14,74 @@ using std::array;
 namespace
 {
     #pragma pack(push, 1)
+    struct CreArmorClass
+    {
+        i16 ac_natural;      // 0x46
+        i16 ac_effective;    // 0x48
+        i16 ac_crushing;     // 0x4A
+        i16 ac_missile;      // 0x4C
+        i16 ac_piercing;     // 0x4E
+        i16 ac_slashing;     // 0x50
+    };
+
+    struct CreSavingThrows
+    {
+        u8 saving_throw_vs_death;          // 0x54
+        u8 saving_throw_vs_wands;          // 0x55
+        u8 saving_throw_vs_poly;           // 0x56
+        u8 saving_throw_vs_breath;         // 0x57
+        u8 saving_throw_vs_spell;          // 0x58
+    };
+
+    struct CreResistances
+    {
+        u8 resist_fire;                    // 0x59
+        u8 resist_cold;                    // 0x5A
+        u8 resist_electricity;             // 0x5B
+        u8 resist_acid;                    // 0x5C
+        u8 resist_magic;                   // 0x5D
+        u8 resist_magic_fire;              // 0x5E
+        u8 resist_magic_cold;              // 0x5F
+        u8 resist_slashing;                // 0x60
+        u8 resist_crushing;                // 0x61
+        u8 resist_piercing;                // 0x62
+        u8 resist_missile;                 // 0x63
+    };
+
+    struct CreLegacyProficiencies
+    {
+        u8 large_sword_proficiency;        // 0x6E
+        u8 small_sword_proficiency;        // 0x6F
+        u8 bow_proficiency;                // 0x70
+        u8 spear_proficiency;              // 0x71
+        u8 blunt_proficiency;              // 0x72
+        u8 spiked_proficiency;             // 0x73
+        u8 axe_proficiency;                // 0x74
+        u8 missile_proficiency;            // 0x75
+    };
+
+    struct CreColors
+    {
+        u8 metal_colour_index;             // 0x2C
+        u8 minor_colour_index;             // 0x2D
+        u8 major_colour_index;             // 0x2E
+        u8 skin_colour_index;              // 0x2F
+        u8 leather_colour_index;           // 0x30
+        u8 armor_colour_index;             // 0x31
+        u8 hair_colour_index;              // 0x32
+    };
+
+    struct CreStats
+    {
+        u8 strength;                       // 0x238
+        u8 strength_bonus;                 // 0x239
+        u8 intelligence;                   // 0x23A
+        u8 wisdom;                         // 0x23B
+        u8 dexterity;                      // 0x23C
+        u8 constitution;                   // 0x23D
+        u8 charisma;                       // 0x23E
+    };;
+
     struct CreHeader
     {
         CharArray<4> signature;            // 0x0 "CRE "
@@ -28,42 +96,17 @@ namespace
         u16 current_hit_points;            // 0x24
         u16 max_hit_points;                // 0x26
         u32 animation_id;                  // 0x28
-        u8 metal_colour_index;             // 0x2C
-        u8 minor_colour_index;             // 0x2D
-        u8 major_colour_index;             // 0x2E
-        u8 skin_colour_index;              // 0x2F
-        u8 leather_colour_index;           // 0x30
-        u8 armor_colour_index;             // 0x31
-        u8 hair_colour_index;              // 0x32
+        CreColors colors;                  // 0x2C - 0x32
         u8 eff_structure_version;          // 0x33
         Resref small_portrait;             // 0x34
         Resref large_portrait;             // 0x3C
         i8 reputation;                     // 0x44 Minimum value: 0
         u8 hide_in_shadows;                // 0x45
-        i16 ac_natural;                    // 0x46
-        i16 ac_effective;                  // 0x48
-        i16 ac_crushing;                   // 0x4A
-        i16 ac_missile;                    // 0x4C
-        i16 ac_piercing;                   // 0x4E
-        i16 ac_slashing;                   // 0x50
+        CreArmorClass armor_class;         // 0x46 - 0x50
         u8 thac0;                          // 0x52
         u8 apr;                            // 0x53
-        u8 saving_throw_vs_death;          // 0x54
-        u8 saving_throw_vs_wands;          // 0x55
-        u8 saving_throw_vs_poly;           // 0x56
-        u8 saving_throw_vs_breath;         // 0x57
-        u8 saving_throw_vs_spell;          // 0x58
-        u8 resist_fire;                    // 0x59
-        u8 resist_cold;                    // 0x5A
-        u8 resist_electricity;             // 0x5B
-        u8 resist_acid;                    // 0x5C
-        u8 resist_magic;                   // 0x5D
-        u8 resist_magic_fire;              // 0x5E
-        u8 resist_magic_cold;              // 0x5F
-        u8 resist_slashing;                // 0x60
-        u8 resist_crushing;                // 0x61
-        u8 resist_piercing;                // 0x62
-        u8 resist_missile;                 // 0x63
+        CreSavingThrows saving_throws;     // 0x54 - 0x58
+        CreResistances resistances;        // 0x59 - 0x63
         u8 detect_illusion;                // 0x64
         u8 set_traps;                      // 0x65
         u8 lore;                           // 0x66
@@ -74,14 +117,7 @@ namespace
         u8 fatigue;                        // 0x6B
         u8 intoxication;                   // 0x6C
         u8 luck;                           // 0x6D
-        u8 large_sword_proficiency;        // 0x6E
-        u8 small_sword_proficiency;        // 0x6F
-        u8 bow_proficiency;                // 0x70
-        u8 spear_proficiency;              // 0x71
-        u8 blunt_proficiency;              // 0x72
-        u8 spiked_proficiency;             // 0x73
-        u8 axe_proficiency;                // 0x74
-        u8 missile_proficiency;            // 0x75
+        CreLegacyProficiencies profs;      // 0x6E - 0x75
         u8 unused_proficiencies1[5];       // 0x76 - 0x7A
         u8 unused_proficiencies2[7];       // 0x7B - 0x81
         u8 turn_undead_level;              // 0x82
@@ -89,14 +125,8 @@ namespace
         CharArray<32> tracking_target;     // 0x84
         Strref soundset_strrefs[100];      // 0xA4 - 0x230
         u8 class_levels[3];                // 0x234 - 0x236
+        CreStats stats;                    // 0x238 - 0x23E
         u8 sex;                            // 0x237
-        u8 strength;                       // 0x238
-        u8 strength_bonus;                 // 0x239
-        u8 intelligence;                   // 0x23A
-        u8 wisdom;                         // 0x23B
-        u8 dexterity;                      // 0x23C
-        u8 constitution;                   // 0x23D
-        u8 charisma;                       // 0x23E
         u8 morale;                         // 0x23F
         u8 morale_break;                   // 0x240
         u8 racial_enemy;                   // 0x241
@@ -107,14 +137,14 @@ namespace
         Resref script_race;                // 0x0258
         Resref script_general;             // 0x0260
         Resref script_default;             // 0x0268
-        u8 enemy_ally_id;                  // 0x0270
-        u8 general_id;                     // 0x0271
-        u8 race_id;                        // 0x0272
-        u8 class_id;                       // 0x0273
-        u8 specific_id;                    // 0x0274
-        u8 gender_id;                      // 0x0275
+        u8 enemy_ally;                     // 0x0270
+        u8 general;                        // 0x0271
+        u8 race;                           // 0x0272
+        u8 clazz;                          // 0x0273
+        u8 specific;                       // 0x0274
+        u8 gender;                         // 0x0275
         u8 object_ids[5];                  // 0x0276
-        u8 alignment_id;                   // 0x027b
+        u8 alignment;                      // 0x027b
         u16 global_actor_id;               // 0x027c
         u16 local_actor_id;                // 0x027e
         CharArray<32> death_variable;      // 0x0280
