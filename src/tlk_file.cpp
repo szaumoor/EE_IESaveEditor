@@ -1,5 +1,6 @@
 #include "aliases.h"
 #include "exceptions.h"
+#include "ie_files.h"
 #include "tlk_file.h"
 
 #include <fstream>
@@ -12,27 +13,21 @@ constexpr const char* TLK_FILE_SIGNATURE = "TLK ";
 constexpr const char* TLK_FILE_VERSION   = "V1  ";
 
 TlkFile::TlkFile( const char* path ) noexcept
-    : header( {} )
+    : IEFile(path), header({})
 {
     std::ifstream tlk( path, std::ios::binary );
     if (tlk)
     {
-        state = TlkFileState::Readable;
+        state = IEFileState::Readable;
         tlk.read( reinterpret_cast<char*>(&header), sizeof( TlkFileHeader ) );
-        const bool valid_signature = header.signature.to_string() == TLK_FILE_SIGNATURE;
-        const bool valid_version = header.version.to_string() == TLK_FILE_VERSION;
+        check_for_malformation();
 
-        if ( valid_signature && valid_version )
-            state = TlkFileState::ReadableAndValid;
-        else
-            state = TlkFileState::ReadableButMalformed;
-
-        if (state == TlkFileState::ReadableAndValid)
+        if (state == IEFileState::ReadableAndValid)
         {
             entries.resize( header.entry_count );
             cached_strings.resize( header.entry_count );
-            tlk.seekg( sizeof(TlkFileHeader), std::ios::beg);
-            tlk.read( reinterpret_cast<char*>(entries.data()),
+            tlk.seekg( sizeof(TlkFileHeader), std::ios::beg );
+            tlk.read( reinterpret_cast<char*>( entries.data() ),
                 entries.size() * sizeof( TlkFileEntry ) );
 
             tlk.seekg( header.offset_to_str_data, std::ios::beg );
@@ -52,14 +47,22 @@ TlkFile::TlkFile( const char* path ) noexcept
     }
 }
 
-optional<std::string> TlkFile::at_index(const u32 index) const
+optional<std::string> TlkFile::at_index( const u32 index ) const
 {
-    if (state != TlkFileState::ReadableAndValid)
+    if ( state != IEFileState::ReadableAndValid )
         throw InvalidStateOperationError( "TlkFile is not readable and valid." );
 
-    const auto length = static_cast<u32>(cached_strings.size());
-    if (index >= length)
+    if ( index >= cached_strings.size() )
         return std::nullopt;
 
-    return std::string(cached_strings[index]);
+    return std::string( cached_strings[index] );
+}
+
+void TlkFile::check_for_malformation() noexcept
+{
+    const bool valid_signature = header.signature.to_string() == TLK_FILE_SIGNATURE;
+    const bool valid_version   = header.version.to_string()   == TLK_FILE_VERSION;
+    state = ( valid_signature && valid_version )
+            ? IEFileState::ReadableAndValid
+            : IEFileState::ReadableButMalformed;
 }

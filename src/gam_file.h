@@ -3,6 +3,7 @@
 
 #include "aliases.h"
 #include "helper_structs.h"
+#include "ie_files.h"
 
 #include <vector>
 
@@ -20,7 +21,7 @@ namespace
         u16 formations[5];                 // 0x000E - 0x0016
         u32 party_gold;                    // 0x0018
         i16 active_area_player_id;         // 0x001C
-        u16 weather_bitfield;              // 0x001E
+        u16 weather;                       // 0x001E
         u32 npc_party_offset;              // 0x0020
         u32 npc_party_count;               // 0x0024
         u32 party_inv_offset;              // 0x0028
@@ -45,9 +46,29 @@ namespace
         u32 pocket_locs_count;             // 0x007C
         u32 zoom_level;                    // 0x0080
         Resref rnd_encounter_area;         // 0x0084
-        Resref current_campaign;           // 0x008C
-        u32 familiar_owner;                // 0x0094
-        CharArray<32> rnd_encounter_entry; // 0x0098
+        Resref current_worldmap;           // 0x008C
+        CharArray<8> current_campaign;     // 0x0094
+        u32 familiar_owner;                // 0x009C
+        CharArray<32> rnd_encounter_entry; // 0x00A0
+    };
+
+    struct GamCharacterStats
+    {
+        Strref most_powerful_vanquished_name; // 0x0000
+        u32 most_powerful_vanquished_xp;      // 0x0004
+        u32 time_party_ticks;                 // 0x0008
+        u32 time_joined_ticks;                // 0x000C
+        u8 in_party;                          // 0x0010 (0 = not in party, 1 = in party)
+        u16 unused0;                          // 0x0011
+        u8 first_letter_cre_resref;           // 0x0013
+        u32 kills_xp_chapter;                 // 0x0014
+        u32 kills_number_chapter;             // 0x0018
+        u32 kills_xp_total;                   // 0x001C
+        u32 kills_number_total;               // 0x0020
+        Resref fav_spells[4];                 // 0x0024 - 0x003C
+        u16 fav_spells_count[4];              // 0x0044 - 0x004B
+        Resref fav_wpns[4];                   // 0x004C - 0x006B
+        u16 fav_wpns_count[4];                // 0x006C
     };
 
     struct GamCharacterData
@@ -73,19 +94,19 @@ namespace
         u16 quick_spell_abilities[3];       // 0x00BA - 0x00BE
         CharArray<32> name;                 // 0x00C0
         u32 talk_count;                     // 0x00E0
-        u8 character_stats[116];
-        u8 voice_set[8];
+        GamCharacterStats character_stats;  // 0x00E4
+        CharArray<8> voice_set;             // 0x00158
     };
 
     struct GamGlobalVariables
     {
-        CharArray<32> variable_name;     // 0x0000
-        u16 type;                        // 0x0020
-        u16 ref_value;                   // 0x0022
-        u32 dword_value;                 // 0x0024
-        u32 int_value;                   // 0x0028
-        double double_value;             // 0x002C
-        CharArray<32> script_name_value; // 0x0034
+        CharArray<32> variable_name; // 0x0000
+        u16 type;                    // 0x0020 (b0=int,b1=float,b2=script name,b3=resref,b4=strref,b5=dword)
+        u16 unused0;                 // 0x0022
+        u32 unused1;                 // 0x0024
+        u32 int_value;               // 0x0028
+        double unused3;              // 0x002C
+        CharArray<32> unused;        // 0x0034
     };
 
     struct GamJournalEntry
@@ -121,34 +142,28 @@ namespace
         u32 ce_familiar_count[9];           // 0x022C – 0x0248
     };
 
-    struct GamStoredLocationsInfo
+    struct GamLocationInfo
     {
         Resref area;        // 0x0000
-        u16 x_coord;        // 0x0008
-        u16 y_coord;        // 0x000A
-    };
-
-    struct GamPocketPlaneInfo
-    {
-        Resref area;        // 0x0000
-        u16 x_coord;        // 0x0008
-        u16 y_coord;        // 0x000A
+        u16 coords[2];  // 0x0008 - 0x000A
     };
     #pragma pack(pop)
 }
 
-class GamFile
+class GamFile : public rp::files::IEFile
 {
+private:
     GamHeader header;
-
     vector<GamCharacterData> party_members;
     vector<GamCharacterData> non_party_members;
+    vector<GamCharacterStats> character_stats;
     vector<GamGlobalVariables> variables;
     vector<GamJournalEntry> journal_entries;
-    vector<GamFamiliarInfo> familiar_info;
-    vector<GamStoredLocationsInfo> stored_locations;
-    vector<GamPocketPlaneInfo> pocket_plane_info;
-
+    vector<GamLocationInfo> stored_locations;
+    vector<GamLocationInfo> pocket_plane_info;
+    GamFamiliarInfo familiar_info;
+    vector<Resref> familiar_extras;
+public:
     explicit GamFile( const char* path );
 };
 

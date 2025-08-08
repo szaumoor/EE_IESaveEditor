@@ -7,7 +7,7 @@
 
 TEST( TlkFileTest, TlkIsUnreadableTest ) {
     EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() ==
-        TlkFileState::Unreadable);
+        IEFileState::Unreadable);
 }
 
 TEST( TlkFileTest, TlkIsMalformedVersion ) {
@@ -16,7 +16,7 @@ TEST( TlkFileTest, TlkIsMalformedVersion ) {
     ofs.write( "Invl", 4 ); // Invalid version
     ofs.close();
     EXPECT_TRUE( TlkFile( "invalid_signature.tlk" ).get_state() ==
-        TlkFileState::ReadableButMalformed );
+        IEFileState::ReadableButMalformed );
     std::filesystem::remove( "invalid_signature.tlk" );
 }
 
@@ -25,13 +25,13 @@ TEST( TlkFileTest, TlkIsMalformedSignature ) {
     ofs.write( "XXXX", 4 ); // Invalid signature
     ofs.close();
     EXPECT_TRUE( TlkFile( "invalid_signature.tlk" ).get_state() ==
-        TlkFileState::ReadableButMalformed );
+        IEFileState::ReadableButMalformed );
     std::filesystem::remove( "invalid_signature.tlk" );
 }
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne ) {
     TlkFile tlk( "dialog.tlk" );
-    EXPECT_EQ( tlk.get_state(), TlkFileState::ReadableAndValid);
+    EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid);
     const auto result = tlk.at_index( 1 );
     EXPECT_TRUE( result.has_value() );
     EXPECT_TRUE( *result == "No, I'm sorry, none of them sound familiar." );
