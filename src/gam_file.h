@@ -8,6 +8,7 @@
 #include <vector>
 
 using std::vector;
+using rp::files::IEFile;
 
 namespace
 {
@@ -150,7 +151,7 @@ namespace
     #pragma pack(pop)
 }
 
-class GamFile : public rp::files::IEFile
+class GamFile : public IEFile
 {
 private:
     GamHeader header;
@@ -165,6 +166,7 @@ private:
     vector<Resref> familiar_extras;
 public:
     explicit GamFile( const char* path );
+    void check_for_malformation() noexcept override;
 };
 
 #endif // GAM_FILE_H
