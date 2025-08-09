@@ -19,24 +19,38 @@ file(GLOB CHOC_SRC
 )
 
 add_library (EESaveEditorBackend
+    ${CHOC_SRC}
     "src/biff_files.h"
     "src/tlk_file.h"
     "src/tlk_file.cpp"
-    ${CHOC_SRC}
-   "src/gam_file.h"
-   "src/gam_file.cpp"
-   "src/exceptions.h"
-   "src/cre_file.h"
-   "src/helper_structs.h"
- "src/eff_files.h" "src/aliases.h" "src/ie_files.h")
+    "src/gam_file.h"
+    "src/gam_file.cpp"
+    "src/exceptions.h"
+    "src/cre_file.h"
+    "src/helper_structs.h"
+    "src/eff_files.h"
+    "src/aliases.h"
+    "src/ie_files.h"
+)
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp
     src/tlk_file.cpp
     src/tlk_file.h
-)
+ )
+
+  add_executable(gam_file_test
+    tests/gam_file_tests.cpp
+    src/gam_file.cpp
+    src/gam_file.h
+  )
 
  target_link_libraries(tlk_file_test
+    PRIVATE
+    GTest::gtest_main
+)
+
+ target_link_libraries(gam_file_test
     PRIVATE
     GTest::gtest_main
 )
