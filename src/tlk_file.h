@@ -46,6 +46,7 @@ private:
 public:
     explicit TlkFile(const char* path) noexcept;
     optional<std::string> at_index( u32 index ) const;
+    u32 string_count() const noexcept { return cached_strings.size(); }
     void check_for_malformation() noexcept override;
 };
 
