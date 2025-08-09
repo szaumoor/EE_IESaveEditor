@@ -1,5 +1,6 @@
 #include "../src/tlk_file.h"
 #include "../src/ie_files.h"
+#include "../src/exceptions.h"
 
 #include <gtest/gtest.h>
 
@@ -50,4 +51,27 @@ TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
     const auto result = tlk.at_index( 1 );
     EXPECT_TRUE( result.has_value() );
     EXPECT_TRUE( *result == "No, I'm sorry, none of them sound familiar." );
+}
+
+TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes) {
+    TlkFile tlk( "dialog.tlk" );
+    EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid );
+    const auto result1 = tlk.at_index( -1 );
+    const auto result2 = tlk.at_index( tlk.string_count() );
+    EXPECT_TRUE( !result1.has_value() && !result2.has_value() );
+}
+
+TEST( TlkFileTest, TlkThrowsExceptionIfFileIsMalformed ) {
+    ofstream ofs0( "invalid_signature0.tlk", ios::binary );
+    ofs0.write( "XXXX", 4 ); // Invalid signature
+    ofs0.write( "V1  ", 4 ); // Valid version
+    ofs0.close();
+    ofstream ofs1( "invalid_signature1.tlk", ios::binary );
+    ofs1.write( "TLK ", 4 ); // Invalid signature
+    ofs1.write( "Invl", 4 ); // Valid version
+    ofs1.close();
+    const auto tlk0 = TlkFile( "invalid_signature0.tlk");
+    EXPECT_THROW( tlk0.at_index(1), InvalidStateOperationError);
+    const auto tlk1 = TlkFile( "invalid_signature1.tlk");
+    EXPECT_THROW( tlk1.at_index(1), InvalidStateOperationError);
 }

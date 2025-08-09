@@ -37,6 +37,7 @@ add_library (EESaveEditorBackend
     tests/tlk_file_tests.cpp
     src/tlk_file.cpp
     src/tlk_file.h
+    src/exceptions.h
  )
 
   add_executable(gam_file_test
