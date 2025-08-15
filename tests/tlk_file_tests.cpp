@@ -42,6 +42,13 @@ TEST( TlkFileTest, TlkIsMalformedSignature )
 TEST( TlkFileTest, TlkIsReadableAndValid ) {
     TlkFile tlk( "dialog.tlk" );
     EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid );
+    ofstream ofs( "valid_tlk.tlk", ios::binary );
+    ofs.write( "TLK ", 4 ); // Valid signature
+    ofs.write( "V1  ", 4 ); // Valid version
+    ofs.close();
+    EXPECT_TRUE( TlkFile( "valid_tlk.tlk" ).get_state() ==
+        IEFileState::ReadableAndValid );
+    filesystem::remove( "valid_tlk.tlk" );
 }
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
@@ -74,4 +81,6 @@ TEST( TlkFileTest, TlkThrowsExceptionIfFileIsMalformed ) {
     EXPECT_THROW( tlk0.at_index(1), InvalidStateOperationError);
     const auto tlk1 = TlkFile( "invalid_signature1.tlk");
     EXPECT_THROW( tlk1.at_index(1), InvalidStateOperationError);
+    filesystem::remove( "invalid_signature0.tlk" );
+    filesystem::remove( "invalid_signature1.tlk" );
 }

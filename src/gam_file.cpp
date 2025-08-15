@@ -1,6 +1,8 @@
 #include "gam_file.h"
 #include "ie_files.h"
 #include <fstream>
+#include <iostream>
+#include "helper_structs.h"
 
 using rp::files::IEFileState;
 
@@ -19,7 +21,41 @@ GamFile::GamFile( const char* path )
 
         if ( state == IEFileState::ReadableAndValid )
         {
-
+            party_members.resize( header.npc_party_count );
+            non_party_members.resize( header.npc_nonparty_count );
+            variables.resize( header.global_vars_count );
+            journal_entries.resize( header.journal_count );
+            stored_locations.resize( header.stored_locs_count );
+            pocket_plane_info.resize( header.pocket_locs_count );
+            familiar_extras.resize( 81 );
+            gam.seekg( header.npc_party_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>( party_members.data() ),
+                party_members.size() * sizeof( GamCharacterData ) );
+            gam.seekg( header.npc_nonparty_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>( non_party_members.data() ),
+                non_party_members.size() * sizeof( GamCharacterData ) );
+            gam.seekg( header.global_vars_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>( variables.data() ),
+                variables.size() * sizeof( GamGlobalVariables ) );
+            gam.seekg( header.journal_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>( journal_entries.data() ),
+                journal_entries.size() * sizeof( GamJournalEntry ) );
+            gam.seekg( header.stored_locs_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>( stored_locations.data() ),
+                stored_locations.size() * sizeof( GamLocationInfo ) );
+            gam.seekg( header.pocket_locs_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>( pocket_plane_info.data() ),
+                pocket_plane_info.size() * sizeof( GamLocationInfo ) );
+            gam.seekg( header.familiar_info_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>(&familiar_info), sizeof( GamFamiliarInfo ) );
+            gam.seekg( header.familiar_extra_offset, std::ios::beg );
+            gam.read( reinterpret_cast<char*>( familiar_extras.data() ),
+                familiar_extras.size() * sizeof( Resref ) );
+            std::cout << '\n';
+            for ( const auto& member : familiar_extras )
+            {
+                std::cout << member.to_string() << '\n';
+            }
         }
     }
 }
