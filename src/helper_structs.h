@@ -8,6 +8,10 @@
 struct Strref
 {
     u32 value;
+    std::string to_string() const
+    {
+        return std::to_string(value);
+    }
 };
 
 template<u32 Length>
