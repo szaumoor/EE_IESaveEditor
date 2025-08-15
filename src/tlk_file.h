@@ -43,11 +43,11 @@ private:
     TlkFileHeader header;
     vector<TlkFileEntry> entries;
     vector<std::string> cached_strings;
+    void check_for_malformation() noexcept override;
 public:
     explicit TlkFile(const char* path) noexcept;
     optional<std::string> at_index( u32 index ) const;
     u32 string_count() const noexcept { return cached_strings.size(); }
-    void check_for_malformation() noexcept override;
 };
 
 #endif // TLK_FILE_H

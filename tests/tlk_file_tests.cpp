@@ -1,13 +1,13 @@
-#include "../src/tlk_file.h"
-#include "../src/ie_files.h"
-#include "../src/exceptions.h"
-
 #include <gtest/gtest.h>
 
 #include <filesystem>
 #include <fstream>
 #include <optional>
-#include <iostream>
+
+#include "../src/tlk_file.h"
+#include "../src/ie_files.h"
+#include "../src/exceptions.h"
+
 
 using namespace std;
 

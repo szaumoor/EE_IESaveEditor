@@ -5,11 +5,10 @@
 #include "eff_files.h"
 #include "helper_structs.h"
 
-#include <array>
+#include <fstream>
 #include <vector>
 
 using std::vector;
-using std::array;
 
 namespace
 {
@@ -80,7 +79,7 @@ namespace
         u8 dexterity;                      // 0x23C
         u8 constitution;                   // 0x23D
         u8 charisma;                       // 0x23E
-    };;
+    };
 
     struct CreHeader
     {
@@ -125,12 +124,12 @@ namespace
         CharArray<32> tracking_target;     // 0x84
         Strref soundset_strrefs[100];      // 0xA4 - 0x230
         u8 class_levels[3];                // 0x234 - 0x236
-        CreStats stats;                    // 0x238 - 0x23E
         u8 sex;                            // 0x237
+        CreStats stats;                    // 0x238 - 0x23E
         u8 morale;                         // 0x23F
         u8 morale_break;                   // 0x240
         u8 racial_enemy;                   // 0x241
-        u8 morale_recovery_time;           // 0x242
+        u16 morale_recovery_time;           // 0x242
         u32 kit_id;                        // 0x244
         Resref script_override;            // 0x0248
         Resref script_class;               // 0x0250
@@ -191,21 +190,55 @@ namespace
         u8 item_expiration_0; // 0x0008
         u8 item_expiration_1; // 0x0009
         u16 charges[3];       // 0x000A - 0x000E
-        u32 flags;            // 0x000C
+        u32 flags;            // 0x0010
     };
+
+    struct CreItemSlots
+    {
+        u16 helmet;                  // 0x0000
+        u16 armor;                   // 0x0002
+        u16 shield;                  // 0x0004
+        u16 gloves;                  // 0x0006
+        u16 left_ring;               // 0x0008
+        u16 right_ring;              // 0x000A
+        u16 amulet;                  // 0x000C
+        u16 belt;                    // 0x000E
+        u16 boots;                   // 0x0010
+        u16 weapon1;                 // 0x0012
+        u16 weapon2;                 // 0x0014
+        u16 weapon3;                 // 0x0016
+        u16 weapon4;                 // 0x0018
+        u16 quiver1;                 // 0x001A
+        u16 quiver2;                 // 0x001C
+        u16 quiver3;                 // 0x001E
+        u16 quiver4;                 // 0x0020
+        u16 cloak;                   // 0x0022
+        u16 quick_item1;             // 0x0024
+        u16 quick_item2;             // 0x0026
+        u16 quick_item3;             // 0x0028
+        u16 inventory[16];           // 0x002A - 0x003A
+        u16 magic_weapon;            // 0x003C
+        u16 selected_weapon;         // 0x003E
+        u16 selected_weapon_ability; // 0x0040
+    };
+
     #pragma pack(pop)
 }
 
 struct CreFile
 {
-private:
     CreHeader header;
+
     vector<CreKnownSpell> known_spells;
     vector<CreSpellMemorizationInfo> memorization_infos;
     vector<CreSpellMemorizedSpell> memorized_spells;
+
     vector<EmbeddedEffFileV2> effects;
+
     vector<CreInventoryItem> items;
-    array<u16, 40> item_slots;
+    CreItemSlots item_slots;
+
+    CreFile( std::ifstream& file, u32 offset );
 };
 
 #endif

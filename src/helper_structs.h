@@ -2,6 +2,7 @@
 #define XREF_FILE_H
 
 #include "aliases.h"
+
 #include <string>
 
 #pragma pack(push, 1)
