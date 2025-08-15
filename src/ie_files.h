@@ -1,7 +1,8 @@
-#ifndef INTERFACES_H
-#define INTERFACES_H
+#ifndef IE_FILES_H
+#define IE_FILES_H
 
 #include <string>
+
 
 namespace rp::files
 {
@@ -20,13 +21,13 @@ namespace rp::files
     protected:
         IEFile(const char* path) : path(std::string(path)) {}
         IEFileState state = IEFileState::Unreadable;
+        virtual void check_for_malformation() = 0;
     public:
         IEFileState get_state() const noexcept { return state; }
         explicit operator bool() const noexcept { return state == IEFileState::ReadableAndValid; }
         const std::string& get_path() const noexcept { return path; }
-        virtual void check_for_malformation() = 0;
     };
 
 }
 
-#endif // INTERFACES_H
+#endif // IE_FILES_H
