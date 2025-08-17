@@ -1,5 +1,5 @@
-#ifndef XREF_FILE_H
-#define XREF_FILE_H
+#ifndef HELPER_STRUCTS_H
+#define HELPER_STRUCTS_H
 
 #include "aliases.h"
 
@@ -35,4 +35,4 @@ struct Resref
 };
 #pragma pack(pop)
 
-#endif
+#endif // HELPER_STRUCTS_H
