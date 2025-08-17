@@ -7,8 +7,10 @@
 
 #include <fstream>
 #include <vector>
+#include <variant>
 
 using std::vector;
+using EffectVariant = std::variant<EmbeddedEffFileV1, EmbeddedEffFileV2>;
 
 namespace
 {
@@ -129,7 +131,7 @@ namespace
         u8 morale;                         // 0x23F
         u8 morale_break;                   // 0x240
         u8 racial_enemy;                   // 0x241
-        u16 morale_recovery_time;           // 0x242
+        u16 morale_recovery_time;          // 0x242
         u32 kit_id;                        // 0x244
         Resref script_override;            // 0x0248
         Resref script_class;               // 0x0250
@@ -163,9 +165,9 @@ namespace
 
     struct CreKnownSpell
     {
-        Resref spell;         // 0x0000
-        u16 spell_level;      // 0x0008
-        u16 spell_type;       // 0x000A
+        Resref spell;     // 0x0000
+        u16 spell_level;  // 0x0008
+        u16 spell_type;   // 0x000A
     };
 
     struct CreSpellMemorizationInfo
@@ -233,12 +235,12 @@ struct CreFile
     vector<CreSpellMemorizationInfo> memorization_infos;
     vector<CreSpellMemorizedSpell> memorized_spells;
 
-    vector<EmbeddedEffFileV2> effects;
+    vector<EffectVariant> effects;
 
     vector<CreInventoryItem> items;
     CreItemSlots item_slots;
 
-    CreFile( std::ifstream& file, u32 offset );
+    CreFile( std::ifstream& file, const u32 offset );
 };
 
 #endif

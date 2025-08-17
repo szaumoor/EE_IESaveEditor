@@ -28,7 +28,7 @@ TlkFile::TlkFile( const char* path ) noexcept
             cached_strings.resize( header.entry_count );
             tlk.seekg( sizeof(TlkFileHeader), std::ios::beg );
             tlk.read( reinterpret_cast<char*>( entries.data() ),
-                entries.size() * sizeof( TlkFileEntry ) );
+                header.entry_count * sizeof( TlkFileEntry ) );
 
             tlk.seekg( header.offset_to_str_data, std::ios::beg );
             std::vector<char> string_data;

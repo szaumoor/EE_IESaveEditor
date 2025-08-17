@@ -2,8 +2,10 @@
 #include "cre_file.h"
 
 #include <fstream>
+#include <vector>
+#include "eff_files.h"
 
-CreFile::CreFile( std::ifstream& file, u32 offset ) :header( {} ), item_slots({})
+CreFile::CreFile( std::ifstream& file, const u32 offset ) :header( {} ), item_slots({})
 {
     file.seekg( offset, std::ios::beg );
     file.read( reinterpret_cast<char*>(&header), sizeof(CreHeader) );
@@ -30,4 +32,24 @@ CreFile::CreFile( std::ifstream& file, u32 offset ) :header( {} ), item_slots({}
 
     file.seekg( offset + header.item_slots_offset, std::ios::beg );
     file.read( reinterpret_cast<char*>(&item_slots), sizeof( CreItemSlots ) );
+
+    file.seekg( offset + header.effects_offset, std::ios::beg );
+    if ( header.eff_structure_version == 0 )
+    {
+        std::vector<EmbeddedEffFileV1> effects_v1;
+        effects_v1.resize( header.effects_count );
+        file.read( reinterpret_cast<char*>(effects_v1.data()),
+            header.effects_count * sizeof( EmbeddedEffFileV1 ) );
+        for ( const auto& eff : effects_v1 )
+            effects.push_back( eff );
+    }
+    else if ( header.eff_structure_version == 1 )
+    {
+        std::vector<EmbeddedEffFileV2> effects_v2;
+        effects_v2.resize( header.effects_count );
+        file.read( reinterpret_cast<char*>(effects_v2.data()),
+            header.effects_count * sizeof( EmbeddedEffFileV2 ) );
+        for ( const auto& eff : effects_v2 )
+            effects.push_back( eff );
+    }
 }
