@@ -7,6 +7,10 @@ endif()
 
 project ("EESaveEditorBackend")
 
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 enable_testing()
 
 file(GLOB CHOC_SRC
@@ -63,9 +67,6 @@ add_library (EESaveEditorBackend
 include(GoogleTest)
 gtest_discover_tests(tlk_file_test)
 
-if (CMAKE_VERSION VERSION_GREATER 3.12)
-  set_property(TARGET EESaveEditorBackend PROPERTY CXX_STANDARD 23)
-endif()
 
 include(FetchContent)
 

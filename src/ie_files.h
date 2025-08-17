@@ -6,7 +6,7 @@
 
 namespace rp::files
 {
-    enum class IEFileState
+    enum class [[nodiscard]] IEFileState
     {
         Unreadable,
         Readable,
@@ -25,6 +25,9 @@ namespace rp::files
     public:
         IEFileState get_state() const noexcept { return state; }
         explicit operator bool() const noexcept { return state == IEFileState::ReadableAndValid; }
+        IEFile() = delete;
+
+        [[nodiscard]]
         const std::string& get_path() const noexcept { return path; }
     };
 

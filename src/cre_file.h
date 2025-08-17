@@ -27,60 +27,60 @@ namespace
 
     struct CreSavingThrows
     {
-        u8 saving_throw_vs_death;          // 0x54
-        u8 saving_throw_vs_wands;          // 0x55
-        u8 saving_throw_vs_poly;           // 0x56
-        u8 saving_throw_vs_breath;         // 0x57
-        u8 saving_throw_vs_spell;          // 0x58
+        u8 saving_throw_vs_death;     // 0x54
+        u8 saving_throw_vs_wands;     // 0x55
+        u8 saving_throw_vs_poly;      // 0x56
+        u8 saving_throw_vs_breath;    // 0x57
+        u8 saving_throw_vs_spell;     // 0x58
     };
 
     struct CreResistances
     {
-        u8 resist_fire;                    // 0x59
-        u8 resist_cold;                    // 0x5A
-        u8 resist_electricity;             // 0x5B
-        u8 resist_acid;                    // 0x5C
-        u8 resist_magic;                   // 0x5D
-        u8 resist_magic_fire;              // 0x5E
-        u8 resist_magic_cold;              // 0x5F
-        u8 resist_slashing;                // 0x60
-        u8 resist_crushing;                // 0x61
-        u8 resist_piercing;                // 0x62
-        u8 resist_missile;                 // 0x63
+        u8 resist_fire;           // 0x59
+        u8 resist_cold;           // 0x5A
+        u8 resist_electricity;    // 0x5B
+        u8 resist_acid;           // 0x5C
+        u8 resist_magic;          // 0x5D
+        u8 resist_magic_fire;     // 0x5E
+        u8 resist_magic_cold;     // 0x5F
+        u8 resist_slashing;       // 0x60
+        u8 resist_crushing;       // 0x61
+        u8 resist_piercing;       // 0x62
+        u8 resist_missile;        // 0x63
     };
 
     struct CreLegacyProficiencies
     {
-        u8 large_sword_proficiency;        // 0x6E
-        u8 small_sword_proficiency;        // 0x6F
-        u8 bow_proficiency;                // 0x70
-        u8 spear_proficiency;              // 0x71
-        u8 blunt_proficiency;              // 0x72
-        u8 spiked_proficiency;             // 0x73
-        u8 axe_proficiency;                // 0x74
-        u8 missile_proficiency;            // 0x75
+        u8 large_sword_proficiency;   // 0x6E
+        u8 small_sword_proficiency;   // 0x6F
+        u8 bow_proficiency;           // 0x70
+        u8 spear_proficiency;         // 0x71
+        u8 blunt_proficiency;         // 0x72
+        u8 spiked_proficiency;        // 0x73
+        u8 axe_proficiency;           // 0x74
+        u8 missile_proficiency;       // 0x75
     };
 
     struct CreColors
     {
-        u8 metal_colour_index;             // 0x2C
-        u8 minor_colour_index;             // 0x2D
-        u8 major_colour_index;             // 0x2E
-        u8 skin_colour_index;              // 0x2F
-        u8 leather_colour_index;           // 0x30
-        u8 armor_colour_index;             // 0x31
-        u8 hair_colour_index;              // 0x32
+        u8 metal_colour_index;     // 0x2C
+        u8 minor_colour_index;     // 0x2D
+        u8 major_colour_index;     // 0x2E
+        u8 skin_colour_index;      // 0x2F
+        u8 leather_colour_index;   // 0x30
+        u8 armor_colour_index;     // 0x31
+        u8 hair_colour_index;      // 0x32
     };
 
     struct CreStats
     {
-        u8 strength;                       // 0x238
-        u8 strength_bonus;                 // 0x239
-        u8 intelligence;                   // 0x23A
-        u8 wisdom;                         // 0x23B
-        u8 dexterity;                      // 0x23C
-        u8 constitution;                   // 0x23D
-        u8 charisma;                       // 0x23E
+        u8 strength;          // 0x238
+        u8 strength_bonus;    // 0x239
+        u8 intelligence;      // 0x23A
+        u8 wisdom;            // 0x23B
+        u8 dexterity;         // 0x23C
+        u8 constitution;      // 0x23D
+        u8 charisma;          // 0x23E
     };
 
     struct CreHeader
@@ -182,8 +182,8 @@ namespace
 
     struct CreSpellMemorizedSpell
     {
-        Resref spell;      // 0x0000
-        u32 memorized;     // 0x0008 bit0: memorized, bit1: disabled
+        Resref spell;   // 0x0000
+        u32 memorized;  // 0x0008 bit0: memorized, bit1: disabled
     };
 
     struct CreInventoryItem
@@ -227,8 +227,9 @@ namespace
     #pragma pack(pop)
 }
 
-struct CreFile
+class CreFile
 {
+private:
     CreHeader header;
 
     vector<CreKnownSpell> known_spells;
@@ -240,6 +241,7 @@ struct CreFile
     vector<CreInventoryItem> items;
     CreItemSlots item_slots;
 
+public:
     explicit CreFile( std::ifstream& file, const u32 offset ) noexcept;
 };
 

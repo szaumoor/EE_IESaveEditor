@@ -50,7 +50,11 @@ private:
     void check_for_malformation() noexcept override;
 public:
     explicit TlkFile(const char* path) noexcept;
+    TlkFile() = delete;
+
+    [[nodiscard]]
     const optional<string_view> at_index( u32 index ) const;
+    [[nodiscard]]
     const u32 string_count() const noexcept { return static_cast<u32>(cached_strings.size()); }
 };
 
