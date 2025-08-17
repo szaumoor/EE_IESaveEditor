@@ -5,7 +5,7 @@
 #include "helper_structs.h"
 
 #pragma pack(push, 1)
-struct EffFileV1
+struct EmbeddedEffFileV1
 {
     u16 opcode;                // 0x00
     u8 target;                 // 0x02
@@ -24,15 +24,10 @@ struct EffFileV1
     u32 special;               // 0x2C
 };
 
-struct EffFileV2Header
-{
-    CharArray<4> signature;    // 0x00 "EFF "
-    CharArray<4> version;      // 0x04 "V2.0"
-};
-
 struct EmbeddedEffFileV2
 {
-    EffFileV2Header header;      // 0x00 usually empty strings in embedded effs
+    CharArray<4> signature;      // 0x00
+    CharArray<4> version;        // 0x04
     u32 opcode;                  // 0x08
     u32 target;                  // 0x0C
     u32 power;                   // 0x10
@@ -71,8 +66,9 @@ struct EmbeddedEffFileV2
     u32 caster_level;            // 0xC0
     u32 internal_flags;          // 0xC4
     u32 secondary_type;          // 0xC8
-    u32 unknown[15];             // 0xCC
+    u8 unknown[60];              // 0xCC
 };
+
 #pragma pack(pop)
 
 #endif
