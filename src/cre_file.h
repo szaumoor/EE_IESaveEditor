@@ -240,7 +240,7 @@ struct CreFile
     vector<CreInventoryItem> items;
     CreItemSlots item_slots;
 
-    CreFile( std::ifstream& file, const u32 offset );
+    explicit CreFile( std::ifstream& file, const u32 offset ) noexcept;
 };
 
 #endif
