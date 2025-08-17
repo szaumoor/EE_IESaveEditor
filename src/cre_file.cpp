@@ -36,7 +36,8 @@ CreFile::CreFile( std::ifstream& file, const u32 offset ) noexcept
     file.read( reinterpret_cast<char*>(&item_slots), sizeof( CreItemSlots ) );
 
     file.seekg( offset + header.effects_offset, std::ios::beg );
-    if ( header.eff_structure_version == 0 )
+
+    if ( header.eff_structure_version == 0 ) [[unlikely]]
     {
         vector<EmbeddedEffFileV1> effects_v1;
         effects_v1.resize( header.effects_count );
@@ -44,7 +45,7 @@ CreFile::CreFile( std::ifstream& file, const u32 offset ) noexcept
             header.effects_count * sizeof( EmbeddedEffFileV1 ) );
         effects.insert( effects.end(), effects_v1.begin(), effects_v1.end() );
     }
-    else if ( header.eff_structure_version == 1 )
+    else if (  header.eff_structure_version == 1 ) [[likely]]
     {
         vector<EmbeddedEffFileV2> effects_v2;
         effects_v2.resize( header.effects_count );

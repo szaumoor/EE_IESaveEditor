@@ -159,14 +159,16 @@ private:
     GamHeader header;
 
     vector<GamCharacterData> party_members;
-    vector<CreFile> party_cre_files;
-
     vector<GamCharacterData> non_party_members;
+    vector<CreFile> party_cre_files;
     vector<CreFile> non_party_cre_files;
 
     vector<GamCharacterStats> character_stats;
+
     vector<GamGlobalVariables> variables;
+
     vector<GamJournalEntry> journal_entries;
+
     vector<GamLocationInfo> stored_locations;
     vector<GamLocationInfo> pocket_plane_info;
 
