@@ -47,7 +47,7 @@ private:
 public:
     explicit TlkFile(const char* path) noexcept;
     optional<std::string> at_index( u32 index ) const;
-    u32 string_count() const noexcept { return cached_strings.size(); }
+    const u32 string_count() const noexcept { return cached_strings.size(); }
 };
 
 #endif // TLK_FILE_H

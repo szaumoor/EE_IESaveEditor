@@ -31,7 +31,10 @@ add_library (EESaveEditorBackend
     "src/eff_files.h"
     "src/aliases.h"
     "src/ie_files.h"
- "src/cre_file.cpp")
+    "src/cre_file.cpp"
+    "src/key_file.h"
+    "src/key_file.cpp"
+)
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp
@@ -44,7 +47,8 @@ add_library (EESaveEditorBackend
     tests/gam_file_tests.cpp
     src/gam_file.cpp
     src/gam_file.h
-   "src/cre_file.cpp")
+   "src/cre_file.cpp"
+  )
 
  target_link_libraries(tlk_file_test
     PRIVATE
