@@ -58,34 +58,34 @@ namespace {
     {
         CharArray<4> signature;
         CharArray<4> version;
-        i32 count_of_fileset_entries;
-        i32 count_of_tileset_entries;
-        i32 offset_to_fileset_entries;
+        u32 count_of_fileset_entries;
+        u32 count_of_tileset_entries;
+        u32 offset_to_fileset_entries;
     };
 
     struct FilesetEntry
     {
-        i32 resource_locator;
-        i32 offset;
-        i32 size;
+        u32 resource_locator;
+        u32 offset;
+        u32 size;
         ResourceType resource_type;
-        i16 unknown;
+        u16 unknown;
     };
 
     struct TilesetEntry
     {
-        i32 resource_locator;
-        i32 offset;
-        i32 tile_count;
-        i32 tile_size;
+        u32 resource_locator;
+        u32 offset;
+        u32 tile_count;
+        u32 tile_size;
         ResourceType resource_type;
-        i16 unknown;
+        u16 unknown;
     };
     #pragma pack(pop)
 }
 
-template <i32 X, i32 Y, i32 Z>
-struct Biff
+template <u32 X, u32 Y, u32 Z>
+struct BiffFile
 {
     BiffHeader header;
     FilesetEntry fileset_entries[X];

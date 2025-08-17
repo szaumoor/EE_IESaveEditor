@@ -10,7 +10,7 @@ using rp::files::IEFileState;
 constexpr const char* GAM_FILE_SIGNATURE = "GAME";
 constexpr const char* GAM_FILE_VERSION   = "V2.0";
 
-GamFile::GamFile( const char* path )
+GamFile::GamFile( const char* path ) noexcept
     : IEFile( path ), header( {} ), familiar_info( {} )
 {
     std::ifstream gam( path, std::ios::binary );
@@ -33,16 +33,14 @@ GamFile::GamFile( const char* path )
             gam.seekg( header.npc_party_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( party_members.data() ),
                 header.npc_party_count * sizeof( GamCharacterData ) );
-
             for ( const auto& member : party_members )
-                party_cre_files.push_back( CreFile( gam, member.cre_offset ) );
+                party_cre_files.emplace_back( gam, member.cre_offset );
 
             gam.seekg( header.npc_nonparty_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( non_party_members.data() ),
                 header.npc_nonparty_count * sizeof( GamCharacterData ) );
-
             for ( const auto& member : non_party_members )
-                non_party_cre_files.push_back( CreFile( gam, member.cre_offset ) );
+                non_party_cre_files.emplace_back( gam, member.cre_offset );
 
             gam.seekg( header.global_vars_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( variables.data() ),
@@ -51,14 +49,18 @@ GamFile::GamFile( const char* path )
             gam.seekg( header.journal_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( journal_entries.data() ),
                 header.journal_count * sizeof( GamJournalEntry ) );
+
             gam.seekg( header.stored_locs_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( stored_locations.data() ),
                 header.stored_locs_count * sizeof( GamLocationInfo ) );
+
             gam.seekg( header.pocket_locs_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( pocket_plane_info.data() ),
                 header.pocket_locs_count * sizeof( GamLocationInfo ) );
+
             gam.seekg( header.familiar_info_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>(&familiar_info), sizeof( GamFamiliarInfo ) );
+
             gam.seekg( header.familiar_extra_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( familiar_extras.data() ),
                 familiar_extras.size() * sizeof( Resref ) );

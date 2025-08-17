@@ -8,7 +8,7 @@ using namespace rp::files;
 constexpr const char* KEY_FILE_SIGNATURE = "KEY ";
 constexpr const char* KEY_FILE_VERSION = "V1  ";
 
-KeyFile::KeyFile( const char* path )
+KeyFile::KeyFile( const char* path ) noexcept
     : IEFile( path ), header( {} )
 {
 

@@ -48,7 +48,7 @@ private:
     vector<ResourceEntries> resource_entries;
     void check_for_malformation() noexcept override;
 public:
-    explicit KeyFile( const char* path );
+    explicit KeyFile( const char* path ) noexcept;
     const u32 get_biff_count() const noexcept { return header.biff_count; }
     const u32 get_resource_count() const noexcept { return header.resource_count; }
 };

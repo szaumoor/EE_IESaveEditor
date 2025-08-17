@@ -8,6 +8,7 @@
 #include <optional>
 #include <string>
 #include <vector>
+#include <string_view>
 
 constexpr const char* TLK_FILE_SIGNATURE = "TLK ";
 constexpr const char* TLK_FILE_VERSION   = "V1  ";
@@ -26,6 +27,7 @@ TlkFile::TlkFile( const char* path ) noexcept
         {
             entries.resize( header.entry_count );
             cached_strings.resize( header.entry_count );
+
             tlk.seekg( sizeof(TlkFileHeader), std::ios::beg );
             tlk.read( reinterpret_cast<char*>( entries.data() ),
                 header.entry_count * sizeof( TlkFileEntry ) );
@@ -47,7 +49,7 @@ TlkFile::TlkFile( const char* path ) noexcept
     }
 }
 
-optional<std::string> TlkFile::at_index( const u32 index ) const
+const optional<string_view> TlkFile::at_index( const u32 index ) const
 {
     if ( state != IEFileState::ReadableAndValid )
         throw InvalidStateOperationError( "TlkFile is not readable and valid." );
@@ -55,7 +57,7 @@ optional<std::string> TlkFile::at_index( const u32 index ) const
     if ( index >= cached_strings.size() )
         return std::nullopt;
 
-    return std::string( cached_strings[index] );
+    return cached_strings[index];
 }
 
 void TlkFile::check_for_malformation() noexcept

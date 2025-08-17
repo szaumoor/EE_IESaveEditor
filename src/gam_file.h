@@ -175,7 +175,7 @@ private:
 
     void check_for_malformation() noexcept override;
 public:
-    explicit GamFile( const char* path );
+    explicit GamFile( const char* path ) noexcept;
 };
 
 #endif // GAM_FILE_H

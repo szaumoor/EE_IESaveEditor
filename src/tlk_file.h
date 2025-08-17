@@ -6,11 +6,15 @@
 #include "ie_files.h"
 
 #include <optional>
+#include <string_view>
 #include <string>
 #include <vector>
 
 using std::optional;
 using std::vector;
+using std::string_view;
+using std::string;
+
 using namespace rp::files;
 
 namespace
@@ -42,12 +46,12 @@ class TlkFile : public IEFile
 private:
     TlkFileHeader header;
     vector<TlkFileEntry> entries;
-    vector<std::string> cached_strings;
+    vector<string> cached_strings;
     void check_for_malformation() noexcept override;
 public:
     explicit TlkFile(const char* path) noexcept;
-    optional<std::string> at_index( u32 index ) const;
-    const u32 string_count() const noexcept { return cached_strings.size(); }
+    const optional<string_view> at_index( u32 index ) const;
+    const u32 string_count() const noexcept { return static_cast<u32>(cached_strings.size()); }
 };
 
 #endif // TLK_FILE_H
