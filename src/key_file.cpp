@@ -2,7 +2,6 @@
 
 #include "ie_files.h"
 #include "key_file.h"
-#include <iostream>
 
 using namespace rp::files;
 

@@ -10,6 +10,16 @@
 using rp::files::IEFileState;
 using namespace std;
 
+TEST( GamFileTests, GamStructsHaveExpectedSize ) {
+    EXPECT_TRUE( sizeof( GamHeader ) == 180 );
+    EXPECT_TRUE( sizeof( GamCharacterStats ) == 116 );
+    EXPECT_TRUE( sizeof( GamCharacterData ) == 352 );
+    EXPECT_TRUE( sizeof( GamGlobalVariable ) == 84 );
+    EXPECT_TRUE( sizeof( GamJournalEntry ) == 12 );
+    EXPECT_TRUE( sizeof( GamFamiliarInfo ) == 400 );
+    EXPECT_TRUE( sizeof( GamLocationInfo ) == 12 );
+}
+
 TEST( GamFileTests, GamIsUnreadableTest )
 {
     EXPECT_TRUE( GamFile("nonexistent.gam").get_state()
