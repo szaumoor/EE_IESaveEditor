@@ -70,7 +70,7 @@ namespace
         Resref fav_spells[4];                 // 0x0024 - 0x003C
         u16 fav_spells_count[4];              // 0x0044 - 0x004B
         Resref fav_wpns[4];                   // 0x004C - 0x006B
-        u16 fav_wpns_count[4];                // 0x006C
+        u16 fav_wpns_count[4];                // 0x006C - 0x0073
     };
 
     struct GamCharacterData
@@ -100,7 +100,7 @@ namespace
         CharArray<8> voice_set;             // 0x00158
     };
 
-    struct GamGlobalVariables
+    struct GamGlobalVariable
     {
         CharArray<32> variable_name; // 0x0000
         u16 type;                    // 0x0020 (b0=int,b1=float,b2=script name,b3=resref,b4=strref,b5=dword)
@@ -165,7 +165,7 @@ private:
 
     vector<GamCharacterStats> character_stats;
 
-    vector<GamGlobalVariables> variables;
+    vector<GamGlobalVariable> variables;
 
     vector<GamJournalEntry> journal_entries;
 

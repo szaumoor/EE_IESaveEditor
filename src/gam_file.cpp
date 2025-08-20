@@ -44,7 +44,7 @@ GamFile::GamFile( const char* path ) noexcept
 
             gam.seekg( header.global_vars_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( variables.data() ),
-                header.global_vars_count * sizeof( GamGlobalVariables ) );
+                header.global_vars_count * sizeof( GamGlobalVariable ) );
 
             gam.seekg( header.journal_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( journal_entries.data() ),

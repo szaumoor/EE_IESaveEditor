@@ -10,6 +10,11 @@
 
 using namespace std;
 
+TEST( TlkFileTest, TlkStructsHaveExpectedSize ) {
+    EXPECT_TRUE( sizeof(TlkFileHeader) == 18 );
+    EXPECT_TRUE( sizeof( TlkFileEntry ) == 26 );
+}
+
 TEST( TlkFileTest, TlkIsUnreadableTest )
 {
     EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() ==

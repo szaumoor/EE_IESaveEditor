@@ -10,6 +10,12 @@ using namespace rp::files;
 using namespace std;
 
 
+TEST( KeyFileTest, KeyStructsHaveExpectedSize ) {
+    EXPECT_TRUE( sizeof( KeyFileHeader ) == 24 );
+    EXPECT_TRUE( sizeof( BiffEntry ) == 12 );
+    EXPECT_TRUE( sizeof( ResourceEntry ) == 14 );
+}
+
 TEST( KeyFileTest, KeyIsUnreadableTest ) {
     EXPECT_TRUE( KeyFile( "nonexistent.key" ).get_state() ==
         IEFileState::Unreadable );
