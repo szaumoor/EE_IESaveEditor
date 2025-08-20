@@ -29,7 +29,7 @@ add_library (EESaveEditorBackend
     "src/tlk_file.cpp"
     "src/gam_file.h"
     "src/gam_file.cpp"
-    "src/exceptions.h"
+    
     "src/cre_file.h"
     "src/helper_structs.h"
     "src/eff_files.h"
@@ -44,7 +44,7 @@ add_library (EESaveEditorBackend
     tests/tlk_file_tests.cpp
     src/tlk_file.cpp
     src/tlk_file.h
-    src/exceptions.h
+    
  )
 
   add_executable(gam_file_test

@@ -5,7 +5,7 @@
 #include "helper_structs.h"
 
 namespace {
-    enum ResourceType : i16
+    enum ResourceType : u16
     {
         NotFound      = 0x0000,
         FileTypeBmp   = 0x0001,

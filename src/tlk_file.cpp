@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <string_view>
+#include <expected>
 
 constexpr const char* TLK_FILE_SIGNATURE = "TLK ";
 constexpr const char* TLK_FILE_VERSION   = "V1  ";
@@ -49,13 +50,15 @@ TlkFile::TlkFile( const char* path ) noexcept
     }
 }
 
-const optional<string_view> TlkFile::at_index( const u32 index ) const
+const expected<string_view, TlkError> TlkFile::at_index( const u32 index ) const noexcept
 {
     if ( state != IEFileState::ReadableAndValid )
-        throw InvalidStateOperationError( "TlkFile is not readable and valid." );
+        return std::unexpected( TlkError( TlkErrorType::NonValidFile,
+            "The TLK file is not valid or readable." ) );
 
     if ( index >= cached_strings.size() )
-        return std::nullopt;
+        return std::unexpected( TlkError( TlkErrorType::InvalidIndex,
+            "The requested index " + std::to_string(index) + " is out of bounds." ) );
 
     return cached_strings[index];
 }

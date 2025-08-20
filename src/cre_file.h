@@ -245,4 +245,4 @@ public:
     explicit CreFile( std::ifstream& file, const u32 offset ) noexcept;
 };
 
-#endif
+#endif // CRE_FILE_H

@@ -5,15 +5,16 @@
 #include "helper_structs.h"
 #include "ie_files.h"
 
-#include <optional>
 #include <string_view>
 #include <string>
 #include <vector>
+#include <expected>
 
-using std::optional;
 using std::vector;
 using std::string_view;
 using std::string;
+using std::expected;
+using std::unexpected;
 
 using namespace rp::files;
 
@@ -41,6 +42,20 @@ namespace
     #pragma pack(pop)
 }
 
+enum class TlkErrorType
+{
+    InvalidIndex,
+    NonValidFile
+};
+
+struct TlkError
+{
+    TlkErrorType type;
+    string message;
+    explicit TlkError(TlkErrorType error_type, const string& msg)
+        : type(error_type), message(msg) {}
+};
+
 class TlkFile : public IEFile
 {
 private:
@@ -53,7 +68,7 @@ public:
     TlkFile() = delete;
 
     [[nodiscard]]
-    const optional<string_view> at_index( u32 index ) const;
+    const expected<string_view, TlkError> at_index( u32 index ) const noexcept;
     [[nodiscard]]
     const u32 string_count() const noexcept { return static_cast<u32>(cached_strings.size()); }
 };

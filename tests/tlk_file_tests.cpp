@@ -2,7 +2,7 @@
 
 #include <filesystem>
 #include <fstream>
-#include <optional>
+#include <expected>
 
 #include "../src/tlk_file.h"
 #include "../src/ie_files.h"
@@ -15,6 +15,12 @@ TEST( TlkFileTest, TlkIsUnreadableTest )
 {
     EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() ==
         IEFileState::Unreadable);
+}
+
+TEST( TlkFileTest, TlkStringCountZeroIfInvalid ) {
+    const auto tlk = TlkFile( "nonexistent.tlk" );
+    EXPECT_TRUE( tlk.get_state() == IEFileState::Unreadable &&
+        tlk.string_count() == 0 );
 }
 
 TEST( TlkFileTest, TlkIsMalformedVersion )
@@ -68,7 +74,7 @@ TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes) {
     EXPECT_TRUE( !result1.has_value() && !result2.has_value() );
 }
 
-TEST( TlkFileTest, TlkThrowsExceptionIfFileIsMalformed ) {
+TEST( TlkFileTest, TlkReturnsUnexpectedIfFileIsMalformed ) {
     ofstream ofs0( "invalid_signature0.tlk", ios::binary );
     ofs0.write( "XXXX", 4 ); // Invalid signature
     ofs0.write( "V1  ", 4 ); // Valid version
@@ -78,9 +84,9 @@ TEST( TlkFileTest, TlkThrowsExceptionIfFileIsMalformed ) {
     ofs1.write( "Invl", 4 ); // Valid version
     ofs1.close();
     const auto tlk0 = TlkFile( "invalid_signature0.tlk");
-    EXPECT_THROW( tlk0.at_index(1), InvalidStateOperationError);
+    EXPECT_FALSE( tlk0.at_index(1).has_value() );
     const auto tlk1 = TlkFile( "invalid_signature1.tlk");
-    EXPECT_THROW( tlk1.at_index(1), InvalidStateOperationError);
+    EXPECT_FALSE( tlk1.at_index(1).has_value() );
     filesystem::remove( "invalid_signature0.tlk" );
     filesystem::remove( "invalid_signature1.tlk" );
 }
