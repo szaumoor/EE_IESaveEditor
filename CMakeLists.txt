@@ -29,7 +29,6 @@ add_library (EESaveEditorBackend
     "src/tlk_file.cpp"
     "src/gam_file.h"
     "src/gam_file.cpp"
-    
     "src/cre_file.h"
     "src/helper_structs.h"
     "src/eff_files.h"
@@ -38,20 +37,25 @@ add_library (EESaveEditorBackend
     "src/cre_file.cpp"
     "src/key_file.h"
     "src/key_file.cpp"
-)
+ "src/biff_files.cpp")
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp
     src/tlk_file.cpp
     src/tlk_file.h
-    
+ )
+
+  add_executable(key_file_test
+    src/key_file.cpp
+    src/key_file.h
+    tests/key_file_tests.cpp
  )
 
   add_executable(gam_file_test
     tests/gam_file_tests.cpp
     src/gam_file.cpp
     src/gam_file.h
-   "src/cre_file.cpp"
+   src/cre_file.cpp
   )
 
  target_link_libraries(tlk_file_test
@@ -60,6 +64,11 @@ add_library (EESaveEditorBackend
 )
 
  target_link_libraries(gam_file_test
+    PRIVATE
+    GTest::gtest_main
+)
+
+ target_link_libraries(key_file_test
     PRIVATE
     GTest::gtest_main
 )
