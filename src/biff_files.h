@@ -3,6 +3,12 @@
 
 #include "aliases.h"
 #include "helper_structs.h"
+#include "ie_files.h"
+
+#include <vector>
+
+using std::vector;
+using rp::files::IEFile;
 
 namespace {
     enum ResourceType : u16
@@ -56,14 +62,14 @@ namespace {
     #pragma pack(push, 1)
     struct BiffHeader
     {
-        CharArray<4> signature;
-        CharArray<4> version;
-        u32 count_of_fileset_entries;
-        u32 count_of_tileset_entries;
-        u32 offset_to_fileset_entries;
+        CharArray<4> signature; // "BIFF"
+        CharArray<4> version;   // "V1  "
+        u32 count_of_file_entries;
+        u32 count_of_tile_entries;
+        u32 offset_to_file_entries;
     };
 
-    struct FilesetEntry
+    struct FileEntry
     {
         u32 resource_locator;
         u32 offset;
@@ -72,10 +78,10 @@ namespace {
         u16 unknown;
     };
 
-    struct TilesetEntry
+    struct TileEntry
     {
         u32 resource_locator;
-        u32 offset;
+        u32 offset_resource_data;
         u32 tile_count;
         u32 tile_size;
         ResourceType resource_type;
@@ -84,13 +90,21 @@ namespace {
     #pragma pack(pop)
 }
 
-template <u32 X, u32 Y, u32 Z>
-struct BiffFile
+class BiffFile : IEFile
 {
+private:
     BiffHeader header;
-    FilesetEntry fileset_entries[X];
-    TilesetEntry tileset_entries[Y];
-    char data[Z];
+    vector<FileEntry> file_entries;
+    vector<TileEntry> tile_entries;
+    void check_for_malformation() noexcept override;
+public:
+    explicit BiffFile( const char* path ) noexcept;
+
+    [[nodiscard]]
+    const u32 file_count() const noexcept { return header.count_of_file_entries; }
+    [[nodiscard]]
+    const u32 tile_count() const noexcept { return header.count_of_tile_entries; }
+
 };
 
 #endif // BIFF_FILES_H

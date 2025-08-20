@@ -1,11 +1,9 @@
 #include "aliases.h"
-#include "exceptions.h"
 #include "ie_files.h"
 #include "tlk_file.h"
 
 #include <fstream>
 #include <iterator>
-#include <optional>
 #include <string>
 #include <vector>
 #include <string_view>

@@ -22,7 +22,7 @@ namespace {
         u32 offset_to_resource_entries;
     };
 
-    struct BiffEntries
+    struct BiffEntry
     {
         u32 length_biff_file;
         u32 offset_to_biff_filename;
@@ -30,10 +30,10 @@ namespace {
         u16 location_file_bitfield;
     };
 
-    struct ResourceEntries
+    struct ResourceEntry
     {
         Resref resource_name;
-        u32 resource_type;
+        u16 resource_type;
         u32 resource_locator;
     };
 
@@ -44,16 +44,16 @@ class KeyFile : public IEFile
 {
 private:
     KeyFileHeader header;
-    vector<BiffEntries> biff_entries;
-    vector<ResourceEntries> resource_entries;
+    vector<BiffEntry> biff_entries;
+    vector<ResourceEntry> resource_entries;
     void check_for_malformation() noexcept override;
 public:
     explicit KeyFile( const char* path ) noexcept;
 
     [[nodiscard]]
-    const u32 get_biff_count() const noexcept { return header.biff_count; }
+    const u32 biff_count() const noexcept { return header.biff_count; }
     [[nodiscard]]
-    const u32 get_resource_count() const noexcept { return header.resource_count; }
+    const u32 resource_count() const noexcept { return header.resource_count; }
 };
 
 #endif // KEY_FILE_H

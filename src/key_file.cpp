@@ -2,6 +2,7 @@
 
 #include "ie_files.h"
 #include "key_file.h"
+#include <iostream>
 
 using namespace rp::files;
 
@@ -12,16 +13,24 @@ KeyFile::KeyFile( const char* path ) noexcept
     : IEFile( path ), header( {} )
 {
 
-    std::ifstream gam( path, std::ios::binary );
-    if ( gam )
+    std::ifstream key( path, std::ios::binary );
+    if ( key )
     {
         state = IEFileState::Readable;
-        gam.read( reinterpret_cast<char*>(&header), sizeof( KeyFileHeader ) );
+        key.read( reinterpret_cast<char*>(&header), sizeof( KeyFileHeader ) );
         check_for_malformation();
 
         if ( state == IEFileState::ReadableAndValid )
         {
+            biff_entries.resize( header.biff_count );
+            resource_entries.resize( header.resource_count );
 
+            key.seekg( header.offset_to_biff_entries, std::ios::beg );
+            key.read( reinterpret_cast<char*>( biff_entries.data() ),
+                header.biff_count * sizeof( BiffEntry ) );
+            key.seekg( header.offset_to_resource_entries, std::ios::beg );
+            key.read( reinterpret_cast<char*>( resource_entries.data() ),
+                header.resource_count * sizeof( ResourceEntry ) );
         }
     }
 }

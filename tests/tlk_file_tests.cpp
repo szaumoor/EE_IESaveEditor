@@ -6,7 +6,6 @@
 
 #include "../src/tlk_file.h"
 #include "../src/ie_files.h"
-#include "../src/exceptions.h"
 
 
 using namespace std;
@@ -46,8 +45,6 @@ TEST( TlkFileTest, TlkIsMalformedSignature )
 }
 
 TEST( TlkFileTest, TlkIsReadableAndValid ) {
-    TlkFile tlk( "dialog.tlk" );
-    EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid );
     ofstream ofs( "valid_tlk.tlk", ios::binary );
     ofs.write( "TLK ", 4 ); // Valid signature
     ofs.write( "V1  ", 4 ); // Valid version
