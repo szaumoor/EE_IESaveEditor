@@ -16,13 +16,14 @@ namespace rp::files
 
     class IEFile
     {
-    private:
         const std::string path;
     protected:
         IEFile(const char* path) : path(std::string(path)) {}
         IEFileState state = IEFileState::Unreadable;
         virtual void check_for_malformation() = 0;
     public:
+        virtual ~IEFile() = default;
+
         IEFileState get_state() const noexcept { return state; }
         explicit operator bool() const noexcept { return state == IEFileState::ReadableAndValid; }
         IEFile() = delete;
