@@ -11,7 +11,7 @@ CreFile::CreFile( std::ifstream& file, const u32 offset ) noexcept
 
     known_spells.resize( header.known_spells_count );
     memorization_infos.resize( header.memorization_count );
-    memorized_spells.resize( header.memorized_count );;
+    memorized_spells.resize( header.memorized_count );
     items.resize( header.items_count );
 
     file.seekg( offset + header.known_spells_offset, std::ios::beg );
