@@ -7,18 +7,17 @@
 
 using rp::files::IEFileState;
 
-constexpr const char* GAM_FILE_SIGNATURE = "GAME";
-constexpr const char* GAM_FILE_VERSION   = "V2.0";
+constexpr auto GAM_FILE_SIGNATURE = "GAME";
+constexpr auto GAM_FILE_VERSION   = "V2.0";
 
 GamFile::GamFile( const char* path ) noexcept
     : IEFile( path ), header( {} ), familiar_info( {} )
 {
-    std::ifstream gam( path, std::ios::binary );
-    if ( gam )
+    if (std::ifstream gam( path, std::ios::binary ); gam )
     {
         state = IEFileState::Readable;
         gam.read( reinterpret_cast<char*>(&header), sizeof( GamHeader ) );
-        check_for_malformation();
+        GamFile::check_for_malformation();
 
         if ( state == IEFileState::ReadableAndValid )
         {

@@ -11,13 +11,11 @@ constexpr const char* KEY_FILE_VERSION = "V1  ";
 KeyFile::KeyFile( const char* path ) noexcept
     : IEFile( path ), header( {} )
 {
-
-    std::ifstream key( path, std::ios::binary );
-    if ( key )
+    if (std::ifstream key( path, std::ios::binary ); key )
     {
         state = IEFileState::Readable;
         key.read( reinterpret_cast<char*>(&header), sizeof( KeyFileHeader ) );
-        check_for_malformation();
+        KeyFile::check_for_malformation();
 
         if ( state == IEFileState::ReadableAndValid )
         {

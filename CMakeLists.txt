@@ -31,13 +31,13 @@ add_library (EESaveEditorBackend
     "src/gam_file.cpp"
     "src/cre_file.h"
     "src/helper_structs.h"
-    "src/eff_files.h"
-    "src/aliases.h"
+        "src/aliases.h"
     "src/ie_files.h"
     "src/cre_file.cpp"
     "src/key_file.h"
     "src/key_file.cpp"
- "src/biff_files.cpp")
+ "src/biff_files.cpp"
+        src/binary_layouts.h)
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp
