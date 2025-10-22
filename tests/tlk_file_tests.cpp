@@ -61,7 +61,7 @@ TEST( TlkFileTest, TlkIsReadableAndValid ) {
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
 {
-    TlkFile tlk( "dialog.tlk" );
+    const TlkFile tlk( "../dialog.tlk" );
     EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid);
     const auto result = tlk.at_index( 1 );
     EXPECT_TRUE( result.has_value() );
@@ -69,7 +69,7 @@ TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
 }
 
 TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes) {
-    TlkFile tlk( "dialog.tlk" );
+    const TlkFile tlk( "../dialog.tlk" );
     EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid );
     const auto result1 = tlk.at_index( -1 );
     const auto result2 = tlk.at_index( tlk.string_count() );
