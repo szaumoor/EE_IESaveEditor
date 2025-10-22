@@ -73,7 +73,6 @@ void GamFile::check_for_malformation() noexcept
     const bool valid_signature = header.signature.to_string() == GAM_FILE_SIGNATURE;
     const bool valid_version   = header.version.to_string() == GAM_FILE_VERSION_2_0 ||
                                  header.version.to_string() == GAM_FILE_VERSION_2_1;
-    std::cout << std::boolalpha << "Signature: " << valid_signature << " Version: " << valid_version << std::endl;
     state = (valid_signature && valid_version)
         ? IEFileState::ReadableAndValid
         : IEFileState::ReadableButMalformed;
