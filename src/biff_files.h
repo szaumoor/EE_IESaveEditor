@@ -13,11 +13,6 @@ using rp::files::IEFile;
 
 class BiffFile final : IEFile
 {
-private:
-    BiffHeader header;
-    vector<FileEntry> file_entries;
-    vector<TileEntry> tile_entries;
-    void check_for_malformation() noexcept override;
 public:
     explicit BiffFile( const char* path ) noexcept;
 
@@ -26,6 +21,11 @@ public:
     [[nodiscard]]
     u32 tile_count() const noexcept { return header.count_of_tile_entries; }
 
+private:
+    BiffHeader header;
+    vector<FileEntry> file_entries;
+    vector<TileEntry> tile_entries;
+    void check_for_malformation() noexcept override;
 };
 
 #endif // BIFF_FILES_H

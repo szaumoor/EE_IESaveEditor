@@ -16,11 +16,6 @@ namespace rp::files
 
     class IEFile
     {
-        const std::string path;
-    protected:
-        IEFile(const char* path) : path(std::string(path)) {}
-        IEFileState state = IEFileState::Unreadable;
-        virtual void check_for_malformation() = 0;
     public:
         virtual ~IEFile() = default;
 
@@ -30,6 +25,14 @@ namespace rp::files
 
         [[nodiscard]]
         const std::string& get_path() const noexcept { return path; }
+
+    protected:
+        explicit IEFile(const char* path) : path(std::string(path)) {}
+        IEFileState state = IEFileState::Unreadable;
+        virtual void check_for_malformation() = 0;
+
+    private:
+        const std::string path;
     };
 
 }

@@ -5,10 +5,10 @@
 #include "binary_layouts.h"
 #include "ie_files.h"
 
-#include <string_view>
-#include <string>
-#include <vector>
 #include <expected>
+#include <string>
+#include <string_view>
+#include <vector>
 
 using std::vector;
 using std::string_view;
@@ -34,11 +34,6 @@ struct TlkError
 
 class TlkFile final : public IEFile
 {
-private:
-    TlkFileHeader header;
-    vector<TlkFileEntry> entries;
-    vector<string> cached_strings;
-    void check_for_malformation() noexcept override;
 public:
     explicit TlkFile(const char* path) noexcept;
     TlkFile() = delete;
@@ -47,6 +42,12 @@ public:
     expected<string_view, TlkError> at_index( u32 index ) const noexcept;
     [[nodiscard]]
     u32 string_count() const noexcept { return static_cast<u32>(cached_strings.size()); }
+
+private:
+    TlkFileHeader header;
+    vector<TlkFileEntry> entries;
+    vector<string> cached_strings;
+    void check_for_malformation() noexcept override;
 };
 
 #endif // TLK_FILE_H
