@@ -2,12 +2,12 @@
 #include "ie_files.h"
 #include "tlk_file.h"
 
+#include <expected>
 #include <fstream>
 #include <iterator>
 #include <string>
-#include <vector>
 #include <string_view>
-#include <expected>
+#include <vector>
 
 constexpr const char* TLK_FILE_SIGNATURE = "TLK ";
 constexpr const char* TLK_FILE_VERSION   = "V1  ";

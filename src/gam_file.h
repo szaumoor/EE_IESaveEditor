@@ -12,9 +12,11 @@ using std::vector;
 using rp::files::IEFile;
 
 
-
 class GamFile final : public IEFile
 {
+public:
+    explicit GamFile( const char* path ) noexcept;
+private:
     GamHeader header;
 
     vector<GamCharacterData> party_members;
@@ -35,8 +37,6 @@ class GamFile final : public IEFile
     vector<Resref> familiar_extras;
 
     void check_for_malformation() noexcept override;
-public:
-    explicit GamFile( const char* path ) noexcept;
 };
 
 #endif // GAM_FILE_H
