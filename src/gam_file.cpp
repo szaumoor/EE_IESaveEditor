@@ -3,11 +3,13 @@
 #include "ie_files.h"
 
 #include <fstream>
+#include <iostream>
 
 using rp::files::IEFileState;
 
-constexpr auto GAM_FILE_SIGNATURE = "GAME";
-constexpr auto GAM_FILE_VERSION   = "V2.0";
+static constexpr auto GAM_FILE_SIGNATURE   = "GAME";
+static constexpr auto GAM_FILE_VERSION_2_0 = "V2.0";
+static constexpr auto GAM_FILE_VERSION_2_1 = "V2.1";
 
 GamFile::GamFile( const char* path ) noexcept
     : IEFile( path ), header( {} ), familiar_info( {} )
@@ -69,7 +71,9 @@ GamFile::GamFile( const char* path ) noexcept
 void GamFile::check_for_malformation() noexcept
 {
     const bool valid_signature = header.signature.to_string() == GAM_FILE_SIGNATURE;
-    const bool valid_version   = header.version.to_string()   == GAM_FILE_VERSION;
+    const bool valid_version   = header.version.to_string() == GAM_FILE_VERSION_2_0 ||
+                                 header.version.to_string() == GAM_FILE_VERSION_2_1;
+    std::cout << std::boolalpha << "Signature: " << valid_signature << " Version: " << valid_version << std::endl;
     state = (valid_signature && valid_version)
         ? IEFileState::ReadableAndValid
         : IEFileState::ReadableButMalformed;

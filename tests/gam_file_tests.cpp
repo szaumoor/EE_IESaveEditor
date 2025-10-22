@@ -38,7 +38,8 @@ TEST( GamFileTests, GamIsMalformedVersion )
 }
 
 TEST( GamFileTests, RealGamIsReadableAndValid ) {
-    GamFile gam( "baldur.gam" );
+    GamFile gam( "../BALDUR.gam" );
+    std::cout << static_cast<int>(gam.get_state()) ;
     EXPECT_EQ( gam.get_state(), IEFileState::ReadableAndValid );
 }
 
