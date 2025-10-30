@@ -4,8 +4,8 @@
 #include <filesystem>
 #include <fstream>
 
-#include "../src/tlk_file.h"
-#include "../src/ie_files.h"
+#include "../src/backend/tlk_file.h"
+#include "../src/backend/ie_files.h"
 
 
 using namespace std;

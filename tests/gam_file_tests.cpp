@@ -3,8 +3,8 @@
 #include <filesystem>
 #include <fstream>
 
-#include "../src/ie_files.h"
-#include "../src/gam_file.h"
+#include "../src/backend/ie_files.h"
+#include "../src/backend/gam_file.h"
 
 
 using rp::files::IEFileState;

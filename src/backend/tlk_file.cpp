@@ -1,6 +1,6 @@
 #include "aliases.h"
 #include "ie_files.h"
-#include "tlk_file.h"
+#include "../tlk_file.h"
 
 #include <expected>
 #include <fstream>

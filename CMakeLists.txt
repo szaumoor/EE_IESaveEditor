@@ -24,38 +24,38 @@ file(GLOB CHOC_SRC
 
 add_library (EESaveEditorBackend
     ${CHOC_SRC}
-    "src/biff_files.h"
-    "src/tlk_file.h"
-    "src/tlk_file.cpp"
-    "src/gam_file.h"
-    "src/gam_file.cpp"
-    "src/cre_file.h"
-    "src/helper_structs.h"
-        "src/aliases.h"
-    "src/ie_files.h"
-    "src/cre_file.cpp"
-    "src/key_file.h"
-    "src/key_file.cpp"
- "src/biff_files.cpp"
-        src/binary_layouts.h)
+    "src/backend/biff_files.h"
+    "src/backend/tlk_file.h"
+    "src/backend/tlk_file.cpp"
+    "src/backend/gam_file.h"
+    "src/backend/gam_file.cpp"
+    "src/backend/cre_file.h"
+    "src/backend/helper_structs.h"
+        "src/backend/aliases.h"
+    "src/backend/ie_files.h"
+    "src/backend/cre_file.cpp"
+    "src/backend/key_file.h"
+    "src/backend/key_file.cpp"
+ "src/backend/biff_files.cpp"
+        src/backend/binary_layouts.h)
 
  add_executable(tlk_file_test
     tests/tlk_file_tests.cpp
-    src/tlk_file.cpp
-    src/tlk_file.h
+         src/backend/tlk_file.cpp
+         src/backend/tlk_file.h
  )
 
   add_executable(key_file_test
-    src/key_file.cpp
-    src/key_file.h
+          src/backend/key_file.cpp
+          src/backend/key_file.h
     tests/key_file_tests.cpp
  )
 
   add_executable(gam_file_test
     tests/gam_file_tests.cpp
-    src/gam_file.cpp
-    src/gam_file.h
-   src/cre_file.cpp
+          src/backend/gam_file.cpp
+          src/backend/gam_file.h
+          src/backend/cre_file.cpp
   )
 
  target_link_libraries(tlk_file_test
