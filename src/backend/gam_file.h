@@ -2,7 +2,7 @@
 #define GAM_FILE_H
 
 #include "cre_file.h"
-#include "helper_structs.h"
+#include "../helper_structs.h"
 #include "ie_files.h"
 #include "binary_layouts.h"
 
