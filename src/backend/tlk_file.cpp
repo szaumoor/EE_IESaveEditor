@@ -1,16 +1,17 @@
 #include "aliases.h"
 #include "ie_files.h"
-#include "../tlk_file.h"
+#include "tlk_file.h"
 
 #include <expected>
+#include <format>
 #include <fstream>
 #include <iterator>
 #include <string>
 #include <string_view>
 #include <vector>
 
-constexpr const char* TLK_FILE_SIGNATURE = "TLK ";
-constexpr const char* TLK_FILE_VERSION   = "V1  ";
+constexpr auto TLK_FILE_SIGNATURE = "TLK ";
+constexpr auto TLK_FILE_VERSION   = "V1  ";
 
 TlkFile::TlkFile( const char* path ) noexcept
     : IEFile(path), header({})
@@ -55,7 +56,7 @@ expected<string_view, TlkError> TlkFile::at_index( const u32 index ) const noexc
 
     if ( index >= cached_strings.size() )
         return std::unexpected( TlkError( TlkErrorType::InvalidIndex,
-            "The requested index " + std::to_string(index) + " is out of bounds." ) );
+            std::format("The requested index {} is out of bounds", index)));
 
     return cached_strings[index];
 }

@@ -1,12 +1,12 @@
 #include <fstream>
 
 #include "ie_files.h"
-#include "../key_file.h"
+#include "key_file.h"
 
 using namespace rp::files;
 
-constexpr const char* KEY_FILE_SIGNATURE = "KEY ";
-constexpr const char* KEY_FILE_VERSION = "V1  ";
+constexpr auto KEY_FILE_SIGNATURE = "KEY ";
+constexpr auto KEY_FILE_VERSION = "V1  ";
 
 KeyFile::KeyFile( const char* path ) noexcept
     : IEFile( path ), header( {} )
