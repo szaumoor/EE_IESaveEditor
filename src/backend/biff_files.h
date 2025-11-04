@@ -2,7 +2,7 @@
 #define BIFF_FILES_H
 
 #include "aliases.h"
-#include "../binary_layouts.h"
+#include "binary_layouts.h"
 #include "ie_files.h"
 
 #include <vector>

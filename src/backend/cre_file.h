@@ -4,7 +4,6 @@
 #include "aliases.h"
 #include "binary_layouts.h"
 
-#include <fstream>
 #include <variant>
 #include <vector>
 

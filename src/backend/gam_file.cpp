@@ -1,6 +1,6 @@
-#include "../gam_file.h"
+#include "gam_file.h"
 #include "helper_structs.h"
-#include "../ie_files.h"
+#include "ie_files.h"
 
 #include <fstream>
 #include <iostream>
