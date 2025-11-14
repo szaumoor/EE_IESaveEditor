@@ -26,7 +26,7 @@
    <string notr="true">EE Save Editor by szaumoor</string>
   </property>
   <property name="toolTip">
-   <string>A save editor for the Enhanced Editiors of the IE games</string>
+   <string>A save editor for the Enhanced Editions of the IE games</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
   <widget class="QMenuBar" name="menubar">

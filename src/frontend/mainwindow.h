@@ -2,7 +2,7 @@
 #define EESAVEEDITOR_MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 

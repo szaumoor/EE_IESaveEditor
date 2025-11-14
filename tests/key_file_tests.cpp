@@ -53,12 +53,12 @@ TEST( KeyFileTest, KeyIsMalformedSignature ) {
     filesystem::remove( "invalid_signature.key" );
 }
 
-TEST( KeyFileTests, RealKeyIsReadableAndValid ) {
+TEST( KeyFileTest, RealKeyIsReadableAndValid ) {
     const KeyFile key( "chitin.key" );
     EXPECT_EQ( key.get_state(), IEFileState::ReadableAndValid );
 }
 
-TEST( KeyFileTests, KeyIsReadableAndValid ) {
+TEST( KeyFileTest, KeyIsReadableAndValid ) {
     ofstream ofs( "valid_key.key", ios::binary );
     ofs.write( "KEY ", 4 ); // Valid signature
     ofs.write( "V1  ", 4 ); // Valid version
