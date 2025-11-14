@@ -54,7 +54,7 @@ TEST( KeyFileTest, KeyIsMalformedSignature ) {
 }
 
 TEST( KeyFileTests, RealKeyIsReadableAndValid ) {
-    KeyFile key( "chitin.key" );
+    const KeyFile key( "chitin.key" );
     EXPECT_EQ( key.get_state(), IEFileState::ReadableAndValid );
 }
 

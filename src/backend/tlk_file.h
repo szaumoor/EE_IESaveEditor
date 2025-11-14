@@ -8,11 +8,11 @@
 #include <expected>
 #include <string>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 using std::vector;
 using std::string_view;
-using std::string;
 using std::expected;
 using std::unexpected;
 
@@ -27,9 +27,9 @@ enum class TlkErrorType
 struct TlkError
 {
     TlkErrorType type;
-    string message;
-    explicit TlkError(TlkErrorType error_type, const string& msg)
-        : type(error_type), message(msg) {}
+    std::string message;
+    explicit TlkError(const TlkErrorType error_type, std::string msg)
+        : type(error_type), message(std::move(msg)) {}
 };
 
 class TlkFile final : public IEFile
@@ -46,7 +46,7 @@ public:
 private:
     TlkFileHeader header;
     vector<TlkFileEntry> entries;
-    vector<string> cached_strings;
+    vector<std::string> cached_strings;
     void check_for_malformation() noexcept override;
 };
 

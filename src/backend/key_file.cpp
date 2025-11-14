@@ -24,10 +24,10 @@ KeyFile::KeyFile( const char* path ) noexcept
 
             key.seekg( header.offset_to_biff_entries, std::ios::beg );
             key.read( reinterpret_cast<char*>( biff_entries.data() ),
-                header.biff_count * sizeof( BiffEntry ) );
+                static_cast<std::streamsize>(header.biff_count * sizeof( BiffEntry ) ));
             key.seekg( header.offset_to_resource_entries, std::ios::beg );
             key.read( reinterpret_cast<char*>( resource_entries.data() ),
-                header.resource_count * sizeof( ResourceEntry ) );
+                static_cast<std::streamsize>(header.resource_count * sizeof( ResourceEntry ) ));
         }
     }
 }
@@ -36,7 +36,7 @@ void KeyFile::check_for_malformation() noexcept
 {
     const bool valid_signature = header.signature.to_string() == KEY_FILE_SIGNATURE;
     const bool valid_version = header.version.to_string() == KEY_FILE_VERSION;
-    state = (valid_signature && valid_version)
+    state = valid_signature && valid_version
         ? IEFileState::ReadableAndValid
         : IEFileState::ReadableButMalformed;
 }

@@ -29,20 +29,16 @@ TlkFile::TlkFile( const char* path ) noexcept
 
             tlk.seekg( sizeof(TlkFileHeader), std::ios::beg );
             tlk.read( reinterpret_cast<char*>( entries.data() ),
-                header.entry_count * sizeof( TlkFileEntry ) );
+                static_cast<std::streamsize>(header.entry_count * sizeof( TlkFileEntry ) ));
 
             tlk.seekg( header.offset_to_str_data, std::ios::beg );
             std::vector<char> string_data;
-            string_data = std::vector<char>(
-                std::istreambuf_iterator<char>( tlk ),
-                std::istreambuf_iterator<char>()
-            );
+            string_data = std::vector(std::istreambuf_iterator( tlk ),std::istreambuf_iterator<char>());
 
-            for ( size_t i = 0; i < entries.size(); ++i )
+            for ( const auto& entry: entries)
             {
-                const auto& entry = entries[i];
                 const u32 offset = entry.offset_to_string;
-                cached_strings[i] = std::string( &string_data[offset], entry.string_length );
+                cached_strings.emplace_back( &string_data[offset], entry.string_length );
             }
         }
     }
@@ -65,7 +61,7 @@ void TlkFile::check_for_malformation() noexcept
 {
     const bool valid_signature = header.signature.to_string() == TLK_FILE_SIGNATURE;
     const bool valid_version   = header.version.to_string()   == TLK_FILE_VERSION;
-    state = ( valid_signature && valid_version )
+    state = valid_signature && valid_version
             ? IEFileState::ReadableAndValid
             : IEFileState::ReadableButMalformed;
 }

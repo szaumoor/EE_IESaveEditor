@@ -1,10 +1,10 @@
 #ifndef GAM_FILE_H
 #define GAM_FILE_H
 
+#include "binary_layouts.h"
 #include "cre_file.h"
 #include "helper_structs.h"
 #include "ie_files.h"
-#include "binary_layouts.h"
 
 #include <vector>
 
