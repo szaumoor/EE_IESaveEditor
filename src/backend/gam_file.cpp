@@ -32,38 +32,38 @@ GamFile::GamFile( const char* path ) noexcept
 
             gam.seekg( header.npc_party_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( party_members.data() ),
-                header.npc_party_count * sizeof( GamCharacterData ) );
+                static_cast<std::streamsize>(header.npc_party_count * sizeof( GamCharacterData ) ));
             for ( const auto& member : party_members )
                 party_cre_files.emplace_back( gam, member.cre_offset );
 
             gam.seekg( header.npc_nonparty_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( non_party_members.data() ),
-                header.npc_nonparty_count * sizeof( GamCharacterData ) );
+                static_cast<std::streamsize>(header.npc_nonparty_count * sizeof( GamCharacterData ) ));
             for ( const auto& member : non_party_members )
                 non_party_cre_files.emplace_back( gam, member.cre_offset );
 
             gam.seekg( header.global_vars_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( variables.data() ),
-                header.global_vars_count * sizeof( GamGlobalVariable ) );
+                static_cast<std::streamsize>(header.global_vars_count * sizeof( GamGlobalVariable ) ));
 
             gam.seekg( header.journal_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( journal_entries.data() ),
-                header.journal_count * sizeof( GamJournalEntry ) );
+                static_cast<std::streamsize>(header.journal_count * sizeof( GamJournalEntry ) ));
 
             gam.seekg( header.stored_locs_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( stored_locations.data() ),
-                header.stored_locs_count * sizeof( GamLocationInfo ) );
+                static_cast<std::streamsize>(header.stored_locs_count * sizeof( GamLocationInfo ) ));
 
             gam.seekg( header.pocket_locs_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( pocket_plane_info.data() ),
-                header.pocket_locs_count * sizeof( GamLocationInfo ) );
+                static_cast<std::streamsize>(header.pocket_locs_count * sizeof( GamLocationInfo ) ));
 
             gam.seekg( header.familiar_info_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>(&familiar_info), sizeof( GamFamiliarInfo ) );
 
             gam.seekg( header.familiar_extra_offset, std::ios::beg );
             gam.read( reinterpret_cast<char*>( familiar_extras.data() ),
-                familiar_extras.size() * sizeof( Resref ) );
+                static_cast<std::streamsize>(familiar_extras.size() * sizeof( Resref ) ));
         }
     }
 }
@@ -73,7 +73,7 @@ void GamFile::check_for_malformation() noexcept
     const bool valid_signature = header.signature.to_string() == GAM_FILE_SIGNATURE;
     const bool valid_version   = header.version.to_string() == GAM_FILE_VERSION_2_0 ||
                                  header.version.to_string() == GAM_FILE_VERSION_2_1;
-    state = (valid_signature && valid_version)
+    state = valid_signature && valid_version
         ? IEFileState::ReadableAndValid
         : IEFileState::ReadableButMalformed;
 }
