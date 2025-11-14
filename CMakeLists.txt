@@ -61,12 +61,26 @@ add_library (backend ${BACKEND_SOURCES})
     src/backend/cre_file.cpp
   )
 
+add_executable(all_tests
+  tests/gam_file_tests.cpp
+  tests/key_file_tests.cpp
+  tests/tlk_file_tests.cpp
+
+        src/backend/gam_file.cpp
+        src/backend/gam_file.h
+        src/backend/cre_file.cpp
+        src/backend/key_file.cpp
+        src/backend/key_file.h
+        src/backend/tlk_file.cpp
+        src/backend/tlk_file.h
+)
+
 add_executable(EESaveEditor
    ${BACKEND_SOURCES}
    src/frontend/mainwindow.cpp
    src/frontend/mainwindow.h
    src/frontend/mainwindow.ui
-        src/main.cpp
+   src/main.cpp
 )
 
  target_link_libraries(tlk_file_test
@@ -82,6 +96,11 @@ add_executable(EESaveEditor
  target_link_libraries(key_file_test
     PRIVATE
     GTest::gtest_main
+)
+
+target_link_libraries(all_tests
+   PRIVATE
+   GTest::gtest_main
 )
 
 target_link_libraries(EESaveEditor PRIVATE Qt6::Widgets)

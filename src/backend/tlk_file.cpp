@@ -25,21 +25,16 @@ TlkFile::TlkFile( const char* path ) noexcept
         if (state == IEFileState::ReadableAndValid)
         {
             entries.resize( header.entry_count );
-            cached_strings.resize( header.entry_count );
 
             tlk.seekg( sizeof(TlkFileHeader), std::ios::beg );
             tlk.read( reinterpret_cast<char*>( entries.data() ),
                 static_cast<std::streamsize>(header.entry_count * sizeof( TlkFileEntry ) ));
 
             tlk.seekg( header.offset_to_str_data, std::ios::beg );
-            std::vector<char> string_data;
-            string_data = std::vector(std::istreambuf_iterator( tlk ),std::istreambuf_iterator<char>());
+            const auto string_data = std::vector(std::istreambuf_iterator( tlk ),std::istreambuf_iterator<char>());
 
             for ( const auto& entry: entries)
-            {
-                const u32 offset = entry.offset_to_string;
-                cached_strings.emplace_back( &string_data[offset], entry.string_length );
-            }
+                cached_strings.emplace_back( &string_data[entry.offset_to_string], entry.string_length );
         }
     }
 }

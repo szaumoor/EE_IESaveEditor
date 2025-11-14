@@ -11,10 +11,10 @@
 #include <utility>
 #include <vector>
 
-using std::vector;
-using std::string_view;
 using std::expected;
+using std::string_view;
 using std::unexpected;
+using std::vector;
 
 using namespace rp::files;
 
@@ -26,8 +26,9 @@ enum class TlkErrorType
 
 struct TlkError
 {
-    TlkErrorType type;
-    std::string message;
+    const TlkErrorType type;
+    const std::string message;
+
     explicit TlkError(const TlkErrorType error_type, std::string msg)
         : type(error_type), message(std::move(msg)) {}
 };
