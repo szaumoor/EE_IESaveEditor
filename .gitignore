@@ -13,3 +13,4 @@ CMakeUserPresets.json
 out
 .vs
 /.idea/
+.qt/
