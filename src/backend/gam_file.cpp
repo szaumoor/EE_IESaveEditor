@@ -5,7 +5,6 @@
 #include <fstream>
 #include <iostream>
 
-using rp::files::IEFileState;
 
 static constexpr auto GAM_FILE_SIGNATURE   = "GAME";
 static constexpr auto GAM_FILE_VERSION_2_0 = "V2.0";

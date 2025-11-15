@@ -9,17 +9,17 @@
 #include <vector>
 
 using std::vector;
-using rp::files::IEFile;
 
 
 class GamFile final : public IEFile
 {
 public:
     explicit GamFile( const char* path ) noexcept;
+    vector<GamCharacterData> party_members;
+
 private:
     GamHeader header;
 
-    vector<GamCharacterData> party_members;
     vector<GamCharacterData> non_party_members;
     vector<CreFile> party_cre_files;
     vector<CreFile> non_party_cre_files;

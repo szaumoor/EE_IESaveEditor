@@ -3,7 +3,6 @@
 #include "ie_files.h"
 #include "key_file.h"
 
-using namespace rp::files;
 
 constexpr auto KEY_FILE_SIGNATURE = "KEY ";
 constexpr auto KEY_FILE_VERSION = "V1  ";
@@ -17,7 +16,7 @@ KeyFile::KeyFile( const char* path ) noexcept
         key.read( reinterpret_cast<char*>(&header), sizeof( KeyFileHeader ) );
         KeyFile::check_for_malformation();
 
-        if ( state == IEFileState::ReadableAndValid )
+        if ( good() )
         {
             biff_entries.resize( header.biff_count );
             resource_entries.resize( header.resource_count );

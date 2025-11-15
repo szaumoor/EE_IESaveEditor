@@ -4,37 +4,36 @@
 #include <string>
 
 
-namespace rp::files
+
+enum class [[nodiscard]] IEFileState
 {
-    enum class [[nodiscard]] IEFileState
-    {
-        Unreadable,
-        Readable,
-        ReadableButMalformed,
-        ReadableAndValid
-    };
+    Unreadable,
+    Readable,
+    ReadableButMalformed,
+    ReadableAndValid
+};
 
-    class IEFile
-    {
-    public:
-        virtual ~IEFile() = default;
+class IEFile
+{
+public:
+    virtual ~IEFile() = default;
 
-        IEFileState get_state() const noexcept { return state; }
-        explicit operator bool() const noexcept { return state == IEFileState::ReadableAndValid; }
-        IEFile() = delete;
+    IEFileState get_state() const noexcept { return state; }
+    [[nodiscard]] bool good() const noexcept { return state == IEFileState::ReadableAndValid; }
+    explicit operator bool() const noexcept { return good(); }
 
-        [[nodiscard]]
-        const std::string& get_path() const noexcept { return path; }
+    IEFile() = delete;
 
-    protected:
-        explicit IEFile(const char* path) : path(std::string(path)) {}
-        IEFileState state = IEFileState::Unreadable;
-        virtual void check_for_malformation() = 0;
+    [[nodiscard]] const std::string& get_path() const noexcept { return path; }
 
-    private:
-        const std::string path;
-    };
+protected:
+    explicit IEFile(const char* path) : path(std::string(path)) {}
+    IEFileState state = IEFileState::Unreadable;
+    virtual void check_for_malformation() = 0;
 
-}
+private:
+    const std::string path;
+};
+
 
 #endif // IE_FILES_H

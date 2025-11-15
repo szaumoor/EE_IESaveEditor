@@ -447,7 +447,7 @@ struct GamCharacterData
     u16 viewing_rect_y;                 // 0x0026
     u16 modal_action;                   // 0x0028
     u16 happiness;                      // 0x002A
-    u32 unused[24];                     // 0x002C � 0x088
+    u32 unused[24];                     // 0x002C - 0x088
     u16 quick_weapon_slots[4];          // 0x008C - 0x0092
     u16 quick_weapon_abilities[4];      // 0x0094 - 0x009A
     Resref quick_spell_resources[3];    // 0x009C - 0x00AC
@@ -492,15 +492,15 @@ struct GamFamiliarInfo
     char chaotic_neutral_familiar[8];   // 0x0038
     char chaotic_evil_familiar[8];      // 0x0040
     u32 familiar_resource_offset;       // 0x0048
-    u32 lg_familiar_count[9];           // 0x004C � 0x0068
-    u32 ln_familiar_count[9];           // 0x006C � 0x0088
-    u32 cg_familiar_count[9];           // 0x008C � 0x00A8
-    u32 cn_familiar_count[9];           // 0x0208 � 0x0224
-    u32 ng_familiar_count[9];           // 0x011C � 0x0138
-    u32 tn_familiar_count[9];           // 0x013C � 0x0158
-    u32 ne_familiar_count[9];           // 0x015C � 0x0178
-    u32 le_familiar_count[9];           // 0x0184 � 0x0204
-    u32 ce_familiar_count[9];           // 0x022C � 0x0248
+    u32 lg_familiar_count[9];           // 0x004C - 0x0068
+    u32 ln_familiar_count[9];           // 0x006C - 0x0088
+    u32 cg_familiar_count[9];           // 0x008C - 0x00A8
+    u32 cn_familiar_count[9];           // 0x0208 - 0x0224
+    u32 ng_familiar_count[9];           // 0x011C - 0x0138
+    u32 tn_familiar_count[9];           // 0x013C - 0x0158
+    u32 ne_familiar_count[9];           // 0x015C - 0x0178
+    u32 le_familiar_count[9];           // 0x0184 - 0x0204
+    u32 ce_familiar_count[9];           // 0x022C - 0x0248
 };
 
 struct GamLocationInfo

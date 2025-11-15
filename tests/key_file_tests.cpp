@@ -6,7 +6,6 @@
 #include "../src/backend/ie_files.h"
 #include "../src/backend/key_file.h"
 
-using namespace rp::files;
 using namespace std;
 
 
