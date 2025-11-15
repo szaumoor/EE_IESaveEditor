@@ -24,55 +24,66 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 enable_testing()
 
 set(BACKEND_SOURCES
-    src/backend/biff_files.h
-    src/backend/tlk_file.h
-    src/backend/tlk_file.cpp
-    src/backend/gam_file.h
-    src/backend/gam_file.cpp
-    src/backend/cre_file.h
-    src/backend/helper_structs.h
-    src/backend/aliases.h
-    src/backend/ie_files.h
-    src/backend/cre_file.cpp
-    src/backend/key_file.h
-    src/backend/key_file.cpp
-    src/backend/biff_files.cpp
-    src/backend/binary_layouts.h
+   src/backend/biff_files.h
+   src/backend/tlk_file.h
+   src/backend/tlk_file.cpp
+   src/backend/gam_file.h
+   src/backend/gam_file.cpp
+   src/backend/cre_file.h
+   src/backend/helper_structs.h
+   src/backend/aliases.h
+   src/backend/ie_files.h
+   src/backend/cre_file.cpp
+   src/backend/key_file.h
+   src/backend/key_file.cpp
+   src/backend/biff_files.cpp
+   src/backend/binary_layouts.h
+)
+
+set(GAM_TEST_SOURCES
+   src/backend/gam_file.cpp
+   src/backend/gam_file.h
+   src/backend/cre_file.cpp
+)
+
+set(TLK_TEST_SOURCES
+  src/backend/tlk_file.cpp
+  src/backend/tlk_file.h
+)
+
+set(KEY_TEST_SOURCES
+  src/backend/key_file.cpp
+  src/backend/key_file.h
+)
+
+set(ALL_TEST_SOURCES
+   ${TLK_TEST_SOURCES}
+   ${KEY_TEST_SOURCES}
+   ${GAM_TEST_SOURCES}
 )
 
 add_library (backend ${BACKEND_SOURCES})
 
- add_executable(tlk_file_test
-    tests/tlk_file_tests.cpp
-    src/backend/tlk_file.cpp
-    src/backend/tlk_file.h
- )
+add_executable(tlk_file_test
+  tests/tlk_file_tests.cpp
+  ${TLK_TEST_SOURCES}
+)
 
-  add_executable(key_file_test
-    src/backend/key_file.cpp
-    src/backend/key_file.h
-    tests/key_file_tests.cpp
- )
+add_executable(key_file_test
+  tests/key_file_tests.cpp
+  ${KEY_TEST_SOURCES}
+)
 
-  add_executable(gam_file_test
-    tests/gam_file_tests.cpp
-    src/backend/gam_file.cpp
-    src/backend/gam_file.h
-    src/backend/cre_file.cpp
-  )
+ add_executable(gam_file_test
+   tests/gam_file_tests.cpp
+   ${GAM_TEST_SOURCES}
+ )
 
 add_executable(all_tests
   tests/gam_file_tests.cpp
   tests/key_file_tests.cpp
   tests/tlk_file_tests.cpp
-
-        src/backend/gam_file.cpp
-        src/backend/gam_file.h
-        src/backend/cre_file.cpp
-        src/backend/key_file.cpp
-        src/backend/key_file.h
-        src/backend/tlk_file.cpp
-        src/backend/tlk_file.h
+  ${ALL_TEST_SOURCES}
 )
 
 add_executable(EESaveEditor

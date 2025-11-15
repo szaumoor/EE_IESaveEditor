@@ -13,6 +13,7 @@
 constexpr auto TLK_FILE_SIGNATURE = "TLK ";
 constexpr auto TLK_FILE_VERSION   = "V1  ";
 
+
 TlkFile::TlkFile( const char* path ) noexcept
     : IEFile(path), header({})
 {
@@ -22,18 +23,17 @@ TlkFile::TlkFile( const char* path ) noexcept
         tlk.read( reinterpret_cast<char*>(&header), sizeof( TlkFileHeader ) );
         TlkFile::check_for_malformation();
 
-        if (state == IEFileState::ReadableAndValid)
+        if ( good() )
         {
             entries.resize( header.entry_count );
 
             tlk.seekg( sizeof(TlkFileHeader), std::ios::beg );
-            tlk.read( reinterpret_cast<char*>( entries.data() ),
-                static_cast<std::streamsize>(header.entry_count * sizeof( TlkFileEntry ) ));
+            tlk.read( reinterpret_cast<char*>( entries.data() ), static_cast<std::streamsize>(header.entry_count * sizeof( TlkFileEntry ) ));
 
             tlk.seekg( header.offset_to_str_data, std::ios::beg );
             const auto string_data = std::vector(std::istreambuf_iterator( tlk ),std::istreambuf_iterator<char>());
 
-            for ( const auto& entry: entries)
+            for ( const auto& entry: entries )
                 cached_strings.emplace_back( &string_data[entry.offset_to_string], entry.string_length );
         }
     }

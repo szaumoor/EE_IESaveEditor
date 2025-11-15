@@ -16,8 +16,6 @@ using std::string_view;
 using std::unexpected;
 using std::vector;
 
-using namespace rp::files;
-
 enum class TlkErrorType
 {
     InvalidIndex,

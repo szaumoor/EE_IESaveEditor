@@ -17,14 +17,12 @@ TEST( TlkFileTest, TlkStructsHaveExpectedSize ) {
 
 TEST( TlkFileTest, TlkIsUnreadableTest )
 {
-    EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() ==
-        IEFileState::Unreadable);
+    EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() == IEFileState::Unreadable);
 }
 
 TEST( TlkFileTest, TlkStringCountZeroIfInvalid ) {
     const auto tlk = TlkFile( "nonexistent.tlk" );
-    EXPECT_TRUE( tlk.get_state() == IEFileState::Unreadable &&
-        tlk.string_count() == 0 );
+    EXPECT_TRUE( tlk.get_state() == IEFileState::Unreadable && tlk.string_count() == 0 );
 }
 
 TEST( TlkFileTest, TlkIsMalformedVersion )
@@ -33,8 +31,7 @@ TEST( TlkFileTest, TlkIsMalformedVersion )
     ofs.write("TLK ", 4); // Valid signature
     ofs.write( "Invl", 4 ); // Invalid version
     ofs.close();
-    EXPECT_TRUE( TlkFile( "invalid_version.tlk" ).get_state() ==
-        IEFileState::ReadableButMalformed );
+    EXPECT_TRUE( TlkFile( "invalid_version.tlk" ).get_state() == IEFileState::ReadableButMalformed );
     filesystem::remove( "invalid_version.tlk" );
 }
 
@@ -44,8 +41,7 @@ TEST( TlkFileTest, TlkIsMalformedSignature )
     ofs.write( "XXXX", 4 ); // Invalid signature
     ofs.write( "V1  ", 4 ); // Valid version
     ofs.close();
-    EXPECT_TRUE( TlkFile( "invalid_signature.tlk" ).get_state() ==
-        IEFileState::ReadableButMalformed );
+    EXPECT_TRUE( TlkFile( "invalid_signature.tlk" ).get_state() == IEFileState::ReadableButMalformed );
     filesystem::remove( "invalid_signature.tlk" );
 }
 
@@ -54,8 +50,7 @@ TEST( TlkFileTest, TlkIsReadableAndValid ) {
     ofs.write( "TLK ", 4 ); // Valid signature
     ofs.write( "V1  ", 4 ); // Valid version
     ofs.close();
-    EXPECT_TRUE( TlkFile( "valid_tlk.tlk" ).get_state() ==
-        IEFileState::ReadableAndValid );
+    EXPECT_TRUE( TlkFile( "valid_tlk.tlk" ).get_state() == IEFileState::ReadableAndValid );
     filesystem::remove( "valid_tlk.tlk" );
 }
 

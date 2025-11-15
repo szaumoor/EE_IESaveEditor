@@ -7,7 +7,6 @@
 
 #include <vector>
 
-using rp::files::IEFile;
 using std::vector;
 
 class KeyFile final : public IEFile

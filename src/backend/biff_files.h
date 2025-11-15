@@ -8,8 +8,6 @@
 #include <vector>
 
 using std::vector;
-using rp::files::IEFile;
-
 
 class BiffFile final : IEFile
 {
