@@ -14,10 +14,10 @@ jobs:
         include:
           - os: macos-latest
             target: x86_64-apple-darwin
-            suffix: ''
+            suffix: 'mac'
           - os: ubuntu-latest
             target: x86_64-unknown-linux-musl
-            suffix: ''
+            suffix: 'linux'
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -40,6 +40,11 @@ jobs:
           cmake -G Ninja -B out
           cd out
           ninja
+      - name: artifacts
+        uses: actions/upload-artifact@main
+        with:
+          name: EESaveEditor-${{ matrix.suffix }}
+          path: ./out/EESaveEditor
   build-win:
     runs-on: windows-2022
     steps:
@@ -66,3 +71,40 @@ jobs:
           cmake -G Ninja -B out
           cd out
           ninja
+      - name: artifacts
+        uses: actions/upload-artifact@main
+        with:
+          name: EESaveEditor.exe
+          path: ./out/EESaveEditor.exe
+  release:
+    needs: [build, build-win]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - file: EESaveEditor-mac
+          - file: EESaveEditor-linux
+          - file: EESaveEditor.exe
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+        with:
+          fetch-depth: 0
+      - name: Create Release
+        id: create_release
+        uses: ncipollo/release-action@main
+        with:
+          generateReleaseNotes: true
+          skipIfReleaseExists: true
+      - uses: actions/download-artifact@main
+        with:
+          name: ${{ matrix.file }}
+      - name: Upload Release Asset - ${{ matrix.os }}
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ${{ matrix.file }}
+          asset_content_type: application/octet-stream
