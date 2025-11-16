@@ -38,8 +38,6 @@ set(BACKEND_SOURCES
    src/backend/key_file.cpp
    src/backend/biff_files.cpp
    src/backend/binary_layouts.h
-   src/backend/choc/choc_assert.h
-   src/backend/choc/string_utilities.h
 )
 
 set(GAM_TEST_SOURCES
