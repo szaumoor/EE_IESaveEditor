@@ -16,15 +16,13 @@ class GamFile final : public IEFile
 public:
     explicit GamFile( const char* path ) noexcept;
     vector<GamCharacterData> party_members;
+    vector<CreFile> party_cre_files;
 
 private:
     GamHeader header;
 
     vector<GamCharacterData> non_party_members;
-    vector<CreFile> party_cre_files;
     vector<CreFile> non_party_cre_files;
-
-    vector<GamCharacterStats> character_stats;
 
     vector<GamGlobalVariable> variables;
 

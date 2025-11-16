@@ -39,7 +39,7 @@ TlkFile::TlkFile( const char* path ) noexcept
     }
 }
 
-expected<string_view, TlkError> TlkFile::at_index( const u32 index ) const noexcept
+expected<string_view, TlkError> TlkFile::at_index( const Strref index ) const noexcept
 {
     if ( state != IEFileState::ReadableAndValid )
         return std::unexpected( TlkError( TlkErrorType::NonValidFile,

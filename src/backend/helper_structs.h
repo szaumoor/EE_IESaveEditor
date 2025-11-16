@@ -5,22 +5,25 @@
 
 #include <string>
 
+using Strref = u32;
+
 #pragma pack(push, 1)
-struct Strref
-{
-    u32 value;
-
-    [[nodiscard]]
-    std::string to_string() const { return std::to_string(value); }
-};
-
 template<u32 Length>
 struct CharArray
 {
     char value[Length];
 
     [[nodiscard]]
-    std::string to_string() const { return std::string(value, Length); }
+    std::string to_string() const {
+        return trim_nulls(std::move(std::string(value, Length)));
+    }
+
+private:
+    static std::string trim_nulls(std::string&& str) {
+        if (const auto null_pos = str.find_first_of('\0'); null_pos != std::string::npos)
+            str.resize(null_pos);
+        return str;
+    }
 };
 
 struct Resref
