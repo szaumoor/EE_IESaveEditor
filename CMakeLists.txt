@@ -60,8 +60,6 @@ set(ALL_TEST_SOURCES
    ${TLK_TEST_SOURCES}
    ${KEY_TEST_SOURCES}
    ${GAM_TEST_SOURCES}
-        src/backend/choc/string_utilities.h
-        src/backend/choc/choc_assert.h
 )
 
 add_library (backend ${BACKEND_SOURCES})
