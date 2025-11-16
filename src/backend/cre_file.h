@@ -16,7 +16,7 @@ class CreFile
 public:
     explicit CreFile( std::ifstream& file, u32 offset ) noexcept;
 
-private:
+//private:
     CreHeader header;
 
     vector<CreKnownSpell> known_spells;

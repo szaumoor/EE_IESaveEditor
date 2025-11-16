@@ -6,7 +6,6 @@
 #include "../src/backend/ie_files.h"
 #include "../src/backend/gam_file.h"
 
-
 using namespace std;
 
 TEST( GamFileTests, GamStructsHaveExpectedSize ) {
@@ -76,8 +75,6 @@ TEST( GamFileTests, GamHasAtLeastOnePartyMember )
 {
     const GamFile gam( "../BALDUR.gam" );
     EXPECT_EQ( gam.get_state(), IEFileState::ReadableAndValid );
-    auto& member = gam.party_members[0];
-    std::cout << member.character_name.to_string() << '\n';
-    std::cout <<  member.character_stats.in_party << '\n';
+    auto member = gam.party_cre_files[0];
     EXPECT_GT(gam.party_members.size(),1);
 }

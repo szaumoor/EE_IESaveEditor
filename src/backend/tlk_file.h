@@ -38,7 +38,7 @@ public:
     TlkFile() = delete;
 
     [[nodiscard]]
-    expected<string_view, TlkError> at_index( u32 index ) const noexcept;
+    expected<string_view, TlkError> at_index( Strref index ) const noexcept;
     [[nodiscard]]
     u32 string_count() const noexcept { return static_cast<u32>(cached_strings.size()); }
 

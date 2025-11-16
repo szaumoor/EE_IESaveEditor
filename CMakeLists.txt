@@ -38,6 +38,8 @@ set(BACKEND_SOURCES
    src/backend/key_file.cpp
    src/backend/biff_files.cpp
    src/backend/binary_layouts.h
+   src/backend/choc/choc_assert.h
+   src/backend/choc/string_utilities.h
 )
 
 set(GAM_TEST_SOURCES
@@ -60,6 +62,8 @@ set(ALL_TEST_SOURCES
    ${TLK_TEST_SOURCES}
    ${KEY_TEST_SOURCES}
    ${GAM_TEST_SOURCES}
+        src/backend/choc/string_utilities.h
+        src/backend/choc/choc_assert.h
 )
 
 add_library (backend ${BACKEND_SOURCES})
