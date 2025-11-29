@@ -6,6 +6,7 @@
 #include "helper_structs.h"
 #include "ie_files.h"
 
+#include <string_view>
 #include <vector>
 
 using std::vector;
@@ -14,25 +15,25 @@ using std::vector;
 class GamFile final : public IEFile
 {
 public:
-    explicit GamFile( const char* path ) noexcept;
-    vector<GamCharacterData> party_members;
-    vector<CreFile> party_cre_files;
+    explicit GamFile( std::string_view path ) noexcept;
+
+    GamFile() = delete;
+
+    vector<GamCharacterData> _party_members;
+    vector<CreFile> _party_cre_files;
 
 private:
-    GamHeader header;
+    GamHeader _header;
 
-    vector<GamCharacterData> non_party_members;
-    vector<CreFile> non_party_cre_files;
+    vector<GamCharacterData> _non_party_members;
+    vector<CreFile> _non_party_cre_files;
+    vector<GamGlobalVariable> _variables;
+    vector<GamJournalEntry> _journal_entries;
+    vector<GamLocationInfo> _stored_locations;
+    vector<GamLocationInfo> _pocket_plane_info;
 
-    vector<GamGlobalVariable> variables;
-
-    vector<GamJournalEntry> journal_entries;
-
-    vector<GamLocationInfo> stored_locations;
-    vector<GamLocationInfo> pocket_plane_info;
-
-    GamFamiliarInfo familiar_info;
-    vector<Resref> familiar_extras;
+    GamFamiliarInfo _familiar_info;
+    vector<Resref> _familiar_extras;
 
     void check_for_malformation() noexcept override;
 };

@@ -116,16 +116,9 @@ target_link_libraries(all_tests
 
 target_link_libraries(EESaveEditor PRIVATE Qt6::Widgets)
 
+# Google Test setup
 include(GoogleTest)
-gtest_discover_tests(tlk_file_test)
-
-
 include(FetchContent)
-
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/heads/main.zip
-)
-
+FetchContent_Declare(googletest URL https://github.com/google/googletest/archive/refs/heads/main.zip)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)

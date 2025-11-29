@@ -16,29 +16,16 @@ TEST( KeyFileTest, KeyStructsHaveExpectedSize ) {
 }
 
 TEST( KeyFileTest, KeyIsUnreadableTest ) {
-    EXPECT_TRUE( KeyFile( "nonexistent.key" ).get_state() ==
-        IEFileState::Unreadable );
+    EXPECT_TRUE( KeyFile( "nonexistent.key" ).unreadable() );
 }
 
-TEST( KeyFileTest, KeyBiffCountZeroIfInvalid ) {
-    const auto key = KeyFile( "nonexistent.key" );
-    EXPECT_TRUE( key.get_state() == IEFileState::Unreadable &&
-        key.biff_count() == 0 );
-}
-
-TEST( KeyFileTest, KeyResCountZeroIfInvalid ) {
-    const auto key = KeyFile( "nonexistent.key" );
-    EXPECT_TRUE( key.get_state() == IEFileState::Unreadable &&
-        key.resource_count() == 0 );
-}
 
 TEST( KeyFileTest, KeyIsMalformedVersion ) {
     ofstream ofs( "invalid_version.key", ios::binary );
     ofs.write( "KEY ", 4 ); // Valid signature
     ofs.write( "Invl", 4 ); // Invalid version
     ofs.close();
-    EXPECT_TRUE( KeyFile( "invalid_version.key" ).get_state() ==
-        IEFileState::ReadableButMalformed );
+    EXPECT_TRUE( KeyFile( "invalid_version.key" ).malformed() );
     filesystem::remove( "invalid_version.key" );
 }
 
@@ -47,14 +34,13 @@ TEST( KeyFileTest, KeyIsMalformedSignature ) {
     ofs.write( "XXXX", 4 ); // Invalid signature
     ofs.write( "V1  ", 4 ); // Valid version
     ofs.close();
-    EXPECT_TRUE( KeyFile( "invalid_signature.key" ).get_state() ==
-        IEFileState::ReadableButMalformed );
+    EXPECT_TRUE( KeyFile( "invalid_signature.key" ).malformed() );
     filesystem::remove( "invalid_signature.key" );
 }
 
 TEST( KeyFileTest, RealKeyIsReadableAndValid ) {
     const KeyFile key( "chitin.key" );
-    EXPECT_EQ( key.get_state(), IEFileState::ReadableAndValid );
+    EXPECT_TRUE( key.good() );
 }
 
 TEST( KeyFileTest, KeyIsReadableAndValid ) {
@@ -62,7 +48,6 @@ TEST( KeyFileTest, KeyIsReadableAndValid ) {
     ofs.write( "KEY ", 4 ); // Valid signature
     ofs.write( "V1  ", 4 ); // Valid version
     ofs.close();
-    EXPECT_TRUE( KeyFile( "valid_key.key" ).get_state() ==
-        IEFileState::ReadableAndValid );
+    EXPECT_TRUE( KeyFile( "valid_key.key" ).good() );
     filesystem::remove( "valid_key.key" );
 }
