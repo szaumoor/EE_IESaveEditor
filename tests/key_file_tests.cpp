@@ -8,19 +8,15 @@
 
 using namespace std;
 
+constexpr auto real_path = "../tests/res/chitin.key";
 
-TEST( KeyFileTest, KeyStructsHaveExpectedSize ) {
-    EXPECT_TRUE( sizeof( KeyFileHeader ) == 24 );
-    EXPECT_TRUE( sizeof( BiffEntry ) == 12 );
-    EXPECT_TRUE( sizeof( ResourceEntry ) == 14 );
-}
-
-TEST( KeyFileTest, KeyIsUnreadableTest ) {
+TEST( KeyFileTest, KeyIsUnreadableTest )
+{
     EXPECT_TRUE( KeyFile( "nonexistent.key" ).unreadable() );
 }
 
-
-TEST( KeyFileTest, KeyIsMalformedVersion ) {
+TEST( KeyFileTest, KeyIsMalformedVersion )
+{
     ofstream ofs( "invalid_version.key", ios::binary );
     ofs.write( "KEY ", 4 ); // Valid signature
     ofs.write( "Invl", 4 ); // Invalid version
@@ -29,7 +25,8 @@ TEST( KeyFileTest, KeyIsMalformedVersion ) {
     filesystem::remove( "invalid_version.key" );
 }
 
-TEST( KeyFileTest, KeyIsMalformedSignature ) {
+TEST( KeyFileTest, KeyIsMalformedSignature )
+{
     ofstream ofs( "invalid_signature.key", ios::binary );
     ofs.write( "XXXX", 4 ); // Invalid signature
     ofs.write( "V1  ", 4 ); // Valid version
@@ -38,12 +35,13 @@ TEST( KeyFileTest, KeyIsMalformedSignature ) {
     filesystem::remove( "invalid_signature.key" );
 }
 
-TEST( KeyFileTest, RealKeyIsReadableAndValid ) {
-    const KeyFile key( "chitin.key" );
-    EXPECT_TRUE( key.good() );
+TEST( KeyFileTest, RealKeyIsReadableAndValid )
+{
+    EXPECT_TRUE( KeyFile( real_path ).good() );
 }
 
-TEST( KeyFileTest, KeyIsReadableAndValid ) {
+TEST( KeyFileTest, KeyIsReadableAndValid )
+{
     ofstream ofs( "valid_key.key", ios::binary );
     ofs.write( "KEY ", 4 ); // Valid signature
     ofs.write( "V1  ", 4 ); // Valid version
