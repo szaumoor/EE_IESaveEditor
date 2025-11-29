@@ -1,16 +1,15 @@
 #ifndef IE_FILES_H
 #define IE_FILES_H
 
-#include <string>
-
-
+#include <string_view>
 
 enum class [[nodiscard]] IEFileState
 {
+    Unread,
     Unreadable,
     Readable,
-    ReadableButMalformed,
-    ReadableAndValid
+    Malformed,
+    Valid
 };
 
 class IEFile
@@ -18,21 +17,23 @@ class IEFile
 public:
     virtual ~IEFile() = default;
 
-    IEFileState get_state() const noexcept { return state; }
-    [[nodiscard]] bool good() const noexcept { return state == IEFileState::ReadableAndValid; }
+    [[nodiscard]] bool good() const noexcept { return state == IEFileState::Valid; }
+    [[nodiscard]] bool bad() const noexcept { return !good(); }
+    [[nodiscard]] bool malformed() const noexcept { return state == IEFileState::Malformed; }
+    [[nodiscard]] bool unreadable() const noexcept { return state == IEFileState::Unreadable; }
+
     explicit operator bool() const noexcept { return good(); }
 
     IEFile() = delete;
 
-    [[nodiscard]] const std::string& get_path() const noexcept { return path; }
-
 protected:
-    explicit IEFile(const char* path) : path(std::string(path)) {}
-    IEFileState state = IEFileState::Unreadable;
+    explicit IEFile(const std::string_view path ) : _path(path) {}
+
+    IEFileState state = IEFileState::Unread;
     virtual void check_for_malformation() = 0;
 
 private:
-    const std::string path;
+    const std::string_view _path;
 };
 
 

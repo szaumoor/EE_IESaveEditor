@@ -1,6 +1,8 @@
 #ifndef EESAVEEDITORBACKEND_BINARY_LAYOUTS_H
 #define EESAVEEDITORBACKEND_BINARY_LAYOUTS_H
 
+#include <cassert>
+
 #include "aliases.h"
 #include "helper_structs.h"
 
@@ -125,8 +127,8 @@ struct CreHeader
 {
     CharArray<4> signature;            // 0x0 "CRE "
     CharArray<4> version;              // 0x4 "V1.0"
-    Strref long_name;                  // 0x8
-    Strref short_name;                 // 0xC
+    strref long_name;                  // 0x8
+    strref short_name;                 // 0xC
     u32 cre_flags;                     // 0x10
     u32 xp_gained_kills;               // 0x14
     u32 xp_creature;                   // 0x18
@@ -162,7 +164,7 @@ struct CreHeader
     u8 turn_undead_level;              // 0x82
     u8 tracking_level;                 // 0x83
     CharArray<32> tracking_target;     // 0x84
-    Strref soundset_strrefs[100];      // 0xA4 - 0x230
+    strref soundset_strrefs[100];      // 0xA4 - 0x230
     u8 class_levels[3];                // 0x234 - 0x236
     u8 sex;                            // 0x237
     CreStats stats;                    // 0x238 - 0x23E
@@ -326,7 +328,7 @@ struct EmbeddedEffFileV2
     u8 unknown[60];              // 0xCC
 };
 
- struct TlkFileHeader
+struct TlkFileHeader
  {
      CharArray<4> signature; // "TLK "
      CharArray<4> version;   // "V1  "
@@ -415,7 +417,7 @@ struct GamHeader
 
 struct GamCharacterStats
 {
-    Strref most_powerful_vanquished_name; // 0x0000
+    strref most_powerful_vanquished_name; // 0x0000
     u32 most_powerful_vanquished_xp;      // 0x0004
     u32 time_party_ticks;                 // 0x0008
     u32 time_joined_ticks;                // 0x000C
@@ -472,7 +474,7 @@ struct GamGlobalVariable
 
 struct GamJournalEntry
 {
-    Strref journal_text;        // 0x0000
+    strref journal_text;        // 0x0000
     u32 time_seconds;           // 0x0004
     u8 current_chapter;         // 0x0008
     u8 read_by_character;       // 0x0009
@@ -535,5 +537,19 @@ struct ResourceEntry
 };
 
 #pragma pack(pop)
+
+static_assert(sizeof(CreHeader) == 724, "CreHeader size is incorrect");
+static_assert(sizeof(BiffHeader) == 20, "BiffHeader size is incorrect");
+static_assert(sizeof(TlkFileHeader) == 18, "TlkFileHeader size is incorrect");
+static_assert(sizeof(KeyFileHeader) == 24, "KeyFileHeader size is incorrect");
+static_assert(sizeof(GamCharacterStats) == 116, "GamCharacterStats size is incorrect");
+static_assert(sizeof(GamHeader) == 180, "GamHeader size is incorrect");
+static_assert(sizeof(GamCharacterData) == 352, "GamCharacterData size is incorrect");
+static_assert(sizeof(GamHeader) == 180, "GamHeader size is incorrect");
+static_assert(sizeof(GamGlobalVariable) == 84, "GamGlobalVariable size is incorrect");
+static_assert(sizeof(GamJournalEntry) == 12, "GamJournalEntry size is incorrect");
+static_assert(sizeof(GamFamiliarInfo) == 400, "GamFamiliarInfo size is incorrect");
+static_assert(sizeof(GamLocationInfo) == 12, "GamLocationInfo size is incorrect");
+
 
 #endif //EESAVEEDITORBACKEND_BINARY_LAYOUTS_H

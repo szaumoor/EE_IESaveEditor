@@ -17,16 +17,16 @@ public:
     explicit CreFile( std::ifstream& file, u32 offset ) noexcept;
 
 //private:
-    CreHeader header;
+    CreHeader _header;
 
-    vector<CreKnownSpell> known_spells;
-    vector<CreSpellMemorizationInfo> memorization_infos;
-    vector<CreSpellMemorizedSpell> memorized_spells;
+    vector<CreKnownSpell> _known_spells;
+    vector<CreSpellMemorizationInfo> _memorization_infos;
+    vector<CreSpellMemorizedSpell> _memorized_spells;
 
-    vector<EffectVariant> effects;
+    vector<EffectVariant> _effects;
 
-    vector<CreInventoryItem> items;
-    CreItemSlots item_slots;
+    vector<CreInventoryItem> _items;
+    CreItemSlots _item_slots;
 };
 
 #endif // CRE_FILE_H
