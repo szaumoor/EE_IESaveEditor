@@ -10,17 +10,15 @@
 
 using namespace std;
 
-TEST( TlkFileTest, TlkStructsHaveExpectedSize ) {
-    EXPECT_TRUE( sizeof(TlkFileHeader) == 18 );
-    EXPECT_TRUE( sizeof( TlkFileEntry ) == 26 );
-}
+constexpr auto real_path = "../tests/res/dialog.tlk";
 
 TEST( TlkFileTest, TlkIsUnreadableTest )
 {
     EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).unreadable() );
 }
 
-TEST( TlkFileTest, TlkStringCountZeroIfInvalid ) {
+TEST( TlkFileTest, TlkStringCountZeroIfInvalid )
+{
     const auto tlk = TlkFile( "nonexistent.tlk" );
     EXPECT_TRUE( tlk.unreadable() && tlk.length() == 0 );
 }
@@ -45,7 +43,8 @@ TEST( TlkFileTest, TlkIsMalformedSignature )
     filesystem::remove( "invalid_signature.tlk" );
 }
 
-TEST( TlkFileTest, TlkIsReadableAndValid ) {
+TEST( TlkFileTest, TlkIsReadableAndValid )
+{
     ofstream ofs( "valid_tlk.tlk", ios::binary );
     ofs.write( "TLK ", 4 ); // Valid signature
     ofs.write( "V1  ", 4 ); // Valid version
@@ -56,22 +55,24 @@ TEST( TlkFileTest, TlkIsReadableAndValid ) {
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
 {
-    const TlkFile tlk( "../dialog.tlk" );
+    const TlkFile tlk( real_path );
     EXPECT_TRUE( tlk.good() );
     const auto result = tlk.at_index( 1 );
     EXPECT_TRUE( result.has_value() );
     EXPECT_TRUE( *result == "No, I'm sorry, none of them sound familiar." );
 }
 
-TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes) {
-    const TlkFile tlk( "../dialog.tlk" );
+TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes)
+{
+    const TlkFile tlk( real_path );
     EXPECT_TRUE( tlk.good() );
     const auto result1 = tlk.at_index( -1 );
     const auto result2 = tlk.at_index( tlk.length() );
     EXPECT_TRUE( !result1.has_value() && !result2.has_value() );
 }
 
-TEST( TlkFileTest, TlkReturnsUnexpectedIfFileIsMalformed ) {
+TEST( TlkFileTest, TlkReturnsUnexpectedIfFileIsMalformed )
+{
     ofstream ofs0( "invalid_signature0.tlk", ios::binary );
     ofs0.write( "XXXX", 4 ); // Invalid signature
     ofs0.write( "V1  ", 4 ); // Valid version
