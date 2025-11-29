@@ -5,51 +5,51 @@
 #include <vector>
 
 CreFile::CreFile( std::ifstream& file, const u32 offset ) noexcept
-    : header( {} ), item_slots({})
+    : _header( {} ), _item_slots({})
 {
     file.seekg( offset, std::ios::beg );
-    file.read( reinterpret_cast<char*>(&header), sizeof(CreHeader) );
+    file.read( reinterpret_cast<char*>(&_header), sizeof(CreHeader) );
 
-    known_spells.resize( header.known_spells_count );
-    memorization_infos.resize( header.memorization_count );
-    memorized_spells.resize( header.memorized_count );
-    items.resize( header.items_count );
+    _known_spells.resize( _header.known_spells_count );
+    _memorization_infos.resize( _header.memorization_count );
+    _memorized_spells.resize( _header.memorized_count );
+    _items.resize( _header.items_count );
 
-    file.seekg( offset + header.known_spells_offset, std::ios::beg );
-    file.read( reinterpret_cast<char*>(known_spells.data()),
-        static_cast<std::streamsize>(header.known_spells_count * sizeof(CreKnownSpell)));
+    file.seekg( offset + _header.known_spells_offset, std::ios::beg );
+    file.read( reinterpret_cast<char*>(_known_spells.data()),
+        static_cast<std::streamsize>(_header.known_spells_count * sizeof(CreKnownSpell)));
 
-    file.seekg( offset + header.memorization_offset, std::ios::beg );
-    file.read( reinterpret_cast<char*>(memorization_infos.data()),
-        static_cast<std::streamsize>(header.memorization_count * sizeof( CreSpellMemorizationInfo )));
+    file.seekg( offset + _header.memorization_offset, std::ios::beg );
+    file.read( reinterpret_cast<char*>(_memorization_infos.data()),
+        static_cast<std::streamsize>(_header.memorization_count * sizeof( CreSpellMemorizationInfo )));
 
-    file.seekg( offset + header.memorized_offset );
-    file.read( reinterpret_cast<char*>(memorized_spells.data()),
-        static_cast<std::streamsize>(header.memorized_count * sizeof( CreSpellMemorizedSpell ) ));
+    file.seekg( offset + _header.memorized_offset );
+    file.read( reinterpret_cast<char*>(_memorized_spells.data()),
+        static_cast<std::streamsize>(_header.memorized_count * sizeof( CreSpellMemorizedSpell ) ));
 
-    file.seekg( offset + header.items_offset, std::ios::beg );
-    file.read( reinterpret_cast<char*>(items.data()),
-        static_cast<std::streamsize>(header.items_count * sizeof( CreInventoryItem ) ));
+    file.seekg( offset + _header.items_offset, std::ios::beg );
+    file.read( reinterpret_cast<char*>(_items.data()),
+        static_cast<std::streamsize>(_header.items_count * sizeof( CreInventoryItem ) ));
 
-    file.seekg( offset + header.item_slots_offset, std::ios::beg );
-    file.read( reinterpret_cast<char*>(&item_slots), sizeof( CreItemSlots ) );
+    file.seekg( offset + _header.item_slots_offset, std::ios::beg );
+    file.read( reinterpret_cast<char*>(&_item_slots), sizeof( CreItemSlots ) );
 
-    file.seekg( offset + header.effects_offset, std::ios::beg );
+    file.seekg( offset + _header.effects_offset, std::ios::beg );
 
-    if ( header.eff_structure_version == 0 ) [[unlikely]]
+    if ( _header.eff_structure_version == 0 ) [[unlikely]]
     {
         vector<EmbeddedEffFileV1> effects_v1;
-        effects_v1.resize( header.effects_count );
+        effects_v1.resize( _header.effects_count );
         file.read( reinterpret_cast<char*>(effects_v1.data()),
-            static_cast<std::streamsize>(header.effects_count * sizeof( EmbeddedEffFileV1 ) ));
-        effects.insert( effects.end(), effects_v1.begin(), effects_v1.end() );
+            static_cast<std::streamsize>(_header.effects_count * sizeof( EmbeddedEffFileV1 ) ));
+        _effects.insert( _effects.end(), effects_v1.begin(), effects_v1.end() );
     }
-    else if (  header.eff_structure_version == 1 ) [[likely]]
+    else if (  _header.eff_structure_version == 1 ) [[likely]]
     {
         vector<EmbeddedEffFileV2> effects_v2;
-        effects_v2.resize( header.effects_count );
+        effects_v2.resize( _header.effects_count );
         file.read( reinterpret_cast<char*>(effects_v2.data()),
-            static_cast<std::streamsize>(header.effects_count * sizeof( EmbeddedEffFileV2 ) ));
-        effects.insert( effects.end(), effects_v2.begin(), effects_v2.end() );
+            static_cast<std::streamsize>(_header.effects_count * sizeof( EmbeddedEffFileV2 ) ));
+        _effects.insert( _effects.end(), effects_v2.begin(), effects_v2.end() );
     }
 }

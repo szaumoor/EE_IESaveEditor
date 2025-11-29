@@ -17,12 +17,12 @@ TEST( TlkFileTest, TlkStructsHaveExpectedSize ) {
 
 TEST( TlkFileTest, TlkIsUnreadableTest )
 {
-    EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).get_state() == IEFileState::Unreadable);
+    EXPECT_TRUE( TlkFile( "nonexistent.tlk" ).unreadable() );
 }
 
 TEST( TlkFileTest, TlkStringCountZeroIfInvalid ) {
     const auto tlk = TlkFile( "nonexistent.tlk" );
-    EXPECT_TRUE( tlk.get_state() == IEFileState::Unreadable && tlk.string_count() == 0 );
+    EXPECT_TRUE( tlk.unreadable() && tlk.length() == 0 );
 }
 
 TEST( TlkFileTest, TlkIsMalformedVersion )
@@ -31,7 +31,7 @@ TEST( TlkFileTest, TlkIsMalformedVersion )
     ofs.write("TLK ", 4); // Valid signature
     ofs.write( "Invl", 4 ); // Invalid version
     ofs.close();
-    EXPECT_TRUE( TlkFile( "invalid_version.tlk" ).get_state() == IEFileState::ReadableButMalformed );
+    EXPECT_TRUE( TlkFile( "invalid_version.tlk" ).malformed() );
     filesystem::remove( "invalid_version.tlk" );
 }
 
@@ -41,7 +41,7 @@ TEST( TlkFileTest, TlkIsMalformedSignature )
     ofs.write( "XXXX", 4 ); // Invalid signature
     ofs.write( "V1  ", 4 ); // Valid version
     ofs.close();
-    EXPECT_TRUE( TlkFile( "invalid_signature.tlk" ).get_state() == IEFileState::ReadableButMalformed );
+    EXPECT_TRUE( TlkFile( "invalid_signature.tlk" ).malformed() );
     filesystem::remove( "invalid_signature.tlk" );
 }
 
@@ -50,14 +50,14 @@ TEST( TlkFileTest, TlkIsReadableAndValid ) {
     ofs.write( "TLK ", 4 ); // Valid signature
     ofs.write( "V1  ", 4 ); // Valid version
     ofs.close();
-    EXPECT_TRUE( TlkFile( "valid_tlk.tlk" ).get_state() == IEFileState::ReadableAndValid );
+    EXPECT_TRUE( TlkFile( "valid_tlk.tlk" ).good() );
     filesystem::remove( "valid_tlk.tlk" );
 }
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
 {
     const TlkFile tlk( "../dialog.tlk" );
-    EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid);
+    EXPECT_TRUE( tlk.good() );
     const auto result = tlk.at_index( 1 );
     EXPECT_TRUE( result.has_value() );
     EXPECT_TRUE( *result == "No, I'm sorry, none of them sound familiar." );
@@ -65,9 +65,9 @@ TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
 
 TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes) {
     const TlkFile tlk( "../dialog.tlk" );
-    EXPECT_EQ( tlk.get_state(), IEFileState::ReadableAndValid );
+    EXPECT_TRUE( tlk.good() );
     const auto result1 = tlk.at_index( -1 );
-    const auto result2 = tlk.at_index( tlk.string_count() );
+    const auto result2 = tlk.at_index( tlk.length() );
     EXPECT_TRUE( !result1.has_value() && !result2.has_value() );
 }
 
