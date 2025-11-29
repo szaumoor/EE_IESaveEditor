@@ -2,8 +2,8 @@
 #include "ie_files.h"
 
 
-BiffFile::BiffFile( const char* path ) noexcept
-    : IEFile( path ), header( {} )
+BiffFile::BiffFile( const std::string_view path ) noexcept
+    : IEFile( path ), _header( {} )
 {
 
 }
