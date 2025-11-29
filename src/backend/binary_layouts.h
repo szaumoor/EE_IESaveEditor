@@ -540,7 +540,10 @@ struct ResourceEntry
 
 static_assert(sizeof(CreHeader) == 724, "CreHeader size is incorrect");
 static_assert(sizeof(BiffHeader) == 20, "BiffHeader size is incorrect");
+static_assert(sizeof(BiffEntry) == 12, "BiffEntry size is incorrect");
+static_assert(sizeof(ResourceEntry) == 14, "ResourceEntry size is incorrect");
 static_assert(sizeof(TlkFileHeader) == 18, "TlkFileHeader size is incorrect");
+static_assert(sizeof(TlkFileEntry) == 26, "TlkFileEntry size is incorrect");
 static_assert(sizeof(KeyFileHeader) == 24, "KeyFileHeader size is incorrect");
 static_assert(sizeof(GamCharacterStats) == 116, "GamCharacterStats size is incorrect");
 static_assert(sizeof(GamHeader) == 180, "GamHeader size is incorrect");
@@ -550,6 +553,5 @@ static_assert(sizeof(GamGlobalVariable) == 84, "GamGlobalVariable size is incorr
 static_assert(sizeof(GamJournalEntry) == 12, "GamJournalEntry size is incorrect");
 static_assert(sizeof(GamFamiliarInfo) == 400, "GamFamiliarInfo size is incorrect");
 static_assert(sizeof(GamLocationInfo) == 12, "GamLocationInfo size is incorrect");
-
 
 #endif //EESAVEEDITORBACKEND_BINARY_LAYOUTS_H
