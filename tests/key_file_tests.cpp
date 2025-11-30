@@ -6,46 +6,34 @@
 #include "../src/backend/ie_files.h"
 #include "../src/backend/key_file.h"
 
-using namespace std;
+#include "utils/tests_helper.h"
 
 constexpr auto real_path = "../tests/res/chitin.key";
 
 TEST( KeyFileTest, KeyIsUnreadableTest )
 {
-    EXPECT_TRUE( KeyFile( "nonexistent.key" ).unreadable() );
+    ASSERT_TRUE( KeyFile( "nonexistent.key" ).unreadable() );
 }
 
 TEST( KeyFileTest, KeyIsMalformedVersion )
 {
-    ofstream ofs( "invalid_version.key", ios::binary );
-    ofs.write( "KEY ", 4 ); // Valid signature
-    ofs.write( "Invl", 4 ); // Invalid version
-    ofs.close();
-    EXPECT_TRUE( KeyFile( "invalid_version.key" ).malformed() );
-    filesystem::remove( "invalid_version.key" );
+    const auto temp = TempCreator( "invalid_version.key", "KEY ", "Invl" );
+    ASSERT_TRUE( KeyFile( temp.name ).malformed() );
 }
 
 TEST( KeyFileTest, KeyIsMalformedSignature )
 {
-    ofstream ofs( "invalid_signature.key", ios::binary );
-    ofs.write( "XXXX", 4 ); // Invalid signature
-    ofs.write( "V1  ", 4 ); // Valid version
-    ofs.close();
-    EXPECT_TRUE( KeyFile( "invalid_signature.key" ).malformed() );
-    filesystem::remove( "invalid_signature.key" );
+    const auto temp = TempCreator( "invalid_signature.key", "XXXX", "V1  " );
+    ASSERT_TRUE( KeyFile( temp.name ).malformed() );
 }
 
 TEST( KeyFileTest, RealKeyIsReadableAndValid )
 {
-    EXPECT_TRUE( KeyFile( real_path ).good() );
+    ASSERT_TRUE( KeyFile( real_path ).good() );
 }
 
 TEST( KeyFileTest, KeyIsReadableAndValid )
 {
-    ofstream ofs( "valid_key.key", ios::binary );
-    ofs.write( "KEY ", 4 ); // Valid signature
-    ofs.write( "V1  ", 4 ); // Valid version
-    ofs.close();
-    EXPECT_TRUE( KeyFile( "valid_key.key" ).good() );
-    filesystem::remove( "valid_key.key" );
+    const auto temp = TempCreator( "valid_key.key", "KEY ", "V1  " );
+    ASSERT_TRUE( KeyFile( temp.name ).good() );
 }
