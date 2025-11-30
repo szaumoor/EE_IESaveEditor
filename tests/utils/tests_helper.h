@@ -8,7 +8,6 @@ using namespace std;
 
 struct TempCreator
 {
-public:
     TempCreator() = delete;
     TempCreator(const char* name, const char* signature, const char* version) : name(name)
     {
@@ -24,9 +23,6 @@ public:
     }
 
     const string_view name;
-
-private:
-    ;
 };
 
 #endif //EESAVEEDITOR_TESTS_HELPER_H
