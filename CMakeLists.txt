@@ -44,22 +44,26 @@ set(GAM_TEST_SOURCES
    src/backend/gam_file.cpp
    src/backend/gam_file.h
    src/backend/cre_file.cpp
+        tests/utils/tests_helper.h
 )
 
 set(TLK_TEST_SOURCES
   src/backend/tlk_file.cpp
   src/backend/tlk_file.h
+        tests/utils/tests_helper.h
 )
 
 set(KEY_TEST_SOURCES
   src/backend/key_file.cpp
   src/backend/key_file.h
+        tests/utils/tests_helper.h
 )
 
 set(ALL_TEST_SOURCES
    ${TLK_TEST_SOURCES}
    ${KEY_TEST_SOURCES}
    ${GAM_TEST_SOURCES}
+        tests/utils/tests_helper.h
 )
 
 add_library (backend ${BACKEND_SOURCES})
@@ -84,6 +88,7 @@ add_executable(all_tests
   tests/key_file_tests.cpp
   tests/tlk_file_tests.cpp
   ${ALL_TEST_SOURCES}
+        tests/utils/tests_helper.h
 )
 
 add_executable(EESaveEditor
