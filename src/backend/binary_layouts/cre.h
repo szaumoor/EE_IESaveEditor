@@ -1,60 +1,11 @@
-#ifndef EESAVEEDITORBACKEND_BINARY_LAYOUTS_H
-#define EESAVEEDITORBACKEND_BINARY_LAYOUTS_H
+#ifndef EESAVEEDITOR_CRE_H
+#define EESAVEEDITOR_CRE_H
 
-#include <cassert>
-
-#include "aliases.h"
-#include "helper_structs.h"
-
-enum ResourceType : u16
-{
-    NotFound      = 0x0000,
-    FileTypeBmp   = 0x0001,
-    FileTypeMve   = 0x0002,
-    FileTypeWav   = 0x0004,
-    FileTypeWfx   = 0x0005,
-    FileTypePlt   = 0x0006,
-    FileTypeBam   = 0x03e8,
-    FileTypeWed   = 0x03e9,
-    FileTypeChu   = 0x03ea,
-    FileTypeTi    = 0x03eb,
-    FileTypeMos   = 0x03ec,
-    FileTypeItm   = 0x03ed,
-    FileTypeSpl   = 0x03ee,
-    FileTypeBcs   = 0x03ef,
-    FileTypeIds   = 0x03f0,
-    FileTypeCre   = 0x03f1,
-    FileTypeAre   = 0x03f2,
-    FileTypeDlg   = 0x03f3,
-    FileType2da   = 0x03f4,
-    FileTypeGam   = 0x03f5,
-    FileTypeSto   = 0x03f6,
-    FileTypeWmap  = 0x03f7,
-    FileTypeChr1  = 0x03f8,
-    FileTypeEff   = 0x03f8,
-    FileTypeBs    = 0x03f9,
-    FileTypeChr   = 0x03fa,
-    FileTypeVvc   = 0x03fb,
-    FileTypeVef   = 0x03fc,
-    FileTypePro   = 0x03fd,
-    FileTypeBio   = 0x03fe,
-    FileTypeWbm   = 0x03ff,
-    FileTypeFnt   = 0x0400,
-    FileTypeGui   = 0x0402,
-    FileTypeSql   = 0x0403,
-    FileTypePvrz  = 0x0404,
-    FileTypeGlsl  = 0x0405,
-    FileTypeTlk   = 0x0407,
-    FileTypeMenu  = 0x0408,
-    FileTypeMenu2 = 0x0409,
-    FileTypeTtf   = 0x040a,
-    FileTypePng   = 0x040b,
-    FileTypeBah   = 0x044c,
-    FileTypeIni   = 0x0802,
-    FileTypeSrc   = 0x0803
-};
+#include "../utils/aliases.h"
+#include "../utils/helper_structs.h"
 
 #pragma pack(push, 1)
+
 struct CreArmorClass
 {
     i16 ac_natural;      // 0x46
@@ -328,230 +279,21 @@ struct EmbeddedEffFileV2
     u8 unknown[60];              // 0xCC
 };
 
-struct TlkFileHeader
- {
-     CharArray<4> signature; // "TLK "
-     CharArray<4> version;   // "V1  "
-     u16 language_id;
-     u32 entry_count;
-     u32 offset_to_str_data;
- };
-
-struct TlkFileEntry
-{
-    u16 entry_flags;
-    CharArray<8> resref;
-    u32 volume;
-    u32 pitch;
-    u32 offset_to_string;
-    u32 string_length;
-};
-
-struct BiffHeader
-{
-    CharArray<4> signature; // "BIFF"
-    CharArray<4> version;   // "V1  "
-    u32 count_of_file_entries;
-    u32 count_of_tile_entries;
-    u32 offset_to_file_entries;
-};
-
-struct FileEntry
-{
-    u32 resource_locator;
-    u32 offset;
-    u32 size;
-    ResourceType resource_type;
-    u16 unknown;
-};
-
-struct TileEntry
-{
-    u32 resource_locator;
-    u32 offset_resource_data;
-    u32 tile_count;
-    u32 tile_size;
-    ResourceType resource_type;
-    u16 unknown;
-};
-
-struct GamHeader
-{
-    CharArray<4> signature;            // 0x0000
-    CharArray<4> version;              // 0x0004
-    u32 game_time;                     // 0x0008
-    u16 selected_formation;            // 0x000C
-    u16 formations[5];                 // 0x000E - 0x0016
-    u32 party_gold;                    // 0x0018
-    i16 active_area_player_id;         // 0x001C
-    u16 weather;                       // 0x001E
-    u32 npc_party_offset;              // 0x0020
-    u32 npc_party_count;               // 0x0024
-    u32 party_inv_offset;              // 0x0028
-    u32 party_inv_count;               // 0x002C
-    u32 npc_nonparty_offset;           // 0x0030
-    u32 npc_nonparty_count;            // 0x0034
-    u32 global_vars_offset;            // 0x0038
-    u32 global_vars_count;             // 0x003C
-    Resref world_area;                 // 0x0040
-    u32 familiar_extra_offset;         // 0x0048
-    u32 journal_count;                 // 0x004C
-    u32 journal_offset;                // 0x0050
-    u32 party_reputation;              // 0x0054
-    Resref master_area;                // 0x0058
-    u32 gui_flags;                     // 0x0060
-    u32 loading_progress;              // 0x0064
-    u32 familiar_info_offset;          // 0x0068
-    u32 stored_locs_offset;            // 0x006C
-    u32 stored_locs_count;             // 0x0070
-    u32 game_time_real;                // 0x0074
-    u32 pocket_locs_offset;            // 0x0078
-    u32 pocket_locs_count;             // 0x007C
-    u32 zoom_level;                    // 0x0080
-    Resref rnd_encounter_area;         // 0x0084
-    Resref current_worldmap;           // 0x008C
-    CharArray<8> current_campaign;     // 0x0094
-    u32 familiar_owner;                // 0x009C
-    CharArray<20> rnd_encounter_entry; // 0x00A0
-};
-
-struct GamCharacterStats
-{
-    strref most_powerful_vanquished_name; // 0x0000
-    u32 most_powerful_vanquished_xp;      // 0x0004
-    u32 time_party_ticks;                 // 0x0008
-    u32 time_joined_ticks;                // 0x000C
-    u8 in_party;                          // 0x0010 (0 = not in party, 1 = in party)
-    u16 unused0;                          // 0x0011
-    u8 first_letter_cre_resref;           // 0x0013
-    u32 kills_xp_chapter;                 // 0x0014
-    u32 kills_number_chapter;             // 0x0018
-    u32 kills_xp_total;                   // 0x001C
-    u32 kills_number_total;               // 0x0020
-    Resref fav_spells[4];                 // 0x0024 - 0x003C
-    u16 fav_spells_count[4];              // 0x0044 - 0x004B
-    Resref fav_wpns[4];                   // 0x004C - 0x006B
-    u16 fav_wpns_count[4];                // 0x006C - 0x0073
-};
-
-struct GamCharacterData
-{
-    u16 character_selection;            // 0x0000
-    u16 party_order;                    // 0x0002
-    u32 cre_offset;                     // 0x0004
-    u32 cre_size;                       // 0x0008
-    CharArray<8> character_name;        // 0x000C
-    u32 orientation;                    // 0x0014
-    Resref current_area;                // 0x0018
-    u16 x_coord;                        // 0x0020
-    u16 y_coord;                        // 0x0022
-    u16 viewing_rect_x;                 // 0x0024
-    u16 viewing_rect_y;                 // 0x0026
-    u16 modal_action;                   // 0x0028
-    u16 happiness;                      // 0x002A
-    u32 unused[24];                     // 0x002C - 0x088
-    u16 quick_weapon_slots[4];          // 0x008C - 0x0092
-    u16 quick_weapon_abilities[4];      // 0x0094 - 0x009A
-    Resref quick_spell_resources[3];    // 0x009C - 0x00AC
-    u16 quick_spell_slots[3];           // 0x00B4 - 0x00B8
-    u16 quick_spell_abilities[3];       // 0x00BA - 0x00BE
-    CharArray<32> name;                 // 0x00C0
-    u32 talk_count;                     // 0x00E0
-    GamCharacterStats character_stats;  // 0x00E4
-    CharArray<8> voice_set;             // 0x00158
-};
-
-struct GamGlobalVariable
-{
-    CharArray<32> variable_name; // 0x0000
-    u16 type;                    // 0x0020 (b0=int,b1=float,b2=script name,b3=resref,b4=strref,b5=dword)
-    u16 unused0;                 // 0x0022
-    u32 unused1;                 // 0x0024
-    u32 int_value;               // 0x0028
-    double unused3;              // 0x002C
-    CharArray<32> unused;        // 0x0034
-};
-
-struct GamJournalEntry
-{
-    strref journal_text;        // 0x0000
-    u32 time_seconds;           // 0x0004
-    u8 current_chapter;         // 0x0008
-    u8 read_by_character;       // 0x0009
-    u8 journal_section_flags;   // 0x000A
-    u8 location_flag;           // 0x000B
-};
-
-struct GamFamiliarInfo
-{
-    char lawful_good_familiar[8];       // 0x0000
-    char lawful_neutral_familiar[8];    // 0x0008
-    char lawful_evil_familiar[8];       // 0x0010
-    char neutral_good_familiar[8];      // 0x0018
-    char neutral_familiar[8];           // 0x0020
-    char neutral_evil_familiar[8];      // 0x0028
-    char chaotic_good_familiar[8];      // 0x0030
-    char chaotic_neutral_familiar[8];   // 0x0038
-    char chaotic_evil_familiar[8];      // 0x0040
-    u32 familiar_resource_offset;       // 0x0048
-    u32 lg_familiar_count[9];           // 0x004C - 0x0068
-    u32 ln_familiar_count[9];           // 0x006C - 0x0088
-    u32 cg_familiar_count[9];           // 0x008C - 0x00A8
-    u32 cn_familiar_count[9];           // 0x0208 - 0x0224
-    u32 ng_familiar_count[9];           // 0x011C - 0x0138
-    u32 tn_familiar_count[9];           // 0x013C - 0x0158
-    u32 ne_familiar_count[9];           // 0x015C - 0x0178
-    u32 le_familiar_count[9];           // 0x0184 - 0x0204
-    u32 ce_familiar_count[9];           // 0x022C - 0x0248
-};
-
-struct GamLocationInfo
-{
-    Resref area;        // 0x0000
-    u16 coords[2];  // 0x0008 - 0x000A
-};
-
-struct KeyFileHeader
-{
-    CharArray<4> signature; // "KEY "
-    CharArray<4> version;   // "V1  "
-    u32 biff_count;
-    u32 resource_count;
-    u32 offset_to_biff_entries;
-    u32 offset_to_resource_entries;
-};
-
-struct BiffEntry
-{
-    u32 length_biff_file;
-    u32 offset_to_biff_filename;
-    u16 length_biff_filename_with_null;
-    u16 location_file_bitfield;
-};
-
-struct ResourceEntry
-{
-    Resref resource_name;
-    u16 resource_type;
-    u32 resource_locator;
-};
-
 #pragma pack(pop)
 
 static_assert(sizeof(CreHeader) == 724, "CreHeader size is incorrect");
-static_assert(sizeof(BiffHeader) == 20, "BiffHeader size is incorrect");
-static_assert(sizeof(BiffEntry) == 12, "BiffEntry size is incorrect");
-static_assert(sizeof(ResourceEntry) == 14, "ResourceEntry size is incorrect");
-static_assert(sizeof(TlkFileHeader) == 18, "TlkFileHeader size is incorrect");
-static_assert(sizeof(TlkFileEntry) == 26, "TlkFileEntry size is incorrect");
-static_assert(sizeof(KeyFileHeader) == 24, "KeyFileHeader size is incorrect");
-static_assert(sizeof(GamCharacterStats) == 116, "GamCharacterStats size is incorrect");
-static_assert(sizeof(GamHeader) == 180, "GamHeader size is incorrect");
-static_assert(sizeof(GamCharacterData) == 352, "GamCharacterData size is incorrect");
-static_assert(sizeof(GamHeader) == 180, "GamHeader size is incorrect");
-static_assert(sizeof(GamGlobalVariable) == 84, "GamGlobalVariable size is incorrect");
-static_assert(sizeof(GamJournalEntry) == 12, "GamJournalEntry size is incorrect");
-static_assert(sizeof(GamFamiliarInfo) == 400, "GamFamiliarInfo size is incorrect");
-static_assert(sizeof(GamLocationInfo) == 12, "GamLocationInfo size is incorrect");
+static_assert(sizeof(CreArmorClass) == 12, "CreArmorClass size is incorrect");
+static_assert(sizeof(CreSavingThrows) == 5, "CreSavingThrows size is incorrect");
+static_assert(sizeof(CreResistances) == 11, "CreResistances size is incorrect");
+static_assert(sizeof(CreLegacyProficiencies) == 8, "CreLegacyProficiencies size is incorrect");
+static_assert(sizeof(CreColors) == 7, "CreColors size is incorrect");
+static_assert(sizeof(CreStats) == 7, "CreStats size is incorrect");
+static_assert(sizeof(CreKnownSpell) == 12, "CreKnownSpell size is incorrect");
+static_assert(sizeof(CreSpellMemorizationInfo) == 16, "CreSpellMemorizationInfo size is incorrect");
+static_assert(sizeof(CreSpellMemorizedSpell) == 12, "CreSpellMemorizedSpell size is incorrect");
+static_assert(sizeof(CreInventoryItem) == 20, "CreInventoryItem size is incorrect");
+static_assert(sizeof(CreItemSlots) == 80, "CreItemSlots size is incorrect");
+static_assert(sizeof(EmbeddedEffFileV1) == 48, "EmbeddedEffFileV1 size is incorrect");
+static_assert(sizeof(EmbeddedEffFileV2) == 264, "EmbeddedEffFileV2 size is incorrect");
 
-#endif //EESAVEEDITORBACKEND_BINARY_LAYOUTS_H
+#endif //EESAVEEDITOR_CRE_H

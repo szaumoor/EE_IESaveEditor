@@ -2,13 +2,14 @@
 
 #include <filesystem>
 #include <fstream>
+#include <string_view>
 
 #include "../src/backend/ie_files.h"
 #include "../src/backend/gam_file.h"
 
 #include "utils/tests_helper.h"
 
-constexpr auto real_gam = "../tests/res/BALDUR.gam";
+static constexpr std::string_view real_gam("../tests/res/BALDUR.gam");
 
 
 TEST( GamFileTests, GamIsUnreadableTest )
