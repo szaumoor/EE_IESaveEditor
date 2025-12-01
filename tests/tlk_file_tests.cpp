@@ -24,19 +24,19 @@ TEST( TlkFileTest, TlkStringCountZeroIfInvalid )
 
 TEST( TlkFileTest, TlkIsMalformedVersion )
 {
-    const auto temp = TempCreator( "invalid_version.tlk", "TLK ", "Invl" );
+    const TempCreator temp( "invalid_version.tlk", "TLK ", "Invl" );
     ASSERT_TRUE( TlkFile( temp.name ).malformed() );
 }
 
 TEST( TlkFileTest, TlkIsMalformedSignature )
 {
-    const auto temp = TempCreator( "invalid_signature.tlk", "XXXX", "V1  " );
+    const TempCreator temp( "invalid_signature.tlk", "XXXX", "V1  " );
     ASSERT_TRUE( TlkFile( temp.name ).malformed() );
 }
 
 TEST( TlkFileTest, TlkIsReadableAndValid )
 {
-    const auto temp = TempCreator( "valid_tlk.tlk", "TLK ", "V1  " );
+    const TempCreator temp( "valid_tlk.tlk", "TLK ", "V1  " );
     ASSERT_TRUE( TlkFile( temp.name ).good() );
 }
 
@@ -62,11 +62,11 @@ TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes)
 
 TEST( TlkFileTest, TlkReturnsUnexpectedIfFileIsMalformed )
 {
-    const auto temp0 = TempCreator( "invalid_version.tlk", "XXXX", "V1  " );
-    const auto tlk0 = TlkFile( temp0.name);
+    const TempCreator temp0( "invalid_version.tlk", "XXXX", "V1  " );
+    const TlkFile tlk0( temp0.name);
     EXPECT_FALSE(tlk0.at_index(1).has_value());
 
-    const auto temp1 = TempCreator("invalid_signature1.tlk", "TLK ", "Invl");
-    const auto tlk1 = TlkFile( temp1.name);
+    const TempCreator temp1("invalid_signature1.tlk", "TLK ", "Invl");
+    const TlkFile tlk1( temp1.name);
     ASSERT_FALSE( tlk1.at_index(1).has_value() );
 }
