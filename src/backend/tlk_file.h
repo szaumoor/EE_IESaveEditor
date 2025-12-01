@@ -1,8 +1,8 @@
 #ifndef TLK_FILE_H
 #define TLK_FILE_H
 
-// #include "aliases.h"
-#include "binary_layouts.h"
+#include "utils/aliases.h"
+#include "binary_layouts/tlk.h"
 #include "ie_files.h"
 
 #include <expected>
@@ -10,16 +10,7 @@
 #include <string_view>
 #include <vector>
 
-using std::expected;
-using std::string_view;
-using std::unexpected;
-using std::vector;
-
-enum class TlkErrorType
-{
-    InvalidIndex,
-    InvalidFile
-};
+enum class TlkErrorType { InvalidIndex, InvalidFile };
 
 struct TlkError
 {
@@ -33,16 +24,15 @@ struct TlkError
 class TlkFile final : public IEFile
 {
 public:
-    explicit TlkFile(string_view path) noexcept;
+    explicit TlkFile(std::string_view path) noexcept;
     TlkFile() = delete;
 
-    [[nodiscard]] expected<string_view, TlkError> at_index( strref index ) const noexcept;
+    [[nodiscard]] std::expected<std::string_view, TlkError> at_index( strref index ) const noexcept;
     [[nodiscard]] u32 length() const noexcept { return static_cast<u32>(_cached_strings.size()); }
 
 private:
     TlkFileHeader _header;
-    vector<TlkFileEntry> _entries;
-    vector<std::string> _cached_strings;
+    std::vector<std::string> _cached_strings;
     void check_for_malformation() noexcept override;
 };
 

@@ -2,13 +2,14 @@
 
 #include <filesystem>
 #include <fstream>
+#include <string_view>
 
 #include "../src/backend/ie_files.h"
 #include "../src/backend/key_file.h"
 
 #include "utils/tests_helper.h"
 
-constexpr auto real_path = "../tests/res/chitin.key";
+static constexpr std::string_view real_path("../tests/res/chitin.key");
 
 TEST( KeyFileTest, KeyIsUnreadableTest )
 {
