@@ -8,10 +8,9 @@ using namespace std;
 
 struct TempCreator
 {
-    TempCreator() = delete;
     TempCreator(const char* name, const char* signature, const char* version) : name(name)
     {
-        std::ofstream ofs(name, ios::binary);
+        ofstream ofs(name, ios::binary);
         ofs.write(signature, 4);
         ofs.write(version, 4);
         ofs.close();
@@ -21,6 +20,12 @@ struct TempCreator
     {
         filesystem::remove(filesystem::path(name));
     }
+
+    TempCreator() = delete;
+    TempCreator(const TempCreator&) = delete;
+    TempCreator& operator=(const TempCreator&) = delete;
+    TempCreator(TempCreator&&) = delete;
+    TempCreator& operator=(TempCreator&&) = delete;
 
     const string_view name;
 };

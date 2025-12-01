@@ -17,13 +17,13 @@ TEST( KeyFileTest, KeyIsUnreadableTest )
 
 TEST( KeyFileTest, KeyIsMalformedVersion )
 {
-    const auto temp = TempCreator( "invalid_version.key", "KEY ", "Invl" );
+    const TempCreator temp( "invalid_version.key", "KEY ", "Invl" );
     ASSERT_TRUE( KeyFile( temp.name ).malformed() );
 }
 
 TEST( KeyFileTest, KeyIsMalformedSignature )
 {
-    const auto temp = TempCreator( "invalid_signature.key", "XXXX", "V1  " );
+    const TempCreator temp( "invalid_signature.key", "XXXX", "V1  " );
     ASSERT_TRUE( KeyFile( temp.name ).malformed() );
 }
 
@@ -34,6 +34,6 @@ TEST( KeyFileTest, RealKeyIsReadableAndValid )
 
 TEST( KeyFileTest, KeyIsReadableAndValid )
 {
-    const auto temp = TempCreator( "valid_key.key", "KEY ", "V1  " );
+    const TempCreator temp( "valid_key.key", "KEY ", "V1  " );
     ASSERT_TRUE( KeyFile( temp.name ).good() );
 }

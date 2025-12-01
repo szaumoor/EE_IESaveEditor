@@ -18,7 +18,7 @@ TEST( GamFileTests, GamIsUnreadableTest )
 
 TEST( GamFileTests, GamIsMalformedVersion )
 {
-    const auto temp = TempCreator("invalid_version.gam", "GAME", "Invl");
+    const TempCreator temp("invalid_version.gam", "GAME", "Invl");
     ASSERT_TRUE( GamFile(temp.name).malformed() );
 }
 
@@ -29,19 +29,19 @@ TEST( GamFileTests, RealGamIsReadableAndValid )
 
 TEST( GamFileTests, GamIsReadableAndValid )
 {
-    const auto temp = TempCreator("valid_version.gam", "GAME", "V2.0");
+    const TempCreator temp("valid_version.gam", "GAME", "V2.0");
     ASSERT_TRUE( GamFile( temp.name ).good() );
 }
 
 TEST( GamFileTests, GamIsReadableAndValidTwoPointOne )
 {
-    const auto temp = TempCreator("valid_version.gam", "GAME", "V2.1");
+    const TempCreator temp("valid_version.gam", "GAME", "V2.1");
     ASSERT_TRUE( GamFile( temp.name ).good() );
 }
 
 TEST( GamFileTests, GamIsMalformedSignature )
 {
-    const auto temp = TempCreator("invalid_signature.gam", "XXXX", "V2.0");
+    const TempCreator temp("invalid_signature.gam", "XXXX", "V2.0");
     ASSERT_TRUE( GamFile( temp.name ).malformed() );
 }
 
