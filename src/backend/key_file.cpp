@@ -1,10 +1,11 @@
 #include <fstream>
+#include <string_view>
 
 #include "ie_files.h"
 #include "key_file.h"
 
-constexpr auto KEY_FILE_SIGNATURE = "KEY ";
-constexpr auto KEY_FILE_VERSION = "V1  ";
+static constexpr std::string_view KEY_FILE_SIGNATURE("KEY ");
+static constexpr std::string_view KEY_FILE_VERSION("V1  ");
 
 KeyFile::KeyFile( const std::string_view path ) noexcept
     : IEFile( path ), _header( {} )
