@@ -1,14 +1,11 @@
 #ifndef KEY_FILE_H
 #define KEY_FILE_H
 
-// #include "aliases.h"
-#include "binary_layouts.h"
 #include "ie_files.h"
+#include "binary_layouts/key_biff.h"
 
 #include <string_view>
 #include <vector>
-
-using std::vector;
 
 class KeyFile final : public IEFile
 {
@@ -21,8 +18,8 @@ public:
 
 private:
     KeyFileHeader _header;
-    vector<BiffEntry> _biff_entries;
-    vector<ResourceEntry> _resource_entries;
+    std::vector<BiffEntry> _biff_entries;
+    std::vector<ResourceEntry> _resource_entries;
     void check_for_malformation() noexcept override;
 };
 

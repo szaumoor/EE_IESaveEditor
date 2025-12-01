@@ -27,7 +27,7 @@ public:
     IEFile() = delete;
 
 protected:
-    explicit IEFile(const std::string_view path ) : _path(path) {}
+    explicit IEFile(const std::string_view path) : _path(path) {}
 
     IEFileState state = IEFileState::Unread;
     virtual void check_for_malformation() = 0;

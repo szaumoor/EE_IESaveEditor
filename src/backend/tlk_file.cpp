@@ -1,4 +1,3 @@
-#include "aliases.h"
 #include "ie_files.h"
 #include "tlk_file.h"
 
@@ -10,9 +9,9 @@
 #include <string_view>
 #include <vector>
 
-constexpr auto TLK_FILE_SIGNATURE = "TLK ";
-constexpr auto TLK_FILE_VERSION   = "V1  ";
 
+static constexpr std::string_view TLK_FILE_SIGNATURE ("TLK ");
+static constexpr std::string_view TLK_FILE_VERSION ("V1  ");
 
 TlkFile::TlkFile( const std::string_view path ) noexcept
     : IEFile(path), _header({})
@@ -26,29 +25,30 @@ TlkFile::TlkFile( const std::string_view path ) noexcept
 
         if ( good() )
         {
-            _entries.resize( _header.entry_count );
+            std::vector<TlkFileEntry> entries;
+            entries.resize( _header.entry_count );
 
             tlk.seekg( sizeof(TlkFileHeader), std::ios::beg );
-            tlk.read( reinterpret_cast<char*>( _entries.data() ), static_cast<std::streamsize>(_header.entry_count * sizeof( TlkFileEntry ) ));
+            tlk.read( reinterpret_cast<char*>( entries.data() ), static_cast<std::streamsize>(_header.entry_count * sizeof( TlkFileEntry ) ));
 
             tlk.seekg( _header.offset_to_str_data, std::ios::beg );
             const auto string_data = std::vector(std::istreambuf_iterator( tlk ),std::istreambuf_iterator<char>());
 
-            for ( const auto& entry: _entries )
+            for ( const auto& entry: entries )
                 _cached_strings.emplace_back( &string_data[entry.offset_to_string], entry.string_length );
         }
     }
 }
 
-expected<string_view, TlkError> TlkFile::at_index( const strref index ) const noexcept
+std::expected<std::string_view, TlkError> TlkFile::at_index( const strref index ) const noexcept
 {
-    if ( state != IEFileState::Valid )
+    if ( bad() )
         return std::unexpected( TlkError( TlkErrorType::InvalidFile,
-            "The TLK file is not valid or readable." ) );
+            "at_index: TLK file is not valid!" ) );
 
     if ( index >= _cached_strings.size() )
         return std::unexpected( TlkError( TlkErrorType::InvalidIndex,
-            std::format("The requested index {} is out of bounds", index)));
+            std::format("TLK: Index {} is out of bounds! There are {} cached strings.", index, _cached_strings.size() )));
 
     return _cached_strings[index];
 }

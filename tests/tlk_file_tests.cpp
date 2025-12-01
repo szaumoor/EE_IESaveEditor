@@ -3,13 +3,14 @@
 #include <expected>
 #include <filesystem>
 #include <fstream>
+#include <string_view>
 
 #include "../src/backend/tlk_file.h"
 #include "../src/backend/ie_files.h"
 
 #include "utils/tests_helper.h"
 
-constexpr auto real_path = "../tests/res/dialog.tlk";
+static constexpr std::string_view real_path("../tests/res/dialog.tlk");
 
 TEST( TlkFileTest, TlkIsUnreadableTest )
 {
