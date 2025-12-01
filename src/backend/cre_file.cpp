@@ -1,4 +1,4 @@
-#include "aliases.h"
+#include "utils/aliases.h"
 #include "cre_file.h"
 
 #include <fstream>
@@ -38,7 +38,7 @@ CreFile::CreFile( std::ifstream& file, const u32 offset ) noexcept
 
     if ( _header.eff_structure_version == 0 ) [[unlikely]]
     {
-        vector<EmbeddedEffFileV1> effects_v1;
+        std::vector<EmbeddedEffFileV1> effects_v1;
         effects_v1.resize( _header.effects_count );
         file.read( reinterpret_cast<char*>(effects_v1.data()),
             static_cast<std::streamsize>(_header.effects_count * sizeof( EmbeddedEffFileV1 ) ));
@@ -46,7 +46,7 @@ CreFile::CreFile( std::ifstream& file, const u32 offset ) noexcept
     }
     else if (  _header.eff_structure_version == 1 ) [[likely]]
     {
-        vector<EmbeddedEffFileV2> effects_v2;
+        std::vector<EmbeddedEffFileV2> effects_v2;
         effects_v2.resize( _header.effects_count );
         file.read( reinterpret_cast<char*>(effects_v2.data()),
             static_cast<std::streamsize>(_header.effects_count * sizeof( EmbeddedEffFileV2 ) ));

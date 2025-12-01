@@ -1,14 +1,14 @@
 #include "gam_file.h"
-#include "helper_structs.h"
+#include "utils/helper_structs.h"
 #include "ie_files.h"
 
 #include <fstream>
 #include <iostream>
 
 
-static constexpr auto GAM_FILE_SIGNATURE   = "GAME";
-static constexpr auto GAM_FILE_VERSION_2_0 = "V2.0";
-static constexpr auto GAM_FILE_VERSION_2_1 = "V2.1";
+static constexpr std::string_view GAM_FILE_SIGNATURE("GAME");
+static constexpr std::string_view GAM_FILE_VERSION_2_0("V2.0");
+static constexpr std::string GAM_FILE_VERSION_2_1 ("V2.1");
 
 GamFile::GamFile( const std::string_view path ) noexcept
     : IEFile( path ), _header( {} ), _familiar_info( {} )
