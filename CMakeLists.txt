@@ -24,7 +24,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 enable_testing()
 
 set(BACKEND_SOURCES
-   src/backend/biff_files.h
+   src/backend/biff_file.h
    src/backend/tlk_file.h
    src/backend/tlk_file.cpp
    src/backend/gam_file.h
@@ -36,7 +36,7 @@ set(BACKEND_SOURCES
    src/backend/cre_file.cpp
    src/backend/key_file.h
    src/backend/key_file.cpp
-   src/backend/biff_files.cpp
+   src/backend/biff_file.cpp
    src/backend/binary_layouts/cre.h
    src/backend/binary_layouts/gam.h
    src/backend/binary_layouts/key_biff.h
