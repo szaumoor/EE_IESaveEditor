@@ -51,6 +51,16 @@ TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
     ASSERT_TRUE( *result == "No, I'm sorry, none of them sound familiar." );
 }
 
+TEST( TlkFileTest, TlkHasExpectedTextAtIndexOneWithBrackets )
+{
+    const TlkFile tlk( real_path );
+    ASSERT_TRUE( tlk.good() );
+
+    const auto result = tlk[1];
+    ASSERT_TRUE( result.has_value() );
+    ASSERT_TRUE( *result == "No, I'm sorry, none of them sound familiar." );
+}
+
 TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes)
 {
     const TlkFile tlk( real_path );
@@ -58,6 +68,7 @@ TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes)
 
     const auto result1 = tlk.at_index( -1 );
     const auto result2 = tlk.at_index( tlk.length() );
+    std::cout << result1.error().message << '\n';
     ASSERT_TRUE( !result1.has_value() && !result2.has_value() );
 }
 
