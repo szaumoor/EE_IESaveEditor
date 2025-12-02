@@ -9,7 +9,6 @@
 #include <string_view>
 #include <vector>
 
-
 static constexpr std::string_view TLK_FILE_SIGNATURE ("TLK ");
 static constexpr std::string_view TLK_FILE_VERSION ("V1  ");
 
@@ -40,7 +39,7 @@ TlkFile::TlkFile( const std::string_view path ) noexcept
     }
 }
 
-std::expected<std::string_view, TlkError> TlkFile::at_index( const strref index ) const noexcept
+tlk_lookup TlkFile::at_index( const strref index ) const noexcept
 {
     if ( bad() )
         return std::unexpected( TlkError( TlkErrorType::InvalidFile,
@@ -52,6 +51,12 @@ std::expected<std::string_view, TlkError> TlkFile::at_index( const strref index 
 
     return _cached_strings[index];
 }
+
+tlk_lookup TlkFile::operator[](const strref index) const noexcept
+{
+    return at_index( index );
+}
+
 
 void TlkFile::check_for_malformation() noexcept
 {
