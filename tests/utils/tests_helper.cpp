@@ -11,7 +11,6 @@ TempCreator::TempCreator(const char* name,
     ofstream ofs(name, ios::binary);
     ofs.write(signature, 4);
     ofs.write(version, 4);
-    ofs.close();
 }
 
 TempCreator::~TempCreator()

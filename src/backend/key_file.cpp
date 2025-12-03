@@ -4,8 +4,8 @@
 #include "ie_files.h"
 #include "key_file.h"
 
-static constexpr std::string_view KEY_FILE_SIGNATURE("KEY ");
-static constexpr std::string_view KEY_FILE_VERSION("V1  ");
+static constexpr std::string_view kKeyFileSig("KEY ");
+static constexpr std::string_view kKeyFileVersion("V1  ");
 
 KeyFile::KeyFile( const std::string_view path ) noexcept
     : IEFile( path ), _header( {} )
@@ -34,8 +34,8 @@ KeyFile::KeyFile( const std::string_view path ) noexcept
 
 void KeyFile::check_for_malformation() noexcept
 {
-    const bool valid_signature = _header.signature.to_string() == KEY_FILE_SIGNATURE;
-    const bool valid_version = _header.version.to_string() == KEY_FILE_VERSION;
+    const bool valid_signature = _header.signature.to_string() == kKeyFileSig;
+    const bool valid_version = _header.version.to_string() == kKeyFileVersion;
     state = valid_signature && valid_version ? IEFileState::Valid : IEFileState::Malformed;
 }
 
