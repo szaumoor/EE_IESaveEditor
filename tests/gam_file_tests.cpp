@@ -14,34 +14,39 @@ static constexpr std::string_view kRealGam("../tests/res/BALDUR.gam");
 
 TEST( GamFileTests, GamIsUnreadableTest )
 {
-    ASSERT_TRUE( GamFile("nonexistent.gam").unreadable() );
+    const auto gam = GamFile::open("nonexistent.gam");
+    ASSERT_TRUE( !gam && gam.error().error_type == IEErrorType::Unreadable );
 }
 
 TEST( GamFileTests, GamIsMalformedVersion )
 {
     const TempCreator temp("invalid_version.gam", "GAME", "Invl");
-    ASSERT_TRUE( GamFile(temp.name).malformed() );
+    const auto gam = GamFile::open(temp.name);
+    ASSERT_TRUE( !gam && gam.error().error_type == IEErrorType::Malformed );
 }
 
 TEST( GamFileTests, RealGamIsReadableAndValid )
 {
-    ASSERT_TRUE( GamFile( kRealGam ).good() );
+    ASSERT_TRUE( GamFile::open( kRealGam ).has_value() );
 }
 
 TEST( GamFileTests, GamIsReadableAndValid )
 {
     const TempCreator temp("valid_version.gam", "GAME", "V2.0");
-    ASSERT_TRUE( GamFile( temp.name ).good() );
+    const auto gam = GamFile::open(temp.name);
+    ASSERT_TRUE( gam.has_value() );
 }
 
 TEST( GamFileTests, GamIsReadableAndValidTwoPointOne )
 {
     const TempCreator temp("valid_version.gam", "GAME", "V2.1");
-    ASSERT_TRUE( GamFile( temp.name ).good() );
+    const auto gam = GamFile::open(temp.name);
+    ASSERT_TRUE( gam.has_value() );
 }
 
 TEST( GamFileTests, GamIsMalformedSignature )
 {
     const TempCreator temp("invalid_signature.gam", "XXXX", "V2.0");
-    ASSERT_TRUE( GamFile( temp.name ).malformed() );
+    const auto gam = GamFile::open(temp.name);
+    ASSERT_TRUE( !gam && gam.error().error_type == IEErrorType::Malformed );
 }
