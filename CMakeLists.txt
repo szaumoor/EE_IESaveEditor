@@ -24,83 +24,84 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 enable_testing()
 
 set(BACKEND_SOURCES
-   src/backend/biff_file.h
-   src/backend/tlk_file.h
-   src/backend/tlk_file.cpp
-   src/backend/gam_file.h
-   src/backend/gam_file.cpp
-   src/backend/cre_file.h
-   src/backend/utils/helper_structs.h
-   src/backend/utils/aliases.h
-   src/backend/ie_files.h
-   src/backend/cre_file.cpp
-   src/backend/key_file.h
-   src/backend/key_file.cpp
-   src/backend/biff_file.cpp
-   src/backend/binary_layouts/cre.h
-   src/backend/binary_layouts/gam.h
-   src/backend/binary_layouts/key_biff.h
-   src/backend/binary_layouts/tlk.h
+    src/backend/biff_file.h
+    src/backend/tlk_file.h
+    src/backend/tlk_file.cpp
+    src/backend/gam_file.h
+    src/backend/gam_file.cpp
+    src/backend/cre_file.h
+    src/backend/utils/helper_structs.h
+    src/backend/utils/aliases.h
+    src/backend/ie_files.h
+    src/backend/cre_file.cpp
+    src/backend/key_file.h
+    src/backend/key_file.cpp
+    src/backend/biff_file.cpp
+    src/backend/binary_layouts/cre.h
+    src/backend/binary_layouts/gam.h
+    src/backend/binary_layouts/key_biff.h
+    src/backend/binary_layouts/tlk.h
+    src/backend/utils/errors.h
 )
 
 set(GAM_TEST_SOURCES
-   src/backend/gam_file.cpp
-   src/backend/gam_file.h
-   src/backend/cre_file.cpp
-   tests/utils/tests_helper.h
-   tests/utils/tests_helper.cpp
+    src/backend/gam_file.cpp
+    src/backend/gam_file.h
+    src/backend/cre_file.cpp
+    tests/utils/tests_helper.h
+    tests/utils/tests_helper.cpp
 )
 
 set(TLK_TEST_SOURCES
-  src/backend/tlk_file.cpp
-  src/backend/tlk_file.h
-  tests/utils/tests_helper.h
-  tests/utils/tests_helper.cpp
+    src/backend/tlk_file.cpp
+    src/backend/tlk_file.h
+    tests/utils/tests_helper.h
+    tests/utils/tests_helper.cpp
 )
 
 set(KEY_TEST_SOURCES
-  src/backend/key_file.cpp
-  src/backend/key_file.h
-  tests/utils/tests_helper.h
-  tests/utils/tests_helper.cpp
+    src/backend/key_file.cpp
+    src/backend/key_file.h
+    tests/utils/tests_helper.h
+    tests/utils/tests_helper.cpp
 )
 
 set(ALL_TEST_SOURCES
-   ${TLK_TEST_SOURCES}
-   ${KEY_TEST_SOURCES}
-   ${GAM_TEST_SOURCES}
+    ${TLK_TEST_SOURCES}
+    ${KEY_TEST_SOURCES}
+    ${GAM_TEST_SOURCES}
 )
 
 add_library (backend ${BACKEND_SOURCES})
 
 add_executable(tlk_file_test
-  tests/tlk_file_tests.cpp
-  ${TLK_TEST_SOURCES}
+    tests/tlk_file_tests.cpp
+    ${TLK_TEST_SOURCES}
 )
 
 add_executable(key_file_test
-  tests/key_file_tests.cpp
-  ${KEY_TEST_SOURCES}
+    tests/key_file_tests.cpp
+    ${KEY_TEST_SOURCES}
 )
 
  add_executable(gam_file_test
-   tests/gam_file_tests.cpp
-   ${GAM_TEST_SOURCES}
+    tests/gam_file_tests.cpp
+    ${GAM_TEST_SOURCES}
  )
 
 add_executable(all_tests
-  tests/gam_file_tests.cpp
-  tests/key_file_tests.cpp
-  tests/tlk_file_tests.cpp
-  ${ALL_TEST_SOURCES}
+    tests/gam_file_tests.cpp
+    tests/key_file_tests.cpp
+    tests/tlk_file_tests.cpp
+    ${ALL_TEST_SOURCES}
 )
 
 add_executable(EESaveEditor
-   ${BACKEND_SOURCES}
-   src/frontend/mainwindow.cpp
-   src/frontend/mainwindow.h
-   src/frontend/mainwindow.ui
-   src/main.cpp
+    ${BACKEND_SOURCES}
+    src/frontend/mainwindow.cpp
+    src/frontend/mainwindow.h
+    src/frontend/mainwindow.ui
+    src/main.cpp
 )
 
  target_link_libraries(tlk_file_test

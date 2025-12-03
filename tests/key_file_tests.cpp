@@ -13,28 +13,32 @@ static constexpr std::string_view kRealKey("../tests/res/chitin.key");
 
 TEST( KeyFileTest, KeyIsUnreadableTest )
 {
-    ASSERT_TRUE( KeyFile( "nonexistent.key" ).unreadable() );
+    const auto key = KeyFile::open( "nonexistent.key" );
+    ASSERT_TRUE( !key && key.error().error_type == IEErrorType::Unreadable );
 }
 
-TEST( KeyFileTest, KeyIsMalformedVersion )
+TEST(KeyFileTest, KeyIsMalformedVersion)
 {
-    const TempCreator temp( "invalid_version.key", "KEY ", "Invl" );
-    ASSERT_TRUE( KeyFile( temp.name ).malformed() );
+    const TempCreator temp("invalid_version.key", "KEY ", "Invl");
+    const auto key = KeyFile::open( temp.name );
+    ASSERT_TRUE( !key && key.error().error_type == IEErrorType::Malformed );
 }
 
 TEST( KeyFileTest, KeyIsMalformedSignature )
 {
     const TempCreator temp( "invalid_signature.key", "XXXX", "V1  " );
-    ASSERT_TRUE( KeyFile( temp.name ).malformed() );
+    const auto key = KeyFile::open( temp.name );
+    ASSERT_TRUE( !key && key.error().error_type == IEErrorType::Malformed );
 }
 
 TEST( KeyFileTest, RealKeyIsReadableAndValid )
 {
-    ASSERT_TRUE( KeyFile( kRealKey ).good() );
+    ASSERT_TRUE( KeyFile::open(kRealKey).has_value() );
 }
 
 TEST( KeyFileTest, KeyIsReadableAndValid )
 {
     const TempCreator temp( "valid_key.key", "KEY ", "V1  " );
-    ASSERT_TRUE( KeyFile( temp.name ).good() );
+    const auto key = KeyFile::open( temp.name );
+    ASSERT_TRUE( key.has_value() );
 }
