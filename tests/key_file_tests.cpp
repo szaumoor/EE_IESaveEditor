@@ -9,7 +9,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view real_path("../tests/res/chitin.key");
+static constexpr std::string_view kRealKey("../tests/res/chitin.key");
 
 TEST( KeyFileTest, KeyIsUnreadableTest )
 {
@@ -30,7 +30,7 @@ TEST( KeyFileTest, KeyIsMalformedSignature )
 
 TEST( KeyFileTest, RealKeyIsReadableAndValid )
 {
-    ASSERT_TRUE( KeyFile( real_path ).good() );
+    ASSERT_TRUE( KeyFile( kRealKey ).good() );
 }
 
 TEST( KeyFileTest, KeyIsReadableAndValid )
