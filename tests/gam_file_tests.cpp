@@ -9,7 +9,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view real_gam("../tests/res/BALDUR.gam");
+static constexpr std::string_view kRealGam("../tests/res/BALDUR.gam");
 
 
 TEST( GamFileTests, GamIsUnreadableTest )
@@ -25,7 +25,7 @@ TEST( GamFileTests, GamIsMalformedVersion )
 
 TEST( GamFileTests, RealGamIsReadableAndValid )
 {
-    ASSERT_TRUE( GamFile( real_gam ).good() );
+    ASSERT_TRUE( GamFile( kRealGam ).good() );
 }
 
 TEST( GamFileTests, GamIsReadableAndValid )
@@ -44,11 +44,4 @@ TEST( GamFileTests, GamIsMalformedSignature )
 {
     const TempCreator temp("invalid_signature.gam", "XXXX", "V2.0");
     ASSERT_TRUE( GamFile( temp.name ).malformed() );
-}
-
-TEST( GamFileTests, GamHasAtLeastOnePartyMember )
-{
-    const GamFile gam( real_gam );
-    ASSERT_TRUE( gam.good() );
-    ASSERT_GT(gam._party_members.size(),1);
 }

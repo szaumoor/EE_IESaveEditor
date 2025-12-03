@@ -9,8 +9,8 @@
 #include <string_view>
 #include <vector>
 
-static constexpr std::string_view TLK_FILE_SIGNATURE ("TLK ");
-static constexpr std::string_view TLK_FILE_VERSION ("V1  ");
+static constexpr std::string_view kTlkFileSig ("TLK ");
+static constexpr std::string_view kTlkFileVersion ("V1  ");
 
 TlkFile::TlkFile( const std::string_view path ) noexcept
     : IEFile(path), _header({})
@@ -60,7 +60,7 @@ tlk_lookup TlkFile::operator[](const strref index) const noexcept
 
 void TlkFile::check_for_malformation() noexcept
 {
-    const bool valid_signature = _header.signature.to_string() == TLK_FILE_SIGNATURE;
-    const bool valid_version   = _header.version.to_string()   == TLK_FILE_VERSION;
+    const bool valid_signature = _header.signature.to_string() == kTlkFileSig;
+    const bool valid_version   = _header.version.to_string()   == kTlkFileVersion;
     state = valid_signature && valid_version ? IEFileState::Valid : IEFileState::Malformed;
 }
