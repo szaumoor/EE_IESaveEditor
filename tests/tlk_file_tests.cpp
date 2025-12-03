@@ -10,7 +10,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view real_path("../tests/res/dialog.tlk");
+static constexpr std::string_view kRealTlk("../tests/res/dialog.tlk");
 
 TEST( TlkFileTest, TlkIsUnreadableTest )
 {
@@ -43,7 +43,7 @@ TEST( TlkFileTest, TlkIsReadableAndValid )
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
 {
-    const TlkFile tlk( real_path );
+    const TlkFile tlk( kRealTlk );
     ASSERT_TRUE( tlk.good() );
 
     const auto result = tlk.at_index( 1 );
@@ -53,7 +53,7 @@ TEST( TlkFileTest, TlkHasExpectedTextAtIndexOne )
 
 TEST( TlkFileTest, TlkHasExpectedTextAtIndexOneWithBrackets )
 {
-    const TlkFile tlk( real_path );
+    const TlkFile tlk( kRealTlk );
     ASSERT_TRUE( tlk.good() );
 
     const auto result = tlk[1];
@@ -63,7 +63,7 @@ TEST( TlkFileTest, TlkHasExpectedTextAtIndexOneWithBrackets )
 
 TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes)
 {
-    const TlkFile tlk( real_path );
+    const TlkFile tlk( kRealTlk );
     ASSERT_TRUE( tlk.good() );
 
     const auto result1 = tlk.at_index( -1 );

@@ -6,9 +6,9 @@
 #include <iostream>
 
 
-static constexpr std::string_view GAM_FILE_SIGNATURE("GAME");
-static constexpr std::string_view GAM_FILE_VERSION_2_0("V2.0");
-static constexpr std::string GAM_FILE_VERSION_2_1 ("V2.1");
+static constexpr std::string_view kGamFileSig("GAME");
+static constexpr std::string_view kGamFileVersion_2_0("V2.0");
+static constexpr std::string kGamFileVersion_2_1 ("V2.1");
 
 GamFile::GamFile( const std::string_view path ) noexcept
     : IEFile( path ), _header( {} ), _familiar_info( {} )
@@ -71,9 +71,9 @@ GamFile::GamFile( const std::string_view path ) noexcept
 
 void GamFile::check_for_malformation() noexcept
 {
-    const bool valid_signature = _header.signature.to_string() == GAM_FILE_SIGNATURE;
-    const bool valid_version   = _header.version.to_string() == GAM_FILE_VERSION_2_0 ||
-                                 _header.version.to_string() == GAM_FILE_VERSION_2_1;
+    const bool valid_signature = _header.signature.to_string() == kGamFileSig;
+    const bool valid_version   = _header.version.to_string() == kGamFileVersion_2_0 ||
+                                 _header.version.to_string() == kGamFileVersion_2_1;
 
     state = valid_signature && valid_version ? IEFileState::Valid : IEFileState::Malformed;
 }
