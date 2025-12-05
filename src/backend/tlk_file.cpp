@@ -16,14 +16,14 @@ PossibleTlkFile TlkFile::open(std::string_view path) noexcept
 {
     std::ifstream file_handle( path.data(), std::ios::binary );
     if ( !file_handle )
-        return std::unexpected(IEError(IEErrorType::Unreadable, "Could not read the TLK file"));
+        return std::unexpected(IEError(IEErrorType::Unreadable));
 
     TlkFile tlk(path);
     file_handle.read( reinterpret_cast<char*>(&tlk._header), sizeof( TlkFileHeader ) );
     tlk.check_for_malformation();
 
     if (!tlk)
-        return std::unexpected(IEError(IEErrorType::Malformed, "TLK file has wrong signature or is corrupted"));
+        return std::unexpected(IEError(IEErrorType::Malformed));
 
     std::vector<TlkFileEntry> entries;
     entries.resize( tlk._header.entry_count );
@@ -33,11 +33,10 @@ PossibleTlkFile TlkFile::open(std::string_view path) noexcept
 
     file_handle.seekg( tlk._header.offset_to_str_data, std::ios::beg );
     const auto string_data = std::vector(std::istreambuf_iterator( file_handle ),std::istreambuf_iterator<char>());
-
     for ( const auto& entry: entries )
-        tlk._cached_strings.emplace_back( &string_data[entry.offset_to_string], entry.string_length );
+        tlk._cached_strings.emplace_back( &(string_data[entry.offset_to_string]), entry.string_length );
 
-    return tlk;
+    return std::move(tlk);
 }
 
 TlkFile::TlkFile( const std::string_view path ) noexcept : IEFile(path) {}
