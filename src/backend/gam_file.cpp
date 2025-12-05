@@ -1,46 +1,61 @@
 #include "gam_file.h"
-#include "utils/helper_structs.h"
 #include "ie_files.h"
+#include "utils/helper_structs.h"
 
+#include <algorithm>
 #include <fstream>
+#include <ranges>
 
-static constexpr std::string_view kGamFileSig("GAME");
-static constexpr std::string_view kGamFileVersion_2_0("V2.0");
-static constexpr std::string_view kGamFileVersion_2_1 ("V2.1");
+using std::string_view;
+using std::ifstream;
+namespace rng = std::ranges;
 
-PossibleGamFile GamFile::open(const std::string_view path) noexcept
+static constexpr string_view kGamFileSig("GAME");
+static constexpr string_view kGamFileVersion_2_0("V2.0");
+static constexpr string_view kGamFileVersion_2_1 ("V2.1");
+
+inline void GamFile::prep_containers()
 {
-    std::ifstream file_handle( path.data(), std::ios::binary );
+    _party_members.resize( _header.npc_party_count );
+    _non_party_members.resize( _header.npc_nonparty_count );
+    _variables.resize( _header.global_vars_count );
+    _journal_entries.resize( _header.journal_count );
+    _stored_locations.resize( _header.stored_locs_count );
+    _pocket_plane_info.resize( _header.pocket_locs_count );
+    _familiar_extras.resize( 81 );
+}
+
+PossibleGamFile GamFile::open(const string_view path) noexcept
+{
+    ifstream file_handle( path.data(), std::ios::binary );
 
     if (!file_handle)
-        return std::unexpected(IEError(IEErrorType::Unreadable, "Could not read the GAM file"));
+        return std::unexpected(IEError(IEErrorType::Unreadable));
 
     GamFile gam(path);
     file_handle.read( reinterpret_cast<char*>(&gam._header), sizeof( GamHeader ) );
     gam.check_for_malformation();
 
     if (!gam)
-        return std::unexpected(IEError(IEErrorType::Malformed, "GAM file has the wrong signature or is corrupted"));
+        return std::unexpected(IEError(IEErrorType::Malformed));
 
-    gam._party_members.resize( gam._header.npc_party_count );
-    gam._non_party_members.resize( gam._header.npc_nonparty_count );
-    gam._variables.resize( gam._header.global_vars_count );
-    gam._journal_entries.resize( gam._header.journal_count );
-    gam._stored_locations.resize( gam._header.stored_locs_count );
-    gam._pocket_plane_info.resize( gam._header.pocket_locs_count );
-    gam._familiar_extras.resize( 81 );
+    gam.prep_containers();
 
     file_handle.seekg( gam._header.npc_party_offset, std::ios::beg );
     file_handle.read( reinterpret_cast<char*>( gam._party_members.data() ),
         static_cast<std::streamsize>(gam._header.npc_party_count * sizeof( GamCharacterData ) ));
-    for ( const auto& member : gam._party_members )
-        gam._party_cre_files.emplace_back( file_handle, member.cre_offset );
+
+    rng::for_each(gam._party_members, [&](const auto& member) {
+        gam._party_cre_files.emplace_back( std::move(CreFile::read(file_handle, member.cre_offset)) );
+    });
 
     file_handle.seekg( gam._header.npc_nonparty_offset, std::ios::beg );
     file_handle.read( reinterpret_cast<char*>( gam._non_party_members.data() ),
         static_cast<std::streamsize>(gam._header.npc_nonparty_count * sizeof( GamCharacterData ) ));
-    for ( const auto& member : gam._non_party_members )
-        gam._non_party_cre_files.emplace_back( file_handle, member.cre_offset );
+
+    rng::for_each(gam._non_party_members, [&](const auto& member) {
+        gam._non_party_cre_files.push_back( std::move(CreFile::read(file_handle, member.cre_offset )));
+    });
 
     file_handle.seekg( gam._header.global_vars_offset, std::ios::beg );
     file_handle.read( reinterpret_cast<char*>( gam._variables.data() ),
@@ -65,7 +80,7 @@ PossibleGamFile GamFile::open(const std::string_view path) noexcept
     file_handle.read( reinterpret_cast<char*>( gam._familiar_extras.data() ),
         static_cast<std::streamsize>(gam._familiar_extras.size() * sizeof( Resref ) ));
 
-    return gam;
+    return std::move(gam);
 }
 
 GamFile::GamFile( const std::string_view path ) noexcept : IEFile( path ) {}
@@ -78,3 +93,5 @@ void GamFile::check_for_malformation() noexcept
     
     good = valid_signature && valid_version;
 }
+
+

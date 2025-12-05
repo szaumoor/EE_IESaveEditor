@@ -9,19 +9,24 @@
 #include <string_view>
 #include <vector>
 
+#include "utils/errors.h"
+
 class KeyFile;
 
+using std::string_view;
+using std::vector;
 using PossibleKeyFile = std::expected<KeyFile, IEError>;
 
 class KeyFile final : public IEFile
 {
 public:
-    static PossibleKeyFile open(std::string_view path) noexcept;
+    [[nodiscard]]
+    static PossibleKeyFile open( string_view path ) noexcept;
 private:
-    explicit KeyFile( std::string_view path ) noexcept;
+    explicit KeyFile( string_view path ) noexcept;
     KeyFileHeader _header{};
-    std::vector<BiffEntry> _biff_entries;
-    std::vector<ResourceEntry> _resource_entries;
+    vector<BiffEntry> _biff_entries;
+    vector<ResourceEntry> _resource_entries;
     void check_for_malformation() noexcept override;
 };
 

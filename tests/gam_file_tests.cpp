@@ -4,25 +4,24 @@
 #include <fstream>
 #include <string_view>
 
-#include "../src/backend/ie_files.h"
 #include "../src/backend/gam_file.h"
+#include "../src/backend/utils/errors.h"
 
 #include "utils/tests_helper.h"
 
 static constexpr std::string_view kRealGam("../tests/res/BALDUR.gam");
 
-
 TEST( GamFileTests, GamIsUnreadableTest )
 {
     const auto gam = GamFile::open("nonexistent.gam");
-    ASSERT_TRUE( !gam && gam.error().error_type == IEErrorType::Unreadable );
+    ASSERT_TRUE( !gam && gam.error().type() == IEErrorType::Unreadable );
 }
 
 TEST( GamFileTests, GamIsMalformedVersion )
 {
     const TempCreator temp("invalid_version.gam", "GAME", "Invl");
     const auto gam = GamFile::open(temp.name);
-    ASSERT_TRUE( !gam && gam.error().error_type == IEErrorType::Malformed );
+    ASSERT_TRUE( !gam && gam.error().type() == IEErrorType::Malformed );
 }
 
 TEST( GamFileTests, RealGamIsReadableAndValid )
@@ -48,5 +47,5 @@ TEST( GamFileTests, GamIsMalformedSignature )
 {
     const TempCreator temp("invalid_signature.gam", "XXXX", "V2.0");
     const auto gam = GamFile::open(temp.name);
-    ASSERT_TRUE( !gam && gam.error().error_type == IEErrorType::Malformed );
+    ASSERT_TRUE( !gam && gam.error().type() == IEErrorType::Malformed );
 }
