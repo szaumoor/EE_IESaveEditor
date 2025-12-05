@@ -12,10 +12,6 @@ class BiffFile final : IEFile
 public:
     explicit BiffFile( std::string_view path ) noexcept;
     BiffFile() = delete;
-
-   // [[nodiscard]] u32 file_count() const noexcept { return _header.count_of_file_entries; }
-   // [[nodiscard]] u32 tile_count() const noexcept { return _header.count_of_tile_entries; }
-
 private:
     BiffHeader _header;
     std::vector<FileEntry> _file_entries;

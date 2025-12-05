@@ -4,21 +4,33 @@
 #include <string>
 #include <string_view>
 
-enum class [[nodiscard]] IEErrorType
+#include "aliases.h"
+
+enum class [[nodiscard]] IEErrorType : u8
 {
-    NotFound,
-    Unreadable,
-    Malformed,
-    OutOfBounds
+    NotFound    = 0,
+    Unreadable  = 1,
+    Malformed   = 2,
+    OutOfBounds = 3
 };
 
-struct IEError
+class IEError
 {
-    const IEErrorType error_type;
-    const std::string error_message;
+public:
+    explicit IEError(IEErrorType error_t, std::string_view error_m);
+    explicit IEError(IEErrorType error_t);
 
-    explicit IEError(const IEErrorType error_t, const std::string_view error_m)
-        : error_type(error_t), error_message(error_m) {}
+    [[nodiscard]]
+    constexpr std::string_view what() const { return error_message; };
+
+    [[nodiscard]]
+    constexpr IEErrorType type() const { return error_type; };
+
+private:
+    const IEErrorType error_type;
+    std::string_view error_message;
+
+   // constexpr void resolve_error_msg();
 };
 
 #endif //EESAVEEDITOR_ERRORS_H
