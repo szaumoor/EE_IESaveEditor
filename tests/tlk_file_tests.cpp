@@ -16,21 +16,21 @@ static const auto real_tlk = TlkFile::open(kRealTlk);
 TEST( TlkFileTest, TlkIsUnreadableTest )
 {
     const auto tlk = TlkFile::open( "nonexistent.tlk" );
-    ASSERT_TRUE( !tlk && tlk.error().error_type == IEErrorType::Unreadable );
+    ASSERT_TRUE( !tlk && tlk.error().type() == IEErrorType::Unreadable );
 }
 
 TEST( TlkFileTest, TlkIsMalformedVersion )
 {
     const TempCreator temp( "invalid_version.tlk", "TLK ", "Invl" );
     const auto tlk = TlkFile::open( temp.name );
-    ASSERT_TRUE( !tlk && tlk.error().error_type == IEErrorType::Malformed );
+    ASSERT_TRUE( !tlk && tlk.error().type() == IEErrorType::Malformed );
 }
 
 TEST( TlkFileTest, TlkIsMalformedSignature )
 {
     const TempCreator temp( "invalid_signature.tlk", "XXXX", "V1  " );
     const auto tlk = TlkFile::open( temp.name );
-    ASSERT_TRUE( !tlk && tlk.error().error_type == IEErrorType::Malformed );
+    ASSERT_TRUE( !tlk && tlk.error().type() == IEErrorType::Malformed );
 }
 
 TEST( TlkFileTest, TlkIsReadableAndValid )
