@@ -29,8 +29,6 @@ public:
 private:
     const IEErrorType error_type;
     std::string_view error_message;
-
-   // constexpr void resolve_error_msg();
 };
 
 #endif //EESAVEEDITOR_ERRORS_H

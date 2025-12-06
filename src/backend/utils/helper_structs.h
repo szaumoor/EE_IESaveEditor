@@ -15,14 +15,14 @@ struct CharArray
 
     [[nodiscard]]
     std::string to_string() const {
-        return trim_nulls(std::move(std::string(value, Length)));
+        return std::move(trim_nulls(std::string(value, Length)));
     }
 
 private:
-    static std::string trim_nulls(std::string&& str) {
+    static std::string&& trim_nulls(std::string&& str) {
         if (const auto null_pos = str.find_first_of('\0'); null_pos != std::string::npos)
             str.resize(null_pos);
-        return str;
+        return std::move(str);
     }
 };
 
