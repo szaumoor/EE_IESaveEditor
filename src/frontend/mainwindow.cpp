@@ -1,11 +1,63 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMessageBox>
+#include <QDesktopServices>
+#include <QUrl>
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
+
+    connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::show_about);
+    connect(ui->actionForum, &QAction::triggered, this, &MainWindow::open_forum);
+    connect(ui->actionGibberlings, &QAction::triggered, this, &MainWindow::open_discord_g3);
+    connect(ui->actionInfinityEngine, &QAction::triggered, this, &MainWindow::open_discord_ie);
+
 }
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+void MainWindow::show_about()
+{
+    QMessageBox::information(
+        this,
+        "About",
+        "EE Save Editor\n"
+        "Author: szaumoor\n"
+        "Version: 0.1\n"
+        "Powered by C++ and the Qt Framework"
+    );
+}
+
+void MainWindow::open_forum()
+{
+    QMessageBox::warning(
+        this,
+        "Forum",
+        "Forum doesn't exist yet! Stay tuned."
+    );
+}
+
+void MainWindow::open_discord_g3()
+{
+    if (const bool ok = QDesktopServices::openUrl(QUrl("https://discord.com/invite/yTzjMTb")); !ok)
+    {
+        qDebug() << "Error opening link to join discord!";
+    }
+}
+
+void MainWindow::open_discord_ie()
+{
+    if (const bool ok = QDesktopServices::openUrl(QUrl("https://discord.gg/NWw65ags7S")); !ok)
+    {
+        qDebug() << "Error opening link to join discord!";
+    }
+}
+
+void MainWindow::open_github_repo()
+{
+
 }
