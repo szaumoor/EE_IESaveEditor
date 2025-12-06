@@ -43,6 +43,7 @@ set(BACKEND_SOURCES
     src/backend/binary_layouts/tlk.h
     src/backend/utils/errors.h
     src/backend/utils/errors.cpp
+        src/backend/utils/io.h
 )
 
 set(TEST_COMMON

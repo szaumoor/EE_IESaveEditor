@@ -4,6 +4,8 @@
 #include "ie_files.h"
 #include "key_file.h"
 
+#include "utils/io.h"
+
 static constexpr string_view kKeyFileSig("KEY ");
 static constexpr string_view kKeyFileVersion("V1  ");
 
@@ -15,7 +17,8 @@ PossibleKeyFile KeyFile::open(const string_view path) noexcept
         return std::unexpected(IEError(IEErrorType::Unreadable));
 
     KeyFile key(path);
-    file_handle.read( reinterpret_cast<char*>(&key._header), sizeof( KeyFileHeader ) );
+    StructWriter writer(file_handle);
+    writer.into(key._header);
     key.check_for_malformation();
 
     if (!key)
@@ -24,12 +27,8 @@ PossibleKeyFile KeyFile::open(const string_view path) noexcept
     key._biff_entries.resize( key._header.biff_count );
     key._resource_entries.resize( key._header.resource_count );
 
-    file_handle.seekg( key._header.offset_to_biff_entries, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( key._biff_entries.data() ),
-        static_cast<std::streamsize>(key._header.biff_count * sizeof( BiffEntry ) ));
-    file_handle.seekg( key._header.offset_to_resource_entries, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( key._resource_entries.data() ),
-        static_cast<std::streamsize>(key._header.resource_count * sizeof( ResourceEntry ) ));
+    writer.into(key._biff_entries, key._header.offset_to_biff_entries);
+    writer.into(key._resource_entries, key._header.offset_to_resource_entries);
 
     return key;
 }

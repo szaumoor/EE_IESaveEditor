@@ -1,6 +1,7 @@
 #include "gam_file.h"
 #include "ie_files.h"
 #include "utils/helper_structs.h"
+#include "utils/io.h"
 
 #include <algorithm>
 #include <fstream>
@@ -33,7 +34,10 @@ PossibleGamFile GamFile::open(const string_view path) noexcept
         return std::unexpected(IEError(IEErrorType::Unreadable));
 
     GamFile gam(path);
-    file_handle.read( reinterpret_cast<char*>(&gam._header), sizeof( GamHeader ) );
+    auto& header = gam._header;
+
+    const StructWriter writer(file_handle);
+    writer.into(header);
     gam.check_for_malformation();
 
     if (!gam)
@@ -41,44 +45,22 @@ PossibleGamFile GamFile::open(const string_view path) noexcept
 
     gam.prep_containers();
 
-    file_handle.seekg( gam._header.npc_party_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( gam._party_members.data() ),
-        static_cast<std::streamsize>(gam._header.npc_party_count * sizeof( GamCharacterData ) ));
-
+    writer.into(gam._party_members, header.npc_party_offset);
     rng::for_each(gam._party_members, [&](const auto& member) {
-        gam._party_cre_files.emplace_back( std::move(CreFile::read(file_handle, member.cre_offset)) );
+        gam._party_cre_files.push_back( std::move(CreFile::read(file_handle, member.cre_offset)) );
     });
-
-    file_handle.seekg( gam._header.npc_nonparty_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( gam._non_party_members.data() ),
-        static_cast<std::streamsize>(gam._header.npc_nonparty_count * sizeof( GamCharacterData ) ));
-
+    
+    writer.into(gam._non_party_members, header.npc_nonparty_offset);
     rng::for_each(gam._non_party_members, [&](const auto& member) {
         gam._non_party_cre_files.push_back( std::move(CreFile::read(file_handle, member.cre_offset )));
     });
-
-    file_handle.seekg( gam._header.global_vars_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( gam._variables.data() ),
-        static_cast<std::streamsize>(gam._header.global_vars_count * sizeof( GamGlobalVariable ) ));
-
-    file_handle.seekg( gam._header.journal_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( gam._journal_entries.data() ),
-        static_cast<std::streamsize>(gam._header.journal_count * sizeof( GamJournalEntry ) ));
-
-    file_handle.seekg( gam._header.stored_locs_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( gam._stored_locations.data() ),
-        static_cast<std::streamsize>(gam._header.stored_locs_count * sizeof( GamLocationInfo ) ));
-
-    file_handle.seekg( gam._header.pocket_locs_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( gam._pocket_plane_info.data() ),
-        static_cast<std::streamsize>(gam._header.pocket_locs_count * sizeof( GamLocationInfo ) ));
-
-    file_handle.seekg( gam._header.familiar_info_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>(&gam._familiar_info), sizeof( GamFamiliarInfo ) );
-
-    file_handle.seekg( gam._header.familiar_extra_offset, std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( gam._familiar_extras.data() ),
-        static_cast<std::streamsize>(gam._familiar_extras.size() * sizeof( Resref ) ));
+    
+    writer.into(gam._variables, header.global_vars_offset);
+    writer.into(gam._journal_entries, header.journal_offset);
+    writer.into(gam._stored_locations, header.stored_locs_offset);
+    writer.into(gam._pocket_plane_info, header.pocket_locs_offset);
+    writer.into(gam._familiar_info, header.familiar_info_offset);
+    writer.into(gam._familiar_extras, header.familiar_extra_offset);
 
     return std::move(gam);
 }
