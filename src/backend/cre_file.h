@@ -1,12 +1,11 @@
 #ifndef CRE_FILE_H
 #define CRE_FILE_H
 
-#include <expected>
-#include <optional>
 
 #include "utils/aliases.h"
 #include "binary_layouts/cre.h"
 
+#include <optional>
 #include <variant>
 #include <vector>
 
@@ -21,10 +20,9 @@ class CreFile
 {
 public:
     static CreFile read(std::ifstream& file, u32 offset);
-private:
-    explicit CreFile( std::ifstream& file, u32 offset ) noexcept;
 
-    CreHeader _header;
+private:
+    CreHeader _header{};
 
     std::vector<CreKnownSpell> _known_spells;
     std::vector<CreSpellMemorizationInfo> _memorization_infos;
@@ -33,7 +31,10 @@ private:
     std::vector<EffectVariant> _effects; // horrendous
 
     std::vector<CreInventoryItem> _items;
-    CreItemSlots _item_slots;
+
+    CreItemSlots _item_slots{};
+
+    inline void resize_vecs() noexcept;
 };
 
 #endif // CRE_FILE_H
