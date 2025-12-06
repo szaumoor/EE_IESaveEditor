@@ -35,6 +35,11 @@ public:
     [[nodiscard]]
     static PossibleTlkFile open( string_view path ) noexcept;
 
+    [[nodiscard]]
+    const std::string* begin() const;
+    [[nodiscard]]
+    const std::string* end() const;
+
 private:
     explicit TlkFile( string_view path ) noexcept;
     TlkFileHeader _header{};

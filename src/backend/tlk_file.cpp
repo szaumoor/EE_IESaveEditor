@@ -5,6 +5,7 @@
 #include <expected>
 #include <format>
 #include <fstream>
+#include <iostream>
 #include <iterator>
 #include <string>
 #include <string_view>
@@ -12,6 +13,16 @@
 
 static constexpr std::string_view kTlkFileSig ("TLK ");
 static constexpr std::string_view kTlkFileVersion ("V1  ");
+
+const std::string* TlkFile::begin() const
+{
+    return &_cached_strings.front();
+}
+
+const std::string* TlkFile::end() const
+{
+    return &_cached_strings.back();
+}
 
 PossibleTlkFile TlkFile::open(std::string_view path) noexcept
 {
