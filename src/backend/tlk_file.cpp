@@ -1,5 +1,6 @@
 #include "ie_files.h"
 #include "tlk_file.h"
+#include "utils/io.h"
 
 #include <expected>
 #include <format>
@@ -19,7 +20,10 @@ PossibleTlkFile TlkFile::open(std::string_view path) noexcept
         return std::unexpected(IEError(IEErrorType::Unreadable));
 
     TlkFile tlk(path);
-    file_handle.read( reinterpret_cast<char*>(&tlk._header), sizeof( TlkFileHeader ) );
+    auto& header = tlk._header;
+    const StructWriter writer(file_handle);
+
+    writer.into(header);
     tlk.check_for_malformation();
 
     if (!tlk)
@@ -27,9 +31,7 @@ PossibleTlkFile TlkFile::open(std::string_view path) noexcept
 
     std::vector<TlkFileEntry> entries;
     entries.resize( tlk._header.entry_count );
-
-    file_handle.seekg( sizeof(TlkFileHeader), std::ios::beg );
-    file_handle.read( reinterpret_cast<char*>( entries.data() ), static_cast<std::streamsize>(tlk._header.entry_count * sizeof( TlkFileEntry ) ));
+    writer.into(entries, sizeof(TlkFileHeader));
 
     file_handle.seekg( tlk._header.offset_to_str_data, std::ios::beg );
     const auto string_data = std::vector(std::istreambuf_iterator( file_handle ),std::istreambuf_iterator<char>());
