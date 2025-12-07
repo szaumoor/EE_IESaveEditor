@@ -22,12 +22,12 @@ constexpr std::string_view resolve_error_msg(const IEErrorType t) noexcept
     }
 }
 
-constexpr std::string_view IEError::what() const noexcept
+std::string_view IEError::what() const noexcept
 {
     return error_message;
 }
 
-constexpr IEErrorType IEError::type() const noexcept
+IEErrorType IEError::type() const noexcept
 {
     return error_type;
 }

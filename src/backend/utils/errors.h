@@ -31,13 +31,13 @@ public:
      * Return the error message associated with the error type.
      * @return std::string_view with the error message
      */
-    [[nodiscard]] constexpr std::string_view what() const noexcept;
+    [[nodiscard]] std::string_view what() const noexcept;
 
     /**
      * Returns the error type associated with the error.
      * @return IEErrorType associated with the error.
      */
-    [[nodiscard]] constexpr IEErrorType type() const noexcept;
+    [[nodiscard]] IEErrorType type() const noexcept;
 
 private:
     const IEErrorType error_type;
