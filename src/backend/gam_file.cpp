@@ -65,6 +65,15 @@ PossibleGamFile GamFile::open(const string_view path) noexcept
     return std::move(gam);
 }
 
+bool GamFile::save_gam()
+{
+    std::ofstream file_handle(_path.data(), std::ios::binary | std::ios::in | std::ios::out);
+    const BinaryWriter writer(file_handle);
+    writer.out(_header);
+    // rest of details for later
+    return true;
+}
+
 GamFile::GamFile( const std::string_view path ) noexcept : IEFile( path ) {}
 
 void GamFile::check_for_malformation() noexcept

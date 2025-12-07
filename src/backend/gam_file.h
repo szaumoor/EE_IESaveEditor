@@ -5,13 +5,11 @@
 #include <string_view>
 #include <vector>
 
-#include <iostream>
-
 #include "binary_layouts/gam.h"
 #include "cre_file.h"
-#include "utils/helper_structs.h"
 #include "ie_files.h"
-
+#include "utils/helper_structs.h"
+#include "utils/errors.h"
 
 
 class GamFile;
@@ -25,10 +23,12 @@ class GamFile final : public IEFile
 public:
     [[nodiscard]]
     static PossibleGamFile open( string_view path ) noexcept;
+    bool save_gam();
+    GamHeader _header{};
 private:
     explicit GamFile( string_view path ) noexcept;
 
-    GamHeader _header{};
+
 
     vector<GamCharacterData> _party_members;
     vector<CreFile> _party_cre_files;

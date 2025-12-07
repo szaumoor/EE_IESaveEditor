@@ -19,6 +19,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+# set(CMAKE_CXX_COMPILER "/usr/bin/clang")
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 enable_testing()
@@ -68,6 +70,11 @@ set(TLK_TEST_SOURCES
     tests/utils/tests_helper.cpp
 )
 
+set(STRING_TEST_SOURCES
+    ${TEST_COMMON}
+    src/backend/utils/helper_structs.h
+)
+
 set(KEY_TEST_SOURCES
     ${TEST_COMMON}
     src/backend/key_file.cpp
@@ -80,6 +87,7 @@ set(ALL_TEST_SOURCES
     ${TLK_TEST_SOURCES}
     ${KEY_TEST_SOURCES}
     ${GAM_TEST_SOURCES}
+    ${STRING_TEST_SOURCES}
 )
 
 add_library (backend ${BACKEND_SOURCES})
@@ -99,10 +107,13 @@ add_executable(key_file_test
     ${GAM_TEST_SOURCES}
  )
 
+
+add_executable(string_tests
+    tests/string_tests.cpp
+    ${STRING_TEST_SOURCES}
+)
+
 add_executable(all_tests
-    tests/gam_file_tests.cpp
-    tests/key_file_tests.cpp
-    tests/tlk_file_tests.cpp
     ${ALL_TEST_SOURCES}
 )
 
@@ -125,6 +136,11 @@ add_executable(EESaveEditor
 )
 
  target_link_libraries(key_file_test
+    PRIVATE
+    GTest::gtest_main
+)
+
+target_link_libraries(string_tests
     PRIVATE
     GTest::gtest_main
 )
