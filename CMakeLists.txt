@@ -19,79 +19,106 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+# set(CMAKE_CXX_COMPILER "/usr/bin/clang")
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 enable_testing()
 
 set(BACKEND_SOURCES
-   src/backend/biff_files.h
-   src/backend/tlk_file.h
-   src/backend/tlk_file.cpp
-   src/backend/gam_file.h
-   src/backend/gam_file.cpp
-   src/backend/cre_file.h
-   src/backend/helper_structs.h
-   src/backend/aliases.h
-   src/backend/ie_files.h
-   src/backend/cre_file.cpp
-   src/backend/key_file.h
-   src/backend/key_file.cpp
-   src/backend/biff_files.cpp
-   src/backend/binary_layouts.h
+    src/backend/biff_file.h
+    src/backend/tlk_file.h
+    src/backend/tlk_file.cpp
+    src/backend/gam_file.h
+    src/backend/gam_file.cpp
+    src/backend/cre_file.h
+    src/backend/utils/helper_structs.h
+    src/backend/utils/aliases.h
+    src/backend/ie_files.h
+    src/backend/cre_file.cpp
+    src/backend/key_file.h
+    src/backend/key_file.cpp
+    src/backend/biff_file.cpp
+    src/backend/binary_layouts/cre.h
+    src/backend/binary_layouts/gam.h
+    src/backend/binary_layouts/key_biff.h
+    src/backend/binary_layouts/tlk.h
+    src/backend/utils/errors.h
+    src/backend/utils/errors.cpp
+    src/backend/utils/io.h
+)
+
+set(TEST_COMMON
+    src/backend/utils/errors.h
+    src/backend/utils/errors.cpp
+    tests/utils/tests_helper.h
+    tests/utils/tests_helper.cpp
 )
 
 set(GAM_TEST_SOURCES
-   src/backend/gam_file.cpp
-   src/backend/gam_file.h
-   src/backend/cre_file.cpp
+    ${TEST_COMMON}
+    src/backend/gam_file.cpp
+    src/backend/gam_file.h
+    src/backend/cre_file.cpp
 )
 
 set(TLK_TEST_SOURCES
-  src/backend/tlk_file.cpp
-  src/backend/tlk_file.h
+    ${TEST_COMMON}
+    src/backend/tlk_file.cpp
+    src/backend/tlk_file.h
+)
+
+set(STRING_TEST_SOURCES
+    ${TEST_COMMON}
+    src/backend/utils/helper_structs.h
 )
 
 set(KEY_TEST_SOURCES
-  src/backend/key_file.cpp
-  src/backend/key_file.h
+    ${TEST_COMMON}
+    src/backend/key_file.cpp
+    src/backend/key_file.h
 )
 
 set(ALL_TEST_SOURCES
-   ${TLK_TEST_SOURCES}
-   ${KEY_TEST_SOURCES}
-   ${GAM_TEST_SOURCES}
+    ${TLK_TEST_SOURCES}
+    ${KEY_TEST_SOURCES}
+    ${GAM_TEST_SOURCES}
+    ${STRING_TEST_SOURCES}
 )
 
 add_library (backend ${BACKEND_SOURCES})
 
 add_executable(tlk_file_test
-  tests/tlk_file_tests.cpp
-  ${TLK_TEST_SOURCES}
+    tests/tlk_file_tests.cpp
+    ${TLK_TEST_SOURCES}
 )
 
 add_executable(key_file_test
-  tests/key_file_tests.cpp
-  ${KEY_TEST_SOURCES}
+    tests/key_file_tests.cpp
+    ${KEY_TEST_SOURCES}
 )
 
  add_executable(gam_file_test
-   tests/gam_file_tests.cpp
-   ${GAM_TEST_SOURCES}
+    tests/gam_file_tests.cpp
+    ${GAM_TEST_SOURCES}
  )
 
+
+add_executable(string_tests
+    tests/string_tests.cpp
+    ${STRING_TEST_SOURCES}
+)
+
 add_executable(all_tests
-  tests/gam_file_tests.cpp
-  tests/key_file_tests.cpp
-  tests/tlk_file_tests.cpp
-  ${ALL_TEST_SOURCES}
+    ${ALL_TEST_SOURCES}
 )
 
 add_executable(EESaveEditor
-   ${BACKEND_SOURCES}
-   src/frontend/mainwindow.cpp
-   src/frontend/mainwindow.h
-   src/frontend/mainwindow.ui
-   src/main.cpp
+    ${BACKEND_SOURCES}
+    src/frontend/mainwindow.cpp
+    src/frontend/mainwindow.h
+    src/frontend/mainwindow.ui
+    src/main.cpp
 )
 
  target_link_libraries(tlk_file_test
@@ -109,6 +136,11 @@ add_executable(EESaveEditor
     GTest::gtest_main
 )
 
+target_link_libraries(string_tests
+    PRIVATE
+    GTest::gtest_main
+)
+
 target_link_libraries(all_tests
    PRIVATE
    GTest::gtest_main
@@ -116,16 +148,9 @@ target_link_libraries(all_tests
 
 target_link_libraries(EESaveEditor PRIVATE Qt6::Widgets)
 
+# Google Test setup
 include(GoogleTest)
-gtest_discover_tests(tlk_file_test)
-
-
 include(FetchContent)
-
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/refs/heads/main.zip
-)
-
+FetchContent_Declare(googletest URL https://github.com/google/googletest/archive/refs/heads/main.zip)
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)

@@ -1,78 +1,88 @@
 #include "gam_file.h"
-#include "helper_structs.h"
 #include "ie_files.h"
+#include "utils/helper_structs.h"
+#include "utils/io.h"
 
+#include <algorithm>
 #include <fstream>
-#include <iostream>
+#include <ranges>
 
+using std::string_view;
+using std::ifstream;
+namespace rng = std::ranges;
 
-static constexpr auto GAM_FILE_SIGNATURE   = "GAME";
-static constexpr auto GAM_FILE_VERSION_2_0 = "V2.0";
-static constexpr auto GAM_FILE_VERSION_2_1 = "V2.1";
+static constexpr string_view kGamFileSig("GAME");
+static constexpr string_view kGamFileVersion_2_0("V2.0");
+static constexpr string_view kGamFileVersion_2_1 ("V2.1");
 
-GamFile::GamFile( const char* path ) noexcept
-    : IEFile( path ), header( {} ), familiar_info( {} )
+inline void GamFile::prep_containers()
 {
-    if (std::ifstream gam( path, std::ios::binary ); gam )
-    {
-        state = IEFileState::Readable;
-        gam.read( reinterpret_cast<char*>(&header), sizeof( GamHeader ) );
-        GamFile::check_for_malformation();
-
-        if ( state == IEFileState::ReadableAndValid )
-        {
-            party_members.resize( header.npc_party_count );
-            non_party_members.resize( header.npc_nonparty_count );
-            variables.resize( header.global_vars_count );
-            journal_entries.resize( header.journal_count );
-            stored_locations.resize( header.stored_locs_count );
-            pocket_plane_info.resize( header.pocket_locs_count );
-            familiar_extras.resize( 81 );
-
-            gam.seekg( header.npc_party_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>( party_members.data() ),
-                static_cast<std::streamsize>(header.npc_party_count * sizeof( GamCharacterData ) ));
-            for ( const auto& member : party_members )
-                party_cre_files.emplace_back( gam, member.cre_offset );
-
-            gam.seekg( header.npc_nonparty_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>( non_party_members.data() ),
-                static_cast<std::streamsize>(header.npc_nonparty_count * sizeof( GamCharacterData ) ));
-            for ( const auto& member : non_party_members )
-                non_party_cre_files.emplace_back( gam, member.cre_offset );
-
-            gam.seekg( header.global_vars_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>( variables.data() ),
-                static_cast<std::streamsize>(header.global_vars_count * sizeof( GamGlobalVariable ) ));
-
-            gam.seekg( header.journal_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>( journal_entries.data() ),
-                static_cast<std::streamsize>(header.journal_count * sizeof( GamJournalEntry ) ));
-
-            gam.seekg( header.stored_locs_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>( stored_locations.data() ),
-                static_cast<std::streamsize>(header.stored_locs_count * sizeof( GamLocationInfo ) ));
-
-            gam.seekg( header.pocket_locs_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>( pocket_plane_info.data() ),
-                static_cast<std::streamsize>(header.pocket_locs_count * sizeof( GamLocationInfo ) ));
-
-            gam.seekg( header.familiar_info_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>(&familiar_info), sizeof( GamFamiliarInfo ) );
-
-            gam.seekg( header.familiar_extra_offset, std::ios::beg );
-            gam.read( reinterpret_cast<char*>( familiar_extras.data() ),
-                static_cast<std::streamsize>(familiar_extras.size() * sizeof( Resref ) ));
-        }
-    }
+    _party_members.resize( _header.npc_party_count );
+    _non_party_members.resize( _header.npc_nonparty_count );
+    _variables.resize( _header.global_vars_count );
+    _journal_entries.resize( _header.journal_count );
+    _stored_locations.resize( _header.stored_locs_count );
+    _pocket_plane_info.resize( _header.pocket_locs_count );
+    _familiar_extras.resize( 81 );
 }
+
+PossibleGamFile GamFile::open(const string_view path) noexcept
+{
+    ifstream file_handle( path.data(), std::ios::binary );
+
+    if (!file_handle)
+        return std::unexpected(IEError(IEErrorType::Unreadable));
+
+    GamFile gam(path);
+    auto& header = gam._header;
+
+    const StructWriter writer(file_handle);
+    writer.into(header);
+    gam.check_for_malformation();
+
+    if (!gam)
+        return std::unexpected(IEError(IEErrorType::Malformed));
+
+    gam.prep_containers();
+
+    writer.into(gam._party_members, header.npc_party_offset);
+    rng::for_each(gam._party_members, [&](const auto& member) {
+        gam._party_cre_files.push_back( std::move(CreFile::read(file_handle, member.cre_offset)) );
+    });
+    
+    writer.into(gam._non_party_members, header.npc_nonparty_offset);
+    rng::for_each(gam._non_party_members, [&](const auto& member) {
+        gam._non_party_cre_files.push_back( std::move(CreFile::read(file_handle, member.cre_offset )));
+    });
+    
+    writer.into(gam._variables, header.global_vars_offset);
+    writer.into(gam._journal_entries, header.journal_offset);
+    writer.into(gam._stored_locations, header.stored_locs_offset);
+    writer.into(gam._pocket_plane_info, header.pocket_locs_offset);
+    writer.into(gam._familiar_info, header.familiar_info_offset);
+    writer.into(gam._familiar_extras, header.familiar_extra_offset);
+
+    return std::move(gam);
+}
+
+bool GamFile::save_gam()
+{
+    std::ofstream file_handle(_path.data(), std::ios::binary | std::ios::in | std::ios::out);
+    const BinaryWriter writer(file_handle);
+    writer.out(_header);
+    // rest of details for later
+    return true;
+}
+
+GamFile::GamFile( const std::string_view path ) noexcept : IEFile( path ) {}
 
 void GamFile::check_for_malformation() noexcept
 {
-    const bool valid_signature = header.signature.to_string() == GAM_FILE_SIGNATURE;
-    const bool valid_version   = header.version.to_string() == GAM_FILE_VERSION_2_0 ||
-                                 header.version.to_string() == GAM_FILE_VERSION_2_1;
-    state = valid_signature && valid_version
-        ? IEFileState::ReadableAndValid
-        : IEFileState::ReadableButMalformed;
+    const bool valid_signature = _header.signature.to_string() == kGamFileSig;
+    const bool valid_version   = _header.version.to_string() == kGamFileVersion_2_0 ||
+                                 _header.version.to_string() == kGamFileVersion_2_1;
+    
+    good = valid_signature && valid_version;
 }
+
+

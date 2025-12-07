@@ -1,42 +1,44 @@
 #include <fstream>
+#include <string_view>
 
 #include "ie_files.h"
 #include "key_file.h"
 
+#include "utils/io.h"
 
-constexpr auto KEY_FILE_SIGNATURE = "KEY ";
-constexpr auto KEY_FILE_VERSION = "V1  ";
+static constexpr string_view kKeyFileSig("KEY ");
+static constexpr string_view kKeyFileVersion("V1  ");
 
-KeyFile::KeyFile( const char* path ) noexcept
-    : IEFile( path ), header( {} )
+PossibleKeyFile KeyFile::open(const string_view path) noexcept
 {
-    if (std::ifstream key( path, std::ios::binary ); key )
-    {
-        state = IEFileState::Readable;
-        key.read( reinterpret_cast<char*>(&header), sizeof( KeyFileHeader ) );
-        KeyFile::check_for_malformation();
+    std::ifstream file_handle( path.data(), std::ios::binary );
 
-        if ( good() )
-        {
-            biff_entries.resize( header.biff_count );
-            resource_entries.resize( header.resource_count );
+    if (!file_handle)
+        return std::unexpected(IEError(IEErrorType::Unreadable));
 
-            key.seekg( header.offset_to_biff_entries, std::ios::beg );
-            key.read( reinterpret_cast<char*>( biff_entries.data() ),
-                static_cast<std::streamsize>(header.biff_count * sizeof( BiffEntry ) ));
-            key.seekg( header.offset_to_resource_entries, std::ios::beg );
-            key.read( reinterpret_cast<char*>( resource_entries.data() ),
-                static_cast<std::streamsize>(header.resource_count * sizeof( ResourceEntry ) ));
-        }
-    }
+    KeyFile key(path);
+    StructWriter writer(file_handle);
+    writer.into(key._header);
+    key.check_for_malformation();
+
+    if (!key)
+        return std::unexpected(IEError(IEErrorType::Malformed));
+
+    key._biff_entries.resize( key._header.biff_count );
+    key._resource_entries.resize( key._header.resource_count );
+
+    writer.into(key._biff_entries, key._header.offset_to_biff_entries);
+    writer.into(key._resource_entries, key._header.offset_to_resource_entries);
+
+    return key;
 }
+
+KeyFile::KeyFile( const string_view path ) noexcept : IEFile( path ) {}
 
 void KeyFile::check_for_malformation() noexcept
 {
-    const bool valid_signature = header.signature.to_string() == KEY_FILE_SIGNATURE;
-    const bool valid_version = header.version.to_string() == KEY_FILE_VERSION;
-    state = valid_signature && valid_version
-        ? IEFileState::ReadableAndValid
-        : IEFileState::ReadableButMalformed;
+    const bool valid_signature = _header.signature.to_string() == kKeyFileSig;
+    const bool valid_version = _header.version.to_string() == kKeyFileVersion;
+    good = valid_signature && valid_version;
 }
 
