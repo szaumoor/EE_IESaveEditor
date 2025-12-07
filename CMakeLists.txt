@@ -45,12 +45,14 @@ set(BACKEND_SOURCES
     src/backend/binary_layouts/tlk.h
     src/backend/utils/errors.h
     src/backend/utils/errors.cpp
-        src/backend/utils/io.h
+    src/backend/utils/io.h
 )
 
 set(TEST_COMMON
     src/backend/utils/errors.h
     src/backend/utils/errors.cpp
+    tests/utils/tests_helper.h
+    tests/utils/tests_helper.cpp
 )
 
 set(GAM_TEST_SOURCES
@@ -58,16 +60,12 @@ set(GAM_TEST_SOURCES
     src/backend/gam_file.cpp
     src/backend/gam_file.h
     src/backend/cre_file.cpp
-    tests/utils/tests_helper.h
-    tests/utils/tests_helper.cpp
 )
 
 set(TLK_TEST_SOURCES
     ${TEST_COMMON}
     src/backend/tlk_file.cpp
     src/backend/tlk_file.h
-    tests/utils/tests_helper.h
-    tests/utils/tests_helper.cpp
 )
 
 set(STRING_TEST_SOURCES
@@ -79,8 +77,6 @@ set(KEY_TEST_SOURCES
     ${TEST_COMMON}
     src/backend/key_file.cpp
     src/backend/key_file.h
-    tests/utils/tests_helper.h
-    tests/utils/tests_helper.cpp
 )
 
 set(ALL_TEST_SOURCES
