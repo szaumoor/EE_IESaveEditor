@@ -2,9 +2,27 @@
 #include "cre_file.h"
 
 #include <fstream>
+#include <ranges>
 #include <vector>
 
 #include "utils/io.h"
+
+
+Effect Effect::from(const EmbeddedEffFileV1 &eff)
+{
+    Effect effect;
+    common_mapping(effect, eff);
+    effect.resource = eff.keyword;
+    return effect;
+}
+
+Effect Effect::from(const EmbeddedEffFileV2 &eff)
+{
+    Effect effect;
+    common_mapping(effect, eff);
+    effect.resource = eff.resource1;
+    return effect;
+}
 
 void CreFile::resize_vecs() noexcept
 {
@@ -49,4 +67,23 @@ CreFile CreFile::read(std::ifstream &file, const u32 offset)
     }
 
     return std::move(cre);
+}
+
+std::vector<Effect> CreFile::effects() // ugly
+{
+    if (const auto& eff = _effects[0]; std::holds_alternative<EmbeddedEffFileV1>(eff))
+    {
+        auto mapped_to_effect = _effects | std::views::transform([](auto x) {
+            const auto& instance = std::get<EmbeddedEffFileV1>(x);
+            return Effect::from(instance);
+        });
+        return {mapped_to_effect.begin(), mapped_to_effect.end()};
+    }
+
+    auto mapped_to_effect = _effects | std::views::transform([](auto x) {
+        const auto& instance = std::get<EmbeddedEffFileV2>(x);
+        return Effect::from(instance);
+    });
+
+    return {mapped_to_effect.begin(), mapped_to_effect.end()};
 }
