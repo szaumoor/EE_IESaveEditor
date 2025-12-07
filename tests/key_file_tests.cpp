@@ -2,67 +2,43 @@
 
 #include <filesystem>
 #include <fstream>
+#include <string_view>
 
-#include "../src/backend/ie_files.h"
+#include "../src/backend/utils/errors.h"
 #include "../src/backend/key_file.h"
 
-using namespace std;
+#include "utils/tests_helper.h"
 
+static constexpr std::string_view kRealKey("../tests/res/chitin.key");
 
-TEST( KeyFileTest, KeyStructsHaveExpectedSize ) {
-    EXPECT_TRUE( sizeof( KeyFileHeader ) == 24 );
-    EXPECT_TRUE( sizeof( BiffEntry ) == 12 );
-    EXPECT_TRUE( sizeof( ResourceEntry ) == 14 );
+TEST( KeyFileTest, KeyIsUnreadableTest )
+{
+    const auto key = KeyFile::open( "nonexistent.key" );
+    ASSERT_TRUE( !key && key.error().type() == IEErrorType::Unreadable );
 }
 
-TEST( KeyFileTest, KeyIsUnreadableTest ) {
-    EXPECT_TRUE( KeyFile( "nonexistent.key" ).get_state() ==
-        IEFileState::Unreadable );
+TEST(KeyFileTest, KeyIsMalformedVersion)
+{
+    const TempCreator temp("invalid_version.key", "KEY ", "Invl");
+    const auto key = KeyFile::open( temp.name );
+    ASSERT_TRUE( !key && key.error().type() == IEErrorType::Malformed );
 }
 
-TEST( KeyFileTest, KeyBiffCountZeroIfInvalid ) {
-    const auto key = KeyFile( "nonexistent.key" );
-    EXPECT_TRUE( key.get_state() == IEFileState::Unreadable &&
-        key.biff_count() == 0 );
+TEST( KeyFileTest, KeyIsMalformedSignature )
+{
+    const TempCreator temp( "invalid_signature.key", "XXXX", "V1  " );
+    const auto key = KeyFile::open( temp.name );
+    ASSERT_TRUE( !key && key.error().type() == IEErrorType::Malformed );
 }
 
-TEST( KeyFileTest, KeyResCountZeroIfInvalid ) {
-    const auto key = KeyFile( "nonexistent.key" );
-    EXPECT_TRUE( key.get_state() == IEFileState::Unreadable &&
-        key.resource_count() == 0 );
+TEST( KeyFileTest, RealKeyIsReadableAndValid )
+{
+    ASSERT_TRUE( KeyFile::open(kRealKey).has_value() );
 }
 
-TEST( KeyFileTest, KeyIsMalformedVersion ) {
-    ofstream ofs( "invalid_version.key", ios::binary );
-    ofs.write( "KEY ", 4 ); // Valid signature
-    ofs.write( "Invl", 4 ); // Invalid version
-    ofs.close();
-    EXPECT_TRUE( KeyFile( "invalid_version.key" ).get_state() ==
-        IEFileState::ReadableButMalformed );
-    filesystem::remove( "invalid_version.key" );
-}
-
-TEST( KeyFileTest, KeyIsMalformedSignature ) {
-    ofstream ofs( "invalid_signature.key", ios::binary );
-    ofs.write( "XXXX", 4 ); // Invalid signature
-    ofs.write( "V1  ", 4 ); // Valid version
-    ofs.close();
-    EXPECT_TRUE( KeyFile( "invalid_signature.key" ).get_state() ==
-        IEFileState::ReadableButMalformed );
-    filesystem::remove( "invalid_signature.key" );
-}
-
-TEST( KeyFileTest, RealKeyIsReadableAndValid ) {
-    const KeyFile key( "chitin.key" );
-    EXPECT_EQ( key.get_state(), IEFileState::ReadableAndValid );
-}
-
-TEST( KeyFileTest, KeyIsReadableAndValid ) {
-    ofstream ofs( "valid_key.key", ios::binary );
-    ofs.write( "KEY ", 4 ); // Valid signature
-    ofs.write( "V1  ", 4 ); // Valid version
-    ofs.close();
-    EXPECT_TRUE( KeyFile( "valid_key.key" ).get_state() ==
-        IEFileState::ReadableAndValid );
-    filesystem::remove( "valid_key.key" );
+TEST( KeyFileTest, KeyIsReadableAndValid )
+{
+    const TempCreator temp( "valid_key.key", "KEY ", "V1  " );
+    const auto key = KeyFile::open( temp.name );
+    ASSERT_TRUE( key.has_value() );
 }

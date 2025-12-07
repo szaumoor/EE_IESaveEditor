@@ -22,6 +22,14 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+private slots:
+    void show_about();
+    void open_forum();
+
+    static void open_discord_g3();
+    static void open_discord_ie();
+    static void open_github_repo();
 };
 
 #endif //EESAVEEDITOR_MAINWINDOW_H

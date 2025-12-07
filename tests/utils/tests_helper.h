@@ -1,0 +1,22 @@
+#ifndef EESAVEEDITOR_TESTS_HELPER_H
+#define EESAVEEDITOR_TESTS_HELPER_H
+
+#include <fstream>
+#include <string_view>
+
+
+struct TempCreator
+{
+    TempCreator(const char* name, const char* signature, const char* version);
+    ~TempCreator();
+
+    TempCreator() = delete;
+    TempCreator(const TempCreator&) = delete;
+    TempCreator& operator=(const TempCreator&) = delete;
+    TempCreator(TempCreator&&) = delete;
+    TempCreator& operator=(TempCreator&&) = delete;
+
+    const std::string_view name;
+};
+
+#endif //EESAVEEDITOR_TESTS_HELPER_H

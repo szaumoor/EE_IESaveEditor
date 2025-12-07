@@ -1,28 +1,32 @@
 #ifndef KEY_FILE_H
 #define KEY_FILE_H
 
-#include "aliases.h"
-#include "binary_layouts.h"
-#include "ie_files.h"
+#include <expected>
 
+#include "ie_files.h"
+#include "binary_layouts/key_biff.h"
+
+#include <string_view>
 #include <vector>
 
+#include "utils/errors.h"
+
+class KeyFile;
+
+using std::string_view;
 using std::vector;
+using PossibleKeyFile = std::expected<KeyFile, IEError>;
 
 class KeyFile final : public IEFile
 {
 public:
-    explicit KeyFile( const char* path ) noexcept;
-
     [[nodiscard]]
-    u32 biff_count() const noexcept { return header.biff_count; }
-    [[nodiscard]]
-    u32 resource_count() const noexcept { return header.resource_count; }
-
+    static PossibleKeyFile open( string_view path ) noexcept;
 private:
-    KeyFileHeader header;
-    vector<BiffEntry> biff_entries;
-    vector<ResourceEntry> resource_entries;
+    explicit KeyFile( string_view path ) noexcept;
+    KeyFileHeader _header{};
+    vector<BiffEntry> _biff_entries;
+    vector<ResourceEntry> _resource_entries;
     void check_for_malformation() noexcept override;
 };
 

@@ -48,9 +48,16 @@
     <property name="title">
      <string>Help</string>
     </property>
+    <widget class="QMenu" name="menuDiscord">
+     <property name="title">
+      <string>Discord</string>
+     </property>
+     <addaction name="actionGibberlings"/>
+     <addaction name="actionInfinityEngine"/>
+    </widget>
     <addaction name="actionAbout"/>
     <addaction name="actionForum"/>
-    <addaction name="actionDiscord"/>
+    <addaction name="menuDiscord"/>
    </widget>
    <addaction name="menuSome_text"/>
    <addaction name="menuHelp"/>
@@ -71,9 +78,20 @@
     <string>Forum...</string>
    </property>
   </action>
-  <action name="actionDiscord">
+  <action name="actionGibberlings">
    <property name="text">
-    <string>Discord</string>
+    <string>Gibberlings3...</string>
+   </property>
+   <property name="toolTip">
+    <string>Join the biggest IE community on Discord!</string>
+   </property>
+  </action>
+  <action name="actionInfinityEngine">
+   <property name="text">
+    <string>Infinity Engine...</string>
+   </property>
+   <property name="toolTip">
+    <string>Join the biggest IE community on Discord!</string>
    </property>
   </action>
  </widget>
