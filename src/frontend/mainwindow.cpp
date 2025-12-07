@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->actionGitHub, &QAction::triggered, this, &MainWindow::open_github_repo);
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::quit);
 
-    ui->actionQuit->setShortcut(QKeySequence("Alt+X"));
+    ui->actionQuit->setShortcut(QKeySequence(Qt::ALT | Qt::Key_X));
 }
 
 MainWindow::~MainWindow() {
