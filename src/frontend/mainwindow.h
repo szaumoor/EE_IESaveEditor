@@ -24,8 +24,9 @@ private:
     Ui::MainWindow *ui;
 
 private slots:
-    void show_about();
     void open_forum();
+    void quit();
+    void show_about();
 
     static void open_discord_g3();
     static void open_discord_ie();

@@ -22,6 +22,7 @@ set(CMAKE_AUTOUIC ON)
 # set(CMAKE_CXX_COMPILER "/usr/bin/clang")
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+#find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
 
 enable_testing()
 
@@ -147,6 +148,18 @@ target_link_libraries(all_tests
 )
 
 target_link_libraries(EESaveEditor PRIVATE Qt6::Widgets)
+
+#set(TS_FILES
+#    src/frontend/translations/app_en.ts
+#    src/frontend/translations/app_es.ts
+#)
+#
+#qt_add_translations(EESaveEditor
+#    TS_FILES ${TS_FILES}
+#    QM_FILES_OUTPUT_VARIABLE QM_FILES
+#)
+#
+#add_custom_target(translations ALL DEPENDS ${QM_FILES})
 
 # Google Test setup
 include(GoogleTest)
