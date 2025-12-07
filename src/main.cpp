@@ -1,5 +1,7 @@
 #include <QApplication>
+// #include <QLocale>
 #include <QScreen>
+// #include <QTranslator>
 
 #include "frontend/mainwindow.h"
 
@@ -12,6 +14,14 @@ inline auto center_window(QMainWindow& window) -> void
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+    // QTranslator translator;
+    // if (translator.load(QLocale(), "app", "_", ":src/frontend/translations")) {
+    //     QApplication::installTranslator(&translator);
+    // }
+    //
+    // auto a = QCoreApplication::translate("Menu", "FILE");
+    // qDebug() << a;
 
     MainWindow window;
     center_window(window);

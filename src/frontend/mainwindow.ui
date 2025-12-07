@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string notr="true">EE Save Editor by szaumoor</string>
+   <string notr="true">EE Save Editor</string>
   </property>
   <property name="toolTip">
    <string>A save editor for the Enhanced Editions of the IE games</string>
@@ -43,6 +43,7 @@
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -56,14 +57,18 @@
      <addaction name="actionInfinityEngine"/>
     </widget>
     <addaction name="actionAbout"/>
-    <addaction name="actionForum"/>
     <addaction name="menuDiscord"/>
+    <addaction name="actionForum"/>
+    <addaction name="actionGitHub"/>
    </widget>
    <addaction name="menuSome_text"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
+   <property name="icon">
+    <iconset theme="QIcon::ThemeIcon::FolderNew"/>
+   </property>
    <property name="text">
     <string>Open...</string>
    </property>
@@ -92,6 +97,19 @@
    </property>
    <property name="toolTip">
     <string>Join the biggest IE community on Discord!</string>
+   </property>
+  </action>
+  <action name="actionGitHub">
+   <property name="text">
+    <string>GitHub...</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset theme="emblem-unreadable"/>
+   </property>
+   <property name="text">
+    <string>Quit</string>
    </property>
   </action>
  </widget>
