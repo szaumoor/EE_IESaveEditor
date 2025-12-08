@@ -80,11 +80,18 @@ set(KEY_TEST_SOURCES
     src/backend/key_file.h
 )
 
+set(BIFF_TEST_SOURCES
+    ${TEST_COMMON}
+    src/backend/biff_file.cpp
+    src/backend/biff_file.h
+)
+
 set(ALL_TEST_SOURCES
     ${TLK_TEST_SOURCES}
     ${KEY_TEST_SOURCES}
     ${GAM_TEST_SOURCES}
     ${STRING_TEST_SOURCES}
+    ${BIFF_TEST_SOURCES}
 )
 
 add_library (backend ${BACKEND_SOURCES})
@@ -104,6 +111,10 @@ add_executable(key_file_test
     ${GAM_TEST_SOURCES}
  )
 
+add_executable(biff_file_test
+    tests/biff_file_tests.cpp
+    ${BIFF_TEST_SOURCES}
+)
 
 add_executable(string_tests
     tests/string_tests.cpp
@@ -138,6 +149,11 @@ add_executable(EESaveEditor
 )
 
 target_link_libraries(string_tests
+    PRIVATE
+    GTest::gtest_main
+)
+
+target_link_libraries(biff_file_test
     PRIVATE
     GTest::gtest_main
 )
