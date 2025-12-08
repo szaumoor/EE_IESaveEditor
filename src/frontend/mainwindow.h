@@ -22,11 +22,15 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void set_up_connections();
+
+    void set_up_shortcuts() const;
 
 private slots:
     void open_forum();
     void quit();
     void show_about();
+    void open_file();
 
     static void open_discord_g3();
     static void open_discord_ie();
