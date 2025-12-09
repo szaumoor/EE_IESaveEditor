@@ -9,7 +9,7 @@
 struct TlkFileHeader
 {
     CharArray<4> signature; // "TLK "
-    CharArray<4> version;   // "V1  "
+    CharArray<4> version; // "V1  "
     u16 language_id;
     u32 entry_count;
     u32 offset_to_str_data;
@@ -27,7 +27,7 @@ struct TlkFileEntry
 
 #pragma pack(pop)
 
-static_assert(sizeof(TlkFileHeader) == 18, "TlkFileHeader size is incorrect");
-static_assert(sizeof(TlkFileEntry) == 26, "TlkFileEntry size is incorrect");
+static_assert( sizeof( TlkFileHeader ) == 18, "TlkFileHeader size is incorrect" );
+static_assert( sizeof( TlkFileEntry ) == 26, "TlkFileEntry size is incorrect" );
 
 #endif //EESAVEEDITOR_TLK_H

@@ -19,11 +19,14 @@ class KeyFile final : public IEFile
 public:
     [[nodiscard]]
     static PossibleKeyFile open( std::string_view path ) noexcept;
+
 private:
     explicit KeyFile( std::string_view path ) noexcept;
+
     KeyFileHeader _header{};
     std::vector<BiffEntry> _biff_entries;
     std::vector<ResourceEntry> _resource_entries;
+
     void check_for_malformation() noexcept override;
 };
 
