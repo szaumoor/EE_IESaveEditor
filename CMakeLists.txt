@@ -54,10 +54,12 @@ set(TEST_COMMON
     src/backend/utils/errors.cpp
     tests/utils/tests_helper.h
     tests/utils/tests_helper.cpp
+    src/backend/utils/helper_structs.h
 )
 
 set(GAM_TEST_SOURCES
     ${TEST_COMMON}
+    tests/gam_file_tests.cpp
     src/backend/gam_file.cpp
     src/backend/gam_file.h
     src/backend/cre_file.cpp
@@ -65,23 +67,26 @@ set(GAM_TEST_SOURCES
 
 set(TLK_TEST_SOURCES
     ${TEST_COMMON}
+    tests/tlk_file_tests.cpp
     src/backend/tlk_file.cpp
     src/backend/tlk_file.h
 )
 
 set(STRING_TEST_SOURCES
     ${TEST_COMMON}
-    src/backend/utils/helper_structs.h
+    tests/string_tests.cpp
 )
 
 set(KEY_TEST_SOURCES
     ${TEST_COMMON}
+    tests/key_file_tests.cpp
     src/backend/key_file.cpp
     src/backend/key_file.h
 )
 
 set(BIFF_TEST_SOURCES
     ${TEST_COMMON}
+    tests/biff_file_tests.cpp
     src/backend/biff_file.cpp
     src/backend/biff_file.h
 )

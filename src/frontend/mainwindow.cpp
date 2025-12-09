@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QMainWindow>
 #include <QMessageBox>
 #include <QDesktopServices>
-#include <QUrl>
 #include <QClipboard>
 #include <QFileDialog>
 #include <QString>
+#include <QWidget>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -54,7 +55,7 @@ void MainWindow::show_about()
 
 void MainWindow::open_file()
 {
-    QString dir = QFileDialog::getExistingDirectory(
+    const QString dir = QFileDialog::getExistingDirectory(
     this,
     tr("Select folder"),
     QString(),

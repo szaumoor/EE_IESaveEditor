@@ -1,5 +1,6 @@
 #include "biff_file.h"
 
+#include <algorithm>
 #include <ios>
 #include <fstream>
 #include <iostream>
@@ -7,6 +8,7 @@
 #include "ie_files.h"
 #include "utils/io.h"
 
+namespace rng = std::ranges;
 
 static constexpr std::string_view kBiffSignature("BIFF");
 static constexpr std::string_view kBiffFileVersion ("V1  ");
@@ -27,11 +29,8 @@ PossibleBiffFile BiffFile::open(const std::string_view path) noexcept
     if (!biff)
         return std::unexpected(IEError(IEErrorType::Malformed));
 
-    std::cout << header.version.to_string() << '\n';
-    std::cout << header.signature.to_string() << '\n';
-    std::cout << header.count_of_file_entries << '\n';
-    std::cout << header.count_of_tile_entries << '\n';
-    std::cout << std::hex << header.offset_to_file_entries << '\n';
+    biff._file_entries.resize(header.count_of_file_entries);
+    writer.into(biff._file_entries, header.offset_to_file_entries);
 
     return std::move(biff);
 }

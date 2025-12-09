@@ -52,6 +52,8 @@ enum ResourceType : u16
     FileTypeSrc   = 0x0803
 };
 
+static_assert(sizeof(ResourceType) == 2, "ResourceType size is incorrect");
+
 #pragma pack(push, 1)
 
 struct BiffHeader

@@ -1,7 +1,3 @@
-//
-// Created by marcos on 12/5/25.
-//
-
 #include "errors.h"
 
 #include <utility>

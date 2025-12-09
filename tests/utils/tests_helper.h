@@ -7,7 +7,7 @@
 
 struct TempCreator
 {
-    TempCreator(const char* name, const char* signature, const char* version);
+    TempCreator(std::string_view name, std::string_view signature, std::string_view version);
     ~TempCreator();
 
     TempCreator() = delete;

@@ -11,36 +11,30 @@
 #include "utils/helper_structs.h"
 #include "utils/errors.h"
 
-
 class GamFile;
-
-using std::vector;
-using std::string_view;
 using PossibleGamFile = std::expected<GamFile, IEError>;
 
 class GamFile final : public IEFile
 {
 public:
     [[nodiscard]]
-    static PossibleGamFile open( string_view path ) noexcept;
+    static PossibleGamFile open( std::string_view path ) noexcept;
     bool save_gam();
     GamHeader _header{};
 private:
-    explicit GamFile( string_view path ) noexcept;
-
-
-
-    vector<GamCharacterData> _party_members;
-    vector<CreFile> _party_cre_files;
-    vector<GamCharacterData> _non_party_members;
-    vector<CreFile> _non_party_cre_files;
-    vector<GamGlobalVariable> _variables;
-    vector<GamJournalEntry> _journal_entries;
-    vector<GamLocationInfo> _stored_locations;
-    vector<GamLocationInfo> _pocket_plane_info;
+    explicit GamFile( std::string_view path ) noexcept;
+    
+    std::vector<GamCharacterData> _party_members;
+    std::vector<CreFile> _party_cre_files;
+    std::vector<GamCharacterData> _non_party_members;
+    std::vector<CreFile> _non_party_cre_files;
+    std::vector<GamGlobalVariable> _variables;
+    std::vector<GamJournalEntry> _journal_entries;
+    std::vector<GamLocationInfo> _stored_locations;
+    std::vector<GamLocationInfo> _pocket_plane_info;
 
     GamFamiliarInfo _familiar_info{};
-    vector<Resref> _familiar_extras;
+    std::vector<Resref> _familiar_extras;
 
     void check_for_malformation() noexcept override;
     void prep_containers();
