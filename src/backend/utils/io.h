@@ -28,7 +28,6 @@ public:
     {
         if (offset > 0) [[likely]]
             file_handle.seekg( offset, std::ios::beg );
-
         file_handle.read( reinterpret_cast<char*>(&st), sizeof( Struct ) );
     }
 
@@ -45,7 +44,6 @@ public:
     {
         if (offset > 0) [[likely]]
             file_handle.seekg( offset, std::ios::beg );
-
         file_handle.read( reinterpret_cast<char*>( st.data() ), static_cast<std::streamsize>(st.size() * sizeof( Struct ) ));
     }
 

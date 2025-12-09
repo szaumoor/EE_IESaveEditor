@@ -2,18 +2,18 @@
 
 #include "tests_helper.h"
 
-using namespace std;
+using std::string_view;
 
-TempCreator::TempCreator(const char* name,
-                         const char* signature,
-                         const char* version) : name(name)
+TempCreator::TempCreator(const string_view name,
+                         const string_view signature,
+                         const string_view version) : name(name)
 {
-    ofstream ofs(name, ios::binary);
-    ofs.write(signature, 4);
-    ofs.write(version, 4);
+    std::ofstream ofs(name.data(), std::ios::binary);
+    ofs.write(signature.data(), 4);
+    ofs.write(version.data(), 4);
 }
 
 TempCreator::~TempCreator()
 {
-    filesystem::remove(filesystem::path(name));
+    std::filesystem::remove(std::filesystem::path(name));
 }
