@@ -30,12 +30,18 @@ public:
     [[nodiscard]]
     static PossibleTlkFile open( std::string_view path ) noexcept;
 
+    [[nodiscard]]
+    std::string_view* begin();
+    [[nodiscard]]
+    std::string_view* end();
+
 private:
     explicit TlkFile( std::string_view path ) noexcept;
 
     TlkFileHeader _header{};
     std::vector<TlkFileEntry> _entries;
     std::vector<char> _string_data;
+    std::vector<std::string_view> _cached_strings;
 
     void check_for_malformation() noexcept override;
 };
