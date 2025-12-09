@@ -17,14 +17,24 @@ using std::string_view;
 static constexpr string_view kTlkFileSig( "TLK " );
 static constexpr string_view kTlkFileVersion( "V1  " );
 
-const string *TlkFile::begin() const
+TlkLookup TlkFile::at_index( const strref index ) const noexcept
 {
-    return &_cached_strings.front();
+    if ( index >= length() )
+        return std::unexpected( IEError( IEErrorType::OutOfBounds,
+                                         std::format( "TLK: Index {} is out of bounds! There are {} cached strings.",
+                                                      index, _entries.size() ) ) );
+    const auto& entry = _entries[index];
+    return std::string_view ( _string_data.data() + entry.offset_to_string, entry.string_length );;
 }
 
-const string *TlkFile::end() const
+TlkLookup TlkFile::operator[]( const strref index ) const noexcept
 {
-    return &_cached_strings.back();
+    return at_index( index );
+}
+
+u32 TlkFile::length() const noexcept
+{
+    return _header.entry_count;
 }
 
 PossibleTlkFile TlkFile::open( string_view path ) noexcept
@@ -43,38 +53,21 @@ PossibleTlkFile TlkFile::open( string_view path ) noexcept
     if ( !tlk )
         return std::unexpected( IEError( IEErrorType::Malformed ) );
 
-    std::vector<TlkFileEntry> entries;
-    entries.resize( tlk._header.entry_count );
-    writer.into( entries, sizeof( TlkFileHeader ) );
+    tlk._entries.resize( tlk.length() );
+    writer.into( tlk._entries, sizeof( TlkFileHeader ) );
 
     file_handle.seekg( tlk._header.offset_to_str_data, std::ios::beg );
-    const auto string_data = std::vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
-    for ( const auto& entry : entries )
-        tlk._cached_strings.emplace_back( &( string_data[entry.offset_to_string] ), entry.string_length );
+    tlk._string_data = std::vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
 
     return std::move( tlk );
 }
 
 TlkFile::TlkFile( const string_view path ) noexcept : IEFile( path ) { }
 
-TlkLookup TlkFile::at_index( const strref index ) const noexcept
-{
-    if ( index >= _cached_strings.size() )
-        return std::unexpected( IEError( IEErrorType::OutOfBounds,
-                                         std::format( "TLK: Index {} is out of bounds! There are {} cached strings.",
-                                                      index, _cached_strings.size() ) ) );
-
-    return _cached_strings[index];
-}
-
-TlkLookup TlkFile::operator[]( const strref index ) const noexcept
-{
-    return at_index( index );
-}
-
 void TlkFile::check_for_malformation() noexcept
 {
     const bool valid_signature = _header.signature.to_string() == kTlkFileSig;
     const bool valid_version   = _header.version.to_string() == kTlkFileVersion;
-    good                       = valid_signature && valid_version;
+
+    good = valid_signature && valid_version;
 }
