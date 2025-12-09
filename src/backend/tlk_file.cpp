@@ -58,8 +58,9 @@ PossibleTlkFile TlkFile::open( string_view path ) noexcept
     file_handle.seekg( tlk._header.offset_to_str_data, std::ios::beg );
     tlk._string_data = std::vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
 
-    for (const auto& entry : tlk._entries)
-        tlk._cached_strings.push_back( std::string_view( tlk._string_data.data() + entry.offset_to_string, entry.string_length ) );
+    for ( const auto& entry : tlk._entries )
+        tlk._cached_strings.push_back(
+            std::string_view( tlk._string_data.data() + entry.offset_to_string, entry.string_length ) );
 
     return std::move( tlk );
 }
