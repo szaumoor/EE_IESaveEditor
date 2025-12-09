@@ -14,16 +14,14 @@ QT_END_NAMESPACE
 
 class MainWindow final : public QMainWindow {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-
     ~MainWindow() override;
 
 private:
     Ui::MainWindow *ui;
-    void set_up_connections();
 
+    void set_up_connections();
     void set_up_shortcuts() const;
 
 private slots:
@@ -31,7 +29,6 @@ private slots:
     void quit();
     void show_about();
     void open_file();
-
     static void open_discord_g3();
     static void open_discord_ie();
     static void open_github_repo();

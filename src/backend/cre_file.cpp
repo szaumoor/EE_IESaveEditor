@@ -7,7 +7,6 @@
 
 #include "utils/io.h"
 
-
 Effect Effect::from(const EmbeddedEffFileV1 &eff)
 {
     Effect effect;

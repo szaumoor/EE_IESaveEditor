@@ -6,6 +6,9 @@
 
 #include "utils/io.h"
 
+using std::string_view;
+using std::vector;
+
 static constexpr string_view kKeyFileSig("KEY ");
 static constexpr string_view kKeyFileVersion("V1  ");
 

@@ -9,6 +9,9 @@
 
 using std::string_view;
 using std::ifstream;
+using std::vector;
+using std::string_view;
+
 namespace rng = std::ranges;
 
 static constexpr string_view kGamFileSig("GAME");

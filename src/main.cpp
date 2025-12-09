@@ -6,7 +6,7 @@
 #include "frontend/mainwindow.h"
 
 
-inline auto center_window(QMainWindow& window) -> void
+inline void center_window(MainWindow& window)
 {
     window.move(window.screen()->geometry().center() - window.rect().center());
 }

@@ -49,7 +49,6 @@ class CreFile
 public:
     static CreFile read(std::ifstream& file, u32 offset);
 
-
     std::vector<Effect> effects();
 
 private:

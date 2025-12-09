@@ -5,26 +5,29 @@
 #include <expected>
 #include <format>
 #include <fstream>
-#include <iostream>
 #include <iterator>
 #include <string>
 #include <string_view>
 #include <vector>
 
-static constexpr std::string_view kTlkFileSig ("TLK ");
-static constexpr std::string_view kTlkFileVersion ("V1  ");
+using std::vector;
+using std::string;
+using std::string_view;
 
-const std::string* TlkFile::begin() const
+static constexpr string_view kTlkFileSig ("TLK ");
+static constexpr string_view kTlkFileVersion ("V1  ");
+
+const string* TlkFile::begin() const
 {
     return &_cached_strings.front();
 }
 
-const std::string* TlkFile::end() const
+const string* TlkFile::end() const
 {
     return &_cached_strings.back();
 }
 
-PossibleTlkFile TlkFile::open(std::string_view path) noexcept
+PossibleTlkFile TlkFile::open(string_view path) noexcept
 {
     std::ifstream file_handle( path.data(), std::ios::binary );
     if ( !file_handle )
@@ -52,7 +55,7 @@ PossibleTlkFile TlkFile::open(std::string_view path) noexcept
     return std::move(tlk);
 }
 
-TlkFile::TlkFile( const std::string_view path ) noexcept : IEFile(path) {}
+TlkFile::TlkFile( const string_view path ) noexcept : IEFile(path) {}
 
 TlkLookup TlkFile::at_index( const strref index ) const noexcept
 {
@@ -67,7 +70,6 @@ TlkLookup TlkFile::operator[](const strref index) const noexcept
 {
     return at_index( index );
 }
-
 
 void TlkFile::check_for_malformation() noexcept
 {
