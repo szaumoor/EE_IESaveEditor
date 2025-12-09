@@ -1,15 +1,13 @@
 #ifndef BIFF_FILES_H
 #define BIFF_FILES_H
 
-#include <expected>
-
 #include "binary_layouts/key_biff.h"
 #include "ie_files.h"
+#include "utils/errors.h"
 
+#include <expected>
 #include <string_view>
 #include <vector>
-
-#include "utils/errors.h"
 
 class BiffFile;
 using PossibleBiffFile = std::expected<BiffFile, IEError>;
