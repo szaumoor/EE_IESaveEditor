@@ -6,14 +6,14 @@
 #include "frontend/mainwindow.h"
 
 
-inline void center_window(MainWindow& window)
+inline void center_window( MainWindow& window )
 {
-    window.move(window.screen()->geometry().center() - window.rect().center());
+    window.move( window.screen()->geometry().center() - window.rect().center() );
 }
 
-int main(int argc, char *argv[])
+int main( int argc, char* argv[] )
 {
-    QApplication app(argc, argv);
+    QApplication app( argc, argv );
 
     // QTranslator translator;
     // if (translator.load(QLocale(), "app", "_", ":src/frontend/translations")) {
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     // qDebug() << a;
 
     MainWindow window;
-    center_window(window);
+    center_window( window );
     window.show();
 
     return QApplication::exec();
