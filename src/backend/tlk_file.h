@@ -25,22 +25,17 @@ public:
     TlkLookup operator[]( strref index ) const noexcept;
 
     [[nodiscard]]
-    u32 length() const noexcept { return static_cast<u32>(_cached_strings.size()); }
+    u32 length() const noexcept;
 
     [[nodiscard]]
     static PossibleTlkFile open( std::string_view path ) noexcept;
-
-    [[nodiscard]]
-    const std::string *begin() const;
-
-    [[nodiscard]]
-    const std::string *end() const;
 
 private:
     explicit TlkFile( std::string_view path ) noexcept;
 
     TlkFileHeader _header{};
-    std::vector<std::string> _cached_strings;
+    std::vector<TlkFileEntry> _entries;
+    std::vector<char> _string_data;
 
     void check_for_malformation() noexcept override;
 };
