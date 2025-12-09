@@ -7,7 +7,6 @@
 #include "utils/errors.h"
 
 #include <expected>
-#include <string>
 #include <string_view>
 #include <vector>
 
@@ -31,15 +30,14 @@ public:
     static PossibleTlkFile open( std::string_view path ) noexcept;
 
     [[nodiscard]]
-    std::string_view* begin();
+    const std::string_view* begin() const;
     [[nodiscard]]
-    std::string_view* end();
+    const std::string_view* end() const;
 
 private:
     explicit TlkFile( std::string_view path ) noexcept;
 
     TlkFileHeader _header{};
-   // std::vector<TlkFileEntry> _entries;
     std::vector<char> _string_data;
     std::vector<std::string_view> _cached_strings;
 

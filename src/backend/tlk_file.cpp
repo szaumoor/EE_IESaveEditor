@@ -66,12 +66,12 @@ PossibleTlkFile TlkFile::open( string_view path ) noexcept
     return std::move( tlk );
 }
 
-std::string_view* TlkFile::begin()
+const std::string_view* TlkFile::begin() const
 {
     return &_cached_strings.front();
 }
 
-std::string_view* TlkFile::end()
+const std::string_view* TlkFile::end() const
 {
     return &_cached_strings.back();
 }
