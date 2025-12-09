@@ -19,11 +19,14 @@ class GamFile final : public IEFile
 public:
     [[nodiscard]]
     static PossibleGamFile open( std::string_view path ) noexcept;
+
     bool save_gam();
+
     GamHeader _header{};
+
 private:
     explicit GamFile( std::string_view path ) noexcept;
-    
+
     std::vector<GamCharacterData> _party_members;
     std::vector<CreFile> _party_cre_files;
     std::vector<GamCharacterData> _non_party_members;
@@ -37,6 +40,7 @@ private:
     std::vector<Resref> _familiar_extras;
 
     void check_for_malformation() noexcept override;
+
     void prep_containers();
 };
 
