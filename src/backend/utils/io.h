@@ -13,7 +13,7 @@
 class StructWriter
 {
 public:
-    explicit StructWriter(std::ifstream& file_handle) noexcept : file_handle(file_handle) {}
+    explicit StructWriter( std::ifstream& file_handle ) noexcept : file_handle( file_handle ) { }
 
     /**
      * Reads the binary data from the std::ifstream from the provided offset
@@ -23,11 +23,11 @@ public:
      * @param st Specific struct instance to write into
      * @param offset Offset in the file to read from
      */
-    template <typename Struct>
-    void into(Struct& st, const u32 offset = 0) const
+    template<typename Struct>
+    void into( Struct& st, const u32 offset = 0 ) const
     {
-        if (offset > 0) [[likely]]
-            file_handle.seekg( offset, std::ios::beg );
+        if ( offset > 0 ) [[likely]]
+                file_handle.seekg( offset, std::ios::beg );
         file_handle.read( reinterpret_cast<char*>(&st), sizeof( Struct ) );
     }
 
@@ -39,12 +39,13 @@ public:
      * @param st Vector of specific struct instances to write into
      * @param offset Offset in the file to read from
      */
-    template <typename Struct>
-    void into(std::vector<Struct>& st, const u32 offset = 0) const
+    template<typename Struct>
+    void into( std::vector<Struct>& st, const u32 offset = 0 ) const
     {
-        if (offset > 0) [[likely]]
-            file_handle.seekg( offset, std::ios::beg );
-        file_handle.read( reinterpret_cast<char*>( st.data() ), static_cast<std::streamsize>(st.size() * sizeof( Struct ) ));
+        if ( offset > 0 ) [[likely]]
+                file_handle.seekg( offset, std::ios::beg );
+        file_handle.read( reinterpret_cast<char*>(st.data()),
+                          static_cast<std::streamsize>(st.size() * sizeof( Struct )) );
     }
 
 private:
@@ -54,14 +55,14 @@ private:
 class BinaryWriter
 {
 public:
-    explicit BinaryWriter(std::ofstream& file_handle) : file_handle(file_handle) {}
+    explicit BinaryWriter( std::ofstream& file_handle ) : file_handle( file_handle ) { }
 
     template<typename Struct>
-    void out(Struct& st, const u32 offset = 0) const
+    void out( Struct& st, const u32 offset = 0 ) const
     {
-        if (offset > 0) [[likely]]
-            file_handle.seekp(offset, std::ios::beg);
-        file_handle.write(reinterpret_cast<const char*>(&st), sizeof(Struct));
+        if ( offset > 0 ) [[likely]]
+                file_handle.seekp( offset, std::ios::beg );
+        file_handle.write( reinterpret_cast<const char*>(&st), sizeof( Struct ) );
     }
 
 private:

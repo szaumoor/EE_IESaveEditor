@@ -52,14 +52,14 @@ enum ResourceType : u16
     FileTypeSrc   = 0x0803
 };
 
-static_assert(sizeof(ResourceType) == 2, "ResourceType size is incorrect");
+static_assert( sizeof( ResourceType ) == 2, "ResourceType size is incorrect" );
 
 #pragma pack(push, 1)
 
 struct BiffHeader
 {
     CharArray<4> signature; // "BIFF"
-    CharArray<4> version;   // "V1  "
+    CharArray<4> version; // "V1  "
     u32 count_of_file_entries;
     u32 count_of_tile_entries;
     u32 offset_to_file_entries;
@@ -87,7 +87,7 @@ struct TileEntry
 struct KeyFileHeader
 {
     CharArray<4> signature; // "KEY "
-    CharArray<4> version;   // "V1  "
+    CharArray<4> version; // "V1  "
     u32 biff_count;
     u32 resource_count;
     u32 offset_to_biff_entries;
@@ -112,9 +112,9 @@ struct ResourceEntry
 #pragma pack(pop)
 
 
-static_assert(sizeof(BiffHeader) == 20, "BiffHeader size is incorrect");
-static_assert(sizeof(BiffEntry) == 12, "BiffEntry size is incorrect");
-static_assert(sizeof(ResourceEntry) == 14, "ResourceEntry size is incorrect");
-static_assert(sizeof(KeyFileHeader) == 24, "KeyFileHeader size is incorrect");
+static_assert( sizeof( BiffHeader ) == 20, "BiffHeader size is incorrect" );
+static_assert( sizeof( BiffEntry ) == 12, "BiffEntry size is incorrect" );
+static_assert( sizeof( ResourceEntry ) == 14, "ResourceEntry size is incorrect" );
+static_assert( sizeof( KeyFileHeader ) == 24, "KeyFileHeader size is incorrect" );
 
 #endif //EESAVEEDITOR_KEY_BIFF_H
