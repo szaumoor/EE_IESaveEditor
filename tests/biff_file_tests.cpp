@@ -10,6 +10,7 @@
 #include "utils/tests_helper.h"
 
 static constexpr std::string_view kRealBiff("../tests/res/Spells.bif");
+static constexpr std::string_view kRealBiffWithTilesets("../tests/res/25ArMisc.bif");
 
 TEST( BiffFileTests, BiffIsUnreadableTest )
 {
@@ -34,4 +35,9 @@ TEST( BiffFileTests, BiffIsMalformedSig )
 TEST( BiffFileTests, RealBiffIsReadableAndValid )
 {
     ASSERT_TRUE( BiffFile::open( kRealBiff ).has_value() );
+}
+
+TEST( BiffFileTests, RealBiffWithTilesetsIsReadableAndValid )
+{
+    ASSERT_TRUE( BiffFile::open( kRealBiffWithTilesets ).has_value() );
 }

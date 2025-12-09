@@ -1,8 +1,8 @@
 #include "biff_file.h"
 
 #include <algorithm>
-#include <ios>
 #include <fstream>
+#include <ios>
 
 #include "ie_files.h"
 #include "utils/io.h"
@@ -28,8 +28,18 @@ PossibleBiffFile BiffFile::open( const std::string_view path ) noexcept
     if ( !biff )
         return std::unexpected( IEError( IEErrorType::Malformed ) );
 
-    biff._file_entries.resize( header.count_of_file_entries );
-    writer.into( biff._file_entries, header.offset_to_file_entries );
+    if ( header.count_of_file_entries > 0 )
+    {
+        biff._file_entries.resize( header.count_of_file_entries );
+        writer.into( biff._file_entries, header.offset_to_file_entries );
+    }
+
+    if ( header.count_of_tile_entries > 0 )
+    {
+        biff._tile_entries.resize( header.count_of_tile_entries );
+        writer.into( biff._tile_entries,
+                     header.offset_to_file_entries + sizeof( FileEntry ) * header.count_of_file_entries );
+    }
 
     return std::move( biff );
 }

@@ -19,6 +19,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address,undefined)
+endif()
+
 # set(CMAKE_CXX_COMPILER "/usr/bin/clang")
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
