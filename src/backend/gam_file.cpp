@@ -18,17 +18,6 @@ static constexpr string_view kGamFileSig( "GAME" );
 static constexpr string_view kGamFileVersion_2_0( "V2.0" );
 static constexpr string_view kGamFileVersion_2_1( "V2.1" );
 
-inline void GamFile::prep_containers()
-{
-    _party_members.resize( _header.npc_party_count );
-    _non_party_members.resize( _header.npc_nonparty_count );
-    _variables.resize( _header.global_vars_count );
-    _journal_entries.resize( _header.journal_count );
-    _stored_locations.resize( _header.stored_locs_count );
-    _pocket_plane_info.resize( _header.pocket_locs_count );
-    _familiar_extras.resize( 81 );
-}
-
 PossibleGamFile GamFile::open( const string_view path ) noexcept
 {
     ifstream file_handle( path.data(), std::ios::binary );
@@ -83,7 +72,18 @@ void GamFile::check_for_malformation() noexcept
 {
     const bool valid_signature = _header.signature.to_string() == kGamFileSig;
     const bool valid_version   = _header.version.to_string() == kGamFileVersion_2_0 ||
-                               _header.version.to_string() == kGamFileVersion_2_1;
+                                 _header.version.to_string() == kGamFileVersion_2_1;
 
     good = valid_signature && valid_version;
+}
+
+inline void GamFile::prep_containers()
+{
+    _party_members.resize( _header.npc_party_count );
+    _non_party_members.resize( _header.npc_nonparty_count );
+    _variables.resize( _header.global_vars_count );
+    _journal_entries.resize( _header.journal_count );
+    _stored_locations.resize( _header.stored_locs_count );
+    _pocket_plane_info.resize( _header.pocket_locs_count );
+    _familiar_extras.resize( 81 );
 }

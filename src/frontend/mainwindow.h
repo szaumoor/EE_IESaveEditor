@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QWidget>
 
+#include "../backend/binary_layouts/tlk.h"
+
 QT_BEGIN_NAMESPACE
 
 namespace Ui
@@ -26,7 +28,7 @@ private:
 
     void set_up_connections();
     void set_up_shortcuts() const;
-
+    TlkFileEntry tlk{};
 private slots:
     void open_forum();
     void quit();
@@ -35,6 +37,7 @@ private slots:
     static void open_discord_g3();
     static void open_discord_ie();
     static void open_github_repo();
+
 };
 
 #endif //EESAVEEDITOR_MAINWINDOW_H

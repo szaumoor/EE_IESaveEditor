@@ -137,10 +137,10 @@ add_executable(all_tests
 
 add_executable(EESaveEditor
     ${BACKEND_SOURCES}
-    src/frontend/mainwindow.cpp
-    src/frontend/mainwindow.h
-    src/frontend/mainwindow.ui
-    src/main.cpp
+        src/main.cpp
+        src/frontend/mainwindow.cpp
+        src/frontend/mainwindow.h
+        src/frontend/mainwindow.ui
 )
 
  target_link_libraries(tlk_file_test

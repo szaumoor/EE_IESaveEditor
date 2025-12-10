@@ -27,7 +27,7 @@ public:
     u32 length() const noexcept;
 
     [[nodiscard]]
-    static PossibleTlkFile open( std::string_view path ) noexcept;
+    static PossibleTlkFile open( std::string_view path );
 
     [[nodiscard]]
     const std::string_view* begin() const;
