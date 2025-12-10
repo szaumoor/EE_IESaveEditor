@@ -19,9 +19,15 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address,undefined)
+endif()
+
 # set(CMAKE_CXX_COMPILER "/usr/bin/clang")
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+#find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
 
 enable_testing()
 
@@ -53,10 +59,12 @@ set(TEST_COMMON
     src/backend/utils/errors.cpp
     tests/utils/tests_helper.h
     tests/utils/tests_helper.cpp
+    src/backend/utils/helper_structs.h
 )
 
 set(GAM_TEST_SOURCES
     ${TEST_COMMON}
+    tests/gam_file_tests.cpp
     src/backend/gam_file.cpp
     src/backend/gam_file.h
     src/backend/cre_file.cpp
@@ -64,19 +72,28 @@ set(GAM_TEST_SOURCES
 
 set(TLK_TEST_SOURCES
     ${TEST_COMMON}
+    tests/tlk_file_tests.cpp
     src/backend/tlk_file.cpp
     src/backend/tlk_file.h
 )
 
 set(STRING_TEST_SOURCES
     ${TEST_COMMON}
-    src/backend/utils/helper_structs.h
+    tests/string_tests.cpp
 )
 
 set(KEY_TEST_SOURCES
     ${TEST_COMMON}
+    tests/key_file_tests.cpp
     src/backend/key_file.cpp
     src/backend/key_file.h
+)
+
+set(BIFF_TEST_SOURCES
+    ${TEST_COMMON}
+    tests/biff_file_tests.cpp
+    src/backend/biff_file.cpp
+    src/backend/biff_file.h
 )
 
 set(ALL_TEST_SOURCES
@@ -84,6 +101,7 @@ set(ALL_TEST_SOURCES
     ${KEY_TEST_SOURCES}
     ${GAM_TEST_SOURCES}
     ${STRING_TEST_SOURCES}
+    ${BIFF_TEST_SOURCES}
 )
 
 add_library (backend ${BACKEND_SOURCES})
@@ -103,6 +121,10 @@ add_executable(key_file_test
     ${GAM_TEST_SOURCES}
  )
 
+add_executable(biff_file_test
+    tests/biff_file_tests.cpp
+    ${BIFF_TEST_SOURCES}
+)
 
 add_executable(string_tests
     tests/string_tests.cpp
@@ -115,10 +137,10 @@ add_executable(all_tests
 
 add_executable(EESaveEditor
     ${BACKEND_SOURCES}
-    src/frontend/mainwindow.cpp
-    src/frontend/mainwindow.h
-    src/frontend/mainwindow.ui
-    src/main.cpp
+        src/main.cpp
+        src/frontend/mainwindow.cpp
+        src/frontend/mainwindow.h
+        src/frontend/mainwindow.ui
 )
 
  target_link_libraries(tlk_file_test
@@ -141,12 +163,29 @@ target_link_libraries(string_tests
     GTest::gtest_main
 )
 
+target_link_libraries(biff_file_test
+    PRIVATE
+    GTest::gtest_main
+)
+
 target_link_libraries(all_tests
    PRIVATE
    GTest::gtest_main
 )
 
 target_link_libraries(EESaveEditor PRIVATE Qt6::Widgets)
+
+#set(TS_FILES
+#    src/frontend/translations/app_en.ts
+#    src/frontend/translations/app_es.ts
+#)
+#
+#qt_add_translations(EESaveEditor
+#    TS_FILES ${TS_FILES}
+#    QM_FILES_OUTPUT_VARIABLE QM_FILES
+#)
+#
+#add_custom_target(translations ALL DEPENDS ${QM_FILES})
 
 # Google Test setup
 include(GoogleTest)

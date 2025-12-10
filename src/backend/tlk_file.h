@@ -7,17 +7,11 @@
 #include "utils/errors.h"
 
 #include <expected>
-#include <string>
 #include <string_view>
 #include <vector>
 
 class TlkFile;
-
-using std::vector;
-using std::string;
-using std::string_view;
-
-using TlkLookup = std::expected<std::string_view, IEError>;
+using TlkLookup       = std::expected<std::string_view, IEError>;
 using PossibleTlkFile = std::expected<TlkFile, IEError>;
 
 class TlkFile final : public IEFile
@@ -30,20 +24,23 @@ public:
     TlkLookup operator[]( strref index ) const noexcept;
 
     [[nodiscard]]
-    u32 length() const noexcept { return static_cast<u32>(_cached_strings.size()); }
+    u32 length() const noexcept;
 
     [[nodiscard]]
-    static PossibleTlkFile open( string_view path ) noexcept;
+    static PossibleTlkFile open( std::string_view path );
 
     [[nodiscard]]
-    const std::string* begin() const;
+    const std::string_view* begin() const;
     [[nodiscard]]
-    const std::string* end() const;
+    const std::string_view* end() const;
 
 private:
-    explicit TlkFile( string_view path ) noexcept;
+    explicit TlkFile( std::string_view path ) noexcept;
+
     TlkFileHeader _header{};
-    vector<string> _cached_strings;
+    std::vector<char> _string_data;
+    std::vector<std::string_view> _cached_strings;
+
     void check_for_malformation() noexcept override;
 };
 
