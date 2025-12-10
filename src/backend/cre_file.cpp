@@ -1,8 +1,10 @@
 #include "utils/aliases.h"
 #include "cre_file.h"
 
+#include <expected>
 #include <fstream>
 #include <ranges>
+#include <utility>
 #include <vector>
 
 #include "utils/io.h"
@@ -48,41 +50,32 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 
     file.seekg( offset + cre._header.effects_offset, std::ios::beg );
 
-    if ( cre._header.eff_structure_version == 0 ) [[unlikely]]
+    switch (header.eff_structure_version)
     {
-        std::vector<EmbeddedEffFileV1> effects_v1;
-        effects_v1.resize( cre._header.effects_count );
-        file.read( reinterpret_cast<char*>(effects_v1.data()),
-                   static_cast<std::streamsize>(cre._header.effects_count * sizeof( EmbeddedEffFileV1 )) );
-        cre._effects.insert( cre._effects.end(), effects_v1.begin(), effects_v1.end() );
-    }
-    else if ( cre._header.eff_structure_version == 1 ) [[likely]]
-    {
-        std::vector<EmbeddedEffFileV2> effects_v2;
-        effects_v2.resize( cre._header.effects_count );
-        file.read( reinterpret_cast<char*>(effects_v2.data()),
-                   static_cast<std::streamsize>(cre._header.effects_count * sizeof( EmbeddedEffFileV2 )) );
-        cre._effects.insert( cre._effects.end(), effects_v2.begin(), effects_v2.end() );
+        case 0: [[unlikely]]
+            cre.read_effects<EmbeddedEffFileV1>(cre, writer);
+            break;
+        case 1: [[likely]]
+            cre.read_effects<EmbeddedEffFileV2>(cre, writer);
+            break;
+        default:
+            std::unreachable(); // should check for corrupt values anyway
     }
 
-    return std::move( cre );
+    return cre;
 }
 
-std::vector<Effect> CreFile::effects() // ugly
+std::vector<Effect> CreFile::effects()
 {
-    if ( const auto& eff = _effects[0]; std::holds_alternative<EmbeddedEffFileV1>( eff ) )
+
+    std::vector<Effect> out;
+    out.reserve( _effects.size() );
+
+    for (const auto& eff : _effects)
     {
-        auto mapped_to_effect = _effects | std::views::transform( []( auto x ) {
-            const auto& instance = std::get<EmbeddedEffFileV1>( x );
-            return Effect::from( instance );
-        } );
-        return { mapped_to_effect.begin(), mapped_to_effect.end() };
+        std::visit([&](const auto& instance) {
+            out.push_back(std::move(Effect::from(instance)));
+        }, eff);
     }
-
-    auto mapped_to_effect = _effects | std::views::transform( []( auto x ) {
-        const auto& instance = std::get<EmbeddedEffFileV2>( x );
-        return Effect::from( instance );
-    } );
-
-    return { mapped_to_effect.begin(), mapped_to_effect.end() };
+    return out;
 }
