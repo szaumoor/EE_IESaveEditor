@@ -105,7 +105,7 @@ struct BiffEntry
 struct ResourceEntry
 {
     Resref resource_name;
-    u16 resource_type;
+    ResourceType resource_type;
     u32 resource_locator;
 };
 

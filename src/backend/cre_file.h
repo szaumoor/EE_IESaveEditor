@@ -8,6 +8,8 @@
 #include <variant>
 #include <vector>
 
+#include "utils/io.h"
+
 using EffectVariant = std::variant<EmbeddedEffFileV1, EmbeddedEffFileV2>;
 
 /**
@@ -20,7 +22,6 @@ class Effect
 {
 public:
     static Effect from( const EmbeddedEffFileV1& eff );
-
     static Effect from( const EmbeddedEffFileV2& eff );
 
 private:
@@ -65,6 +66,14 @@ private:
     CreItemSlots _item_slots{};
 
     inline void resize_vecs() noexcept;
+
+    template<typename T>
+    void read_effects(CreFile& cre, const StructWriter& writer)
+    {
+        std::vector<T> tmp(cre._header.effects_count);
+        writer.into(tmp);
+        cre._effects.insert(cre._effects.end(), tmp.begin(), tmp.end());
+    }
 };
 
 #endif // CRE_FILE_H
