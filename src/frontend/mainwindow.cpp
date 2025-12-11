@@ -36,6 +36,9 @@ void MainWindow::set_up_shortcuts() const
 
     ui->actionQuit->setShortcut( QKeySequence( Qt::CTRL | Qt::Key_Q ) );
     ui->actionQuit->setShortcutContext( Qt::ApplicationShortcut );
+
+    ui->actionSave->setShortcut( QKeySequence( Qt::CTRL | Qt::Key_S ) );
+    ui->actionSave->setShortcutContext( Qt::ApplicationShortcut );
 }
 
 MainWindow::~MainWindow()
@@ -72,9 +75,14 @@ void MainWindow::open_file()
         qDebug() << "User selected" << dir;
 }
 
+void MainWindow::open_my_mods()
+{
+    QDesktopServices::openUrl( QUrl( "https://szaumoor.github.io/IEModLinks/" ) );
+}
+
 void MainWindow::open_forum()
 {
-    QDesktopServices::openUrl(QUrl("https://www.gibberlings3.net/profile/12720-royalprotector/"));
+    QDesktopServices::openUrl( QUrl( "https://www.gibberlings3.net/profile/12720-royalprotector/" ) );
 }
 
 void MainWindow::open_discord_g3()
