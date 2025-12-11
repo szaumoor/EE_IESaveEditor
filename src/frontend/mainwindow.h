@@ -4,8 +4,6 @@
 #include <QMainWindow>
 #include <QWidget>
 
-#include "../backend/binary_layouts/tlk.h"
-
 QT_BEGIN_NAMESPACE
 
 namespace Ui
@@ -28,7 +26,6 @@ private:
 
     void set_up_connections();
     void set_up_shortcuts() const;
-    TlkFileEntry tlk{};
 private slots:
     void open_forum();
     void quit();
