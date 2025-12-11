@@ -7,8 +7,8 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view kRealBiff("../../tests/res/Spells.bif");
-static constexpr std::string_view kRealBiffWithTilesets("../../tests/res/25ArMisc.bif");
+static constexpr std::string_view kRealBiff(TEST_RES_DIR "/Spells.bif");
+static constexpr std::string_view kRealBiffWithTilesets(TEST_RES_DIR "/25ArMisc.bif");
 
 TEST( BiffFileTests, BiffIsUnreadableTest )
 {

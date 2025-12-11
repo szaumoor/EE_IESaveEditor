@@ -8,7 +8,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view kRealTlk("../../tests/res/dialog.tlk");
+static constexpr std::string_view kRealTlk(TEST_RES_DIR "/dialog.tlk");
 static const auto real_tlk = TlkFile::open(kRealTlk);
 
 TEST( TlkFileTest, TlkIsUnreadableTest )

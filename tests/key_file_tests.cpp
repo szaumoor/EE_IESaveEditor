@@ -7,7 +7,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view kRealKey("../../tests/res/chitin.key");
+static constexpr std::string_view kRealKey(TEST_RES_DIR "/chitin.key");
 
 TEST( KeyFileTest, KeyIsUnreadableTest )
 {
