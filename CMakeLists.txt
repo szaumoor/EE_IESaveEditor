@@ -25,7 +25,13 @@ enable_testing()
 
 add_compile_definitions(TEST_RES_DIR="${CMAKE_SOURCE_DIR}/tests/res")
 
-set(TS_FILES EE_SaveEditor_en_001.ts)
+set(TS_FILES
+    translations/EE_SaveEditor_en.ts
+)
+
+SET(RES_FILES
+  resources/resource.qrc
+)
 
 set(BACKEND_SOURCES
     src/backend/biff_file.h
@@ -115,7 +121,9 @@ set(FRONTEND_SOURCES
     src/main.cpp
     src/frontend/mainwindow.cpp
     src/frontend/mainwindow.h
-    src/frontend/mainwindow.ui)
+    src/frontend/mainwindow.ui
+    ${RES_FILES}
+)
 
 add_executable(tlk_file_test
     tests/tlk_file_tests.cpp
