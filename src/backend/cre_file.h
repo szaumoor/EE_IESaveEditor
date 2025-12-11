@@ -3,7 +3,6 @@
 
 #include "binary_layouts/cre.h"
 #include "utils/aliases.h"
-#include "utils/errors.h"
 
 #include <variant>
 #include <vector>
