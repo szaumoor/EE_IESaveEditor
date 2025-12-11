@@ -1,35 +1,27 @@
-﻿cmake_minimum_required (VERSION 3.20)
+cmake_minimum_required(VERSION 3.20)
 
 if (POLICY CMP0135)
  cmake_policy(SET CMP0135 NEW)
 endif()
 
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
+project(EE_SaveEditor VERSION 0.1 LANGUAGES CXX)
 
-project (EESaveEditor)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
+# if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+#     add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
+#     add_link_options(-fsanitize=address,undefined)
+# endif()
 
-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
-    add_link_options(-fsanitize=address,undefined)
-endif()
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
-# set(CMAKE_CXX_COMPILER "/usr/bin/clang")
-
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-#find_package(Qt6 REQUIRED COMPONENTS LinguistTools)
-
-enable_testing()
+set(TS_FILES EE_SaveEditor_en_001.ts)
 
 set(BACKEND_SOURCES
     src/backend/biff_file.h
@@ -104,7 +96,22 @@ set(ALL_TEST_SOURCES
     ${BIFF_TEST_SOURCES}
 )
 
+set(PROJECT_SOURCES
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    ${TS_FILES}
+)
+
+
 add_library (backend ${BACKEND_SOURCES})
+
+set(FRONTEND_SOURCES
+    ${BACKEND_SOURCES}
+    src/main.cpp
+    src/frontend/mainwindow.cpp
+    src/frontend/mainwindow.h
+    src/frontend/mainwindow.ui)
 
 add_executable(tlk_file_test
     tests/tlk_file_tests.cpp
@@ -133,14 +140,6 @@ add_executable(string_tests
 
 add_executable(all_tests
     ${ALL_TEST_SOURCES}
-)
-
-add_executable(EESaveEditor
-    ${BACKEND_SOURCES}
-        src/main.cpp
-        src/frontend/mainwindow.cpp
-        src/frontend/mainwindow.h
-        src/frontend/mainwindow.ui
 )
 
  target_link_libraries(tlk_file_test
@@ -173,19 +172,59 @@ target_link_libraries(all_tests
    GTest::gtest_main
 )
 
-target_link_libraries(EESaveEditor PRIVATE Qt6::Widgets)
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(EE_SaveEditor
+        MANUAL_FINALIZATION
+        ${FRONTEND_SOURCES}
+    )
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET EE_SaveEditor APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 
-#set(TS_FILES
-#    src/frontend/translations/app_en.ts
-#    src/frontend/translations/app_es.ts
-#)
-#
-#qt_add_translations(EESaveEditor
-#    TS_FILES ${TS_FILES}
-#    QM_FILES_OUTPUT_VARIABLE QM_FILES
-#)
-#
-#add_custom_target(translations ALL DEPENDS ${QM_FILES})
+    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+else()
+    if(ANDROID)
+        add_library(EE_SaveEditor SHARED
+            ${BACKEND_SOURCES}
+        )
+# Define properties for Android with Qt 5 after find_package() calls as:
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    else()
+        add_executable(EE_SaveEditor
+            ${BACKEND_SOURCES}
+        )
+    endif()
+
+    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+endif()
+
+target_link_libraries(EE_SaveEditor PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# If you are developing for iOS or macOS you should consider setting an
+# explicit, fixed bundle identifier manually though.
+if(${QT_VERSION} VERSION_LESS 6.1.0)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.EE_SaveEditor)
+endif()
+set_target_properties(EE_SaveEditor PROPERTIES
+    ${BUNDLE_ID_OPTION}
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+include(GNUInstallDirs)
+install(TARGETS EE_SaveEditor
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(EE_SaveEditor)
+endif()
 
 # Google Test setup
 include(GoogleTest)

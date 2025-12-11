@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <expected>
-#include <filesystem>
-#include <fstream>
 #include <string_view>
 
 #include "../src/backend/tlk_file.h"
@@ -10,7 +8,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view kRealTlk("../tests/res/dialog.tlk");
+static constexpr std::string_view kRealTlk("../../tests/res/dialog.tlk");
 static const auto real_tlk = TlkFile::open(kRealTlk);
 
 TEST( TlkFileTest, TlkIsUnreadableTest )

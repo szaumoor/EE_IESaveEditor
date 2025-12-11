@@ -14,3 +14,5 @@ out
 .vs
 /.idea/
 .qt/
+build
+.qtcreator
