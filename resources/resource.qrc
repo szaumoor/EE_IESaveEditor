@@ -14,5 +14,6 @@
         <file>img/refresh_2.png</file>
         <file>img/setting.png</file>
         <file>img/shield.ico</file>
+        <file>img/bg.png</file>
     </qresource>
 </RCC>
