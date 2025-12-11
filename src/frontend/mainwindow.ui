@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string notr="true">EE Save Editor</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../resources/resource.qrc">
+    <normaloff>:/img/shield.ico</normaloff>:/img/shield.ico</iconset>
+  </property>
   <property name="toolTip">
    <string>A save editor for the Enhanced Editions of the IE games</string>
   </property>
@@ -53,6 +57,10 @@
      <property name="title">
       <string>Discord</string>
      </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/discord.png</normaloff>:/img/discord.png</iconset>
+     </property>
      <addaction name="actionGibberlings"/>
      <addaction name="actionInfinityEngine"/>
     </widget>
@@ -60,6 +68,7 @@
     <addaction name="menuDiscord"/>
     <addaction name="actionForum"/>
     <addaction name="actionGitHub"/>
+    <addaction name="actionRoyalProtector_s_Mods"/>
    </widget>
    <addaction name="menuSome_text"/>
    <addaction name="menuHelp"/>
@@ -74,6 +83,10 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/information.png</normaloff>:/img/information.png</iconset>
+   </property>
    <property name="text">
     <string>About...</string>
    </property>
@@ -84,6 +97,10 @@
    </property>
   </action>
   <action name="actionGibberlings">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/g3.png</normaloff>:/img/g3.png</iconset>
+   </property>
    <property name="text">
     <string>Gibberlings3...</string>
    </property>
@@ -100,19 +117,34 @@
    </property>
   </action>
   <action name="actionGitHub">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/github.png</normaloff>:/img/github.png</iconset>
+   </property>
    <property name="text">
     <string>GitHub...</string>
+   </property>
+   <property name="toolTip">
+    <string>Discord servers where you can find me and many other enthusiasts of the games</string>
    </property>
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset theme="emblem-unreadable"/>
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/out.png</normaloff>:/img/out.png</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
    </property>
   </action>
+  <action name="actionRoyalProtector_s_Mods">
+   <property name="text">
+    <string>RoyalProtector's Mods</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

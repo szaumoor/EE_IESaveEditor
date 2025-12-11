@@ -1,0 +1,17 @@
+QTabBar::tab {
+    background: lightgray;
+    padding: 13px;
+}
+
+QTabBar::tab:selected {
+    background: white;
+    color: black;
+}
+
+QTabBar::tab:!selected {
+    color: darkgray;
+}
+
+QTabBar::tab:hover {
+    background: lightblue;
+}
