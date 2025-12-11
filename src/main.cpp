@@ -23,6 +23,8 @@ int main( int argc, char* argv[] )
     // auto a = QCoreApplication::translate("Menu", "FILE");
     // qDebug() << a;
 
+    qDebug() << QCoreApplication::applicationDirPath();
+
     MainWindow window;
     center_window( window );
     window.show();

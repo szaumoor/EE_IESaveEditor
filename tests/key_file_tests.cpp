@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <filesystem>
-#include <fstream>
 #include <string_view>
 
 #include "../src/backend/utils/errors.h"
@@ -9,7 +7,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view kRealKey("../tests/res/chitin.key");
+static constexpr std::string_view kRealKey("../../tests/res/chitin.key");
 
 TEST( KeyFileTest, KeyIsUnreadableTest )
 {
