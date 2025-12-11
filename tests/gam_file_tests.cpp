@@ -10,7 +10,7 @@
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view kRealGam("../tests/res/BALDUR.gam");
+static constexpr std::string_view kRealGam("../../tests/res/BALDUR.gam");
 
 TEST( GamFileTests, GamIsUnreadableTest )
 {
