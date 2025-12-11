@@ -21,6 +21,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
 
+enable_testing()
+
+add_compile_definitions(TEST_RES_DIR="${CMAKE_SOURCE_DIR}/tests/res")
+
 set(TS_FILES EE_SaveEditor_en_001.ts)
 
 set(BACKEND_SOURCES
