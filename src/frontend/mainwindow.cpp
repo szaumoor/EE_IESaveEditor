@@ -47,11 +47,13 @@ void MainWindow::show_about()
 {
     QMessageBox::information(
         this,
-        "About EE Save Editor",
-        "Author: szaumoor\n"
-        "Contact: royalprotector@keemail.me\n"
-        "Version: 0.1\n"
-        "Powered by C++ and the Qt Framework"
+        "About",
+        "<h2>EE Save Editor</h2>"
+        "<p>Author: szaumoor, a.k.a. 'RoyalProtector'</p>"
+        "<p>Contact: royalprotector@keemail.me</p>"
+        "<p><a href='https://github.com/szaumoor'>My GitHub</a></p>"
+        "<p>Version: 0.1</p>"
+        "<p>Powered by C++ and the Qt Framework</p>"
     );
 }
 
@@ -72,11 +74,7 @@ void MainWindow::open_file()
 
 void MainWindow::open_forum()
 {
-    QMessageBox::warning(
-        this,
-        "Forum",
-        "Forum doesn't exist yet! Stay tuned."
-    );
+    QDesktopServices::openUrl(QUrl("https://www.gibberlings3.net/profile/12720-royalprotector/"));
 }
 
 void MainWindow::open_discord_g3()

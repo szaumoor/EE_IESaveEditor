@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>css/style.qss</file>
+        <file>img/dice.png</file>
+        <file>img/discord.png</file>
+        <file>img/diskette.png</file>
+        <file>img/g3.png</file>
+        <file>img/github.png</file>
+        <file>img/information.png</file>
+        <file>img/language2.png</file>
+        <file>img/mrh8i.png</file>
+        <file>img/open-folder.png</file>
+        <file>img/out.png</file>
+        <file>img/refresh_2.png</file>
+        <file>img/setting.png</file>
+        <file>img/shield.ico</file>
+    </qresource>
+</RCC>
