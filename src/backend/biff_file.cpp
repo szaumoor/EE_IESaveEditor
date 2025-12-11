@@ -1,13 +1,10 @@
 #include "biff_file.h"
 
-#include <algorithm>
 #include <fstream>
 #include <ios>
 
 #include "ie_files.h"
 #include "utils/io.h"
-
-namespace rng = std::ranges;
 
 static constexpr std::string_view kBiffSignature( "BIFF" );
 static constexpr std::string_view kBiffFileVersion( "V1  " );

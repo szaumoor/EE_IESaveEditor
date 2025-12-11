@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <fstream>
-#include <ranges>
 
 using std::string_view;
 using std::ifstream;
