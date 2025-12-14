@@ -1,8 +1,8 @@
 #ifndef TLK_FILE_H
 #define TLK_FILE_H
 
-#include "binary_layouts/tlk.h"
 #include "ie_files.h"
+#include "binary_layouts/tlk.h"
 #include "utils/aliases.h"
 #include "utils/errors.h"
 

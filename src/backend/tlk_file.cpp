@@ -66,7 +66,7 @@ PossibleTlkFile TlkFile::open( string_view path )
     rng::for_each( _entries, [&tlk]( const TlkFileEntry& entry ) {
         const std::string_view st( tlk._string_data.data() + entry.offset_to_string, entry.string_length );
         tlk._cached_strings.push_back( st );
-    });
+    } );
 
     return std::move( tlk );
 }

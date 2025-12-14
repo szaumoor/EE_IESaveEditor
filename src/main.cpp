@@ -14,7 +14,6 @@ inline void center_window( MainWindow& window )
 int main( int argc, char* argv[] )
 {
     QApplication app( argc, argv );
-    //app.setWindowIcon(QIcon(":/img/shield.ico"));
 
     QTranslator translator; // auto-generated code for translations, unused for now
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -22,7 +21,7 @@ int main( int argc, char* argv[] )
     {
         const QString baseName = "EE_SaveEditor_" + QLocale( locale ).name();
         if ( translator.load( ":/translations/" + baseName ) )
-            app.installTranslator( &translator );
+            QApplication::installTranslator( &translator );
         break;
     }
 

@@ -40,10 +40,9 @@ private:
             str.resize( null_pos );
         return std::move( str );
     }
-
 };
 
-static_assert(sizeof(CharArray<32>) == 32, "CharArray should be packed to fit in one byte per character");
+static_assert( sizeof( CharArray<32> ) == 32, "CharArray should be packed to fit in one byte per character" );
 
 /**
  * Helper struct for the very commonly found 8-character resource reference in the IE files.

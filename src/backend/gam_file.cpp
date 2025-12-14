@@ -10,7 +10,6 @@ using std::string_view;
 using std::ifstream;
 using std::vector;
 using std::string_view;
-
 namespace rng = std::ranges;
 
 static constexpr string_view kGamFileSig( "GAME" );
@@ -71,7 +70,7 @@ void GamFile::check_for_malformation() noexcept
 {
     const bool valid_signature = _header.signature.to_string() == kGamFileSig;
     const bool valid_version   = _header.version.to_string() == kGamFileVersion_2_0 ||
-                                 _header.version.to_string() == kGamFileVersion_2_1;
+                               _header.version.to_string() == kGamFileVersion_2_1;
 
     good = valid_signature && valid_version;
 }

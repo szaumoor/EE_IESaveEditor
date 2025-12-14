@@ -1,9 +1,8 @@
 #include <fstream>
 #include <string_view>
 
-#include "ie_files.h"
 #include "key_file.h"
-
+#include "ie_files.h"
 #include "utils/io.h"
 
 using std::string_view;
