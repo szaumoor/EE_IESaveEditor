@@ -67,11 +67,11 @@ private:
     inline void resize_vecs() noexcept;
 
     template<typename T>
-    void read_effects(CreFile& cre, const StructWriter& writer)
+    void read_effects( CreFile& cre, const StructWriter& writer )
     {
-        std::vector<T> tmp(cre._header.effects_count);
-        writer.into(tmp);
-        cre._effects.insert(cre._effects.end(), tmp.begin(), tmp.end());
+        std::vector<T> tmp( cre._header.effects_count );
+        writer.into( tmp );
+        cre._effects.insert( cre._effects.end(), tmp.begin(), tmp.end() );
     }
 };
 

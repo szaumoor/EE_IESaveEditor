@@ -25,7 +25,6 @@ class IEError
 {
 public:
     explicit IEError( IEErrorType error_t, std::string_view error_m ) noexcept;
-
     explicit IEError( IEErrorType error_t ) noexcept;
 
     /**

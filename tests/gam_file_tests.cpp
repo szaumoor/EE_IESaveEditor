@@ -27,7 +27,8 @@ TEST( GamFileTests, GamIsMalformedVersion )
 
 TEST( GamFileTests, RealGamIsReadableAndValid )
 {
-    ASSERT_TRUE( GamFile::open( kRealGam ).has_value() );
+    const auto gam = GamFile::open( kRealGam );
+    ASSERT_TRUE( gam.has_value() );
 }
 
 TEST( GamFileTests, GamIsReadableAndValid )
@@ -73,6 +74,5 @@ TEST(GamFileTests, GamHeaderCanBeWritten)
     const auto& real_duplicate_gam = duplicate_gam.value();
     EXPECT_TRUE(real_duplicate_gam._header.party_gold == 9999900);
 
-    std::filesystem::remove("duplicate_gam.gam");
-    EXPECT_TRUE(true);
+    std::filesystem::remove(duplicate);
 }

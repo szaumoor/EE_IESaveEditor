@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 #include <QMainWindow>
@@ -16,6 +17,11 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::M
 
     set_up_connections();
     set_up_shortcuts();
+}
+
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    quit();
 }
 
 void MainWindow::set_up_connections()

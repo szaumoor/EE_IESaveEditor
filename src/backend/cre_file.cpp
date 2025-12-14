@@ -1,11 +1,10 @@
-#include "utils/aliases.h"
 #include "cre_file.h"
+#include "utils/aliases.h"
+#include "utils/io.h"
 
 #include <fstream>
 #include <utility>
 #include <vector>
-
-#include "utils/io.h"
 
 Effect Effect::from( const EmbeddedEffFileV1& eff )
 {
@@ -21,14 +20,6 @@ Effect Effect::from( const EmbeddedEffFileV2& eff )
     common_mapping( effect, eff );
     effect.resource = eff.resource1;
     return effect;
-}
-
-void CreFile::resize_vecs() noexcept
-{
-    _known_spells.resize( _header.known_spells_count );
-    _memorization_infos.resize( _header.memorization_count );
-    _memorized_spells.resize( _header.memorized_count );
-    _items.resize( _header.items_count );
 }
 
 CreFile CreFile::read( std::ifstream& file, const u32 offset )
@@ -48,13 +39,13 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 
     file.seekg( offset + cre._header.effects_offset, std::ios::beg );
 
-    switch (header.eff_structure_version)
+    switch ( header.eff_structure_version )
     {
-        case 0: [[unlikely]]
-            cre.read_effects<EmbeddedEffFileV1>(cre, writer);
+        case 0:
+            [[unlikely]] cre.read_effects<EmbeddedEffFileV1>( cre, writer );
             break;
-        case 1: [[likely]]
-            cre.read_effects<EmbeddedEffFileV2>(cre, writer);
+        case 1:
+            [[likely]] cre.read_effects<EmbeddedEffFileV2>( cre, writer );
             break;
         default:
             std::unreachable(); // should check for corrupt values anyway
@@ -65,15 +56,22 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 
 std::vector<Effect> CreFile::effects()
 {
-
     std::vector<Effect> out;
     out.reserve( _effects.size() );
 
-    for (const auto& eff : _effects)
+    for ( const auto& eff : _effects )
     {
-        std::visit([&](const auto& instance) {
-            out.push_back(std::move(Effect::from(instance)));
-        }, eff);
+        std::visit( [&]( const auto& instance ) {
+            out.push_back( std::move( Effect::from( instance ) ) );
+        }, eff );
     }
     return out;
+}
+
+void CreFile::resize_vecs() noexcept
+{
+    _known_spells.resize( _header.known_spells_count );
+    _memorization_infos.resize( _header.memorization_count );
+    _memorized_spells.resize( _header.memorized_count );
+    _items.resize( _header.items_count );
 }

@@ -3,7 +3,6 @@
 
 #include <string_view>
 
-
 struct TempCreator
 {
     TempCreator(std::string_view name, std::string_view signature, std::string_view version);
