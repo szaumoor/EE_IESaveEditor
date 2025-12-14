@@ -32,10 +32,12 @@ TEST( BiffFileTests, BiffIsMalformedSig )
 
 TEST( BiffFileTests, RealBiffIsReadableAndValid )
 {
-    ASSERT_TRUE( BiffFile::open( kRealBiff ).has_value() );
+    const auto biff = BiffFile::open( kRealBiff );
+    ASSERT_TRUE( biff.has_value() );
 }
 
 TEST( BiffFileTests, RealBiffWithTilesetsIsReadableAndValid )
 {
-    ASSERT_TRUE( BiffFile::open( kRealBiffWithTilesets ).has_value() );
+    const auto biff = BiffFile::open( kRealBiffWithTilesets );
+    ASSERT_TRUE( biff.has_value() );
 }

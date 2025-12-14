@@ -2,14 +2,13 @@
 #define KEY_FILE_H
 
 #include <expected>
-
-#include "ie_files.h"
-#include "binary_layouts/key_biff.h"
-
 #include <string_view>
 #include <vector>
 
+#include "ie_files.h"
+#include "binary_layouts/key_biff.h"
 #include "utils/errors.h"
+
 
 class KeyFile;
 using PossibleKeyFile = std::expected<KeyFile, IEError>;
