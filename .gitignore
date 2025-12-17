@@ -16,3 +16,4 @@ out
 .qt/
 build
 .qtcreator
+.clang-format

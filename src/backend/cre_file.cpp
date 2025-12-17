@@ -31,11 +31,11 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 
     cre.resize_vecs();
 
-    writer.into( cre._known_spells, offset + cre._header.known_spells_offset );
-    writer.into( cre._memorization_infos, offset + header.memorization_offset );
-    writer.into( cre._memorized_spells, offset + cre._header.memorized_offset );
-    writer.into( cre._items, offset + cre._header.items_offset );
-    writer.into( cre._item_slots, offset + cre._header.item_slots_offset );
+    writer.into( cre.m_known_spells, offset + cre._header.known_spells_offset );
+    writer.into( cre.m_memorization_infos, offset + header.memorization_offset );
+    writer.into( cre.m_memorized_spells, offset + cre._header.memorized_offset );
+    writer.into( cre.m_items, offset + cre._header.items_offset );
+    writer.into( cre.m_item_slots, offset + cre._header.item_slots_offset );
 
     file.seekg( offset + cre._header.effects_offset, std::ios::beg );
 
@@ -57,9 +57,9 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 std::vector<Effect> CreFile::effects()
 {
     std::vector<Effect> out;
-    out.reserve( _effects.size() );
+    out.reserve( m_effects.size() );
 
-    for ( const auto& eff : _effects )
+    for ( const auto& eff : m_effects )
     {
         std::visit( [&]( const auto& instance ) {
             out.push_back( std::move( Effect::from( instance ) ) );
@@ -70,8 +70,8 @@ std::vector<Effect> CreFile::effects()
 
 void CreFile::resize_vecs() noexcept
 {
-    _known_spells.resize( _header.known_spells_count );
-    _memorization_infos.resize( _header.memorization_count );
-    _memorized_spells.resize( _header.memorized_count );
-    _items.resize( _header.items_count );
+    m_known_spells.resize( _header.known_spells_count );
+    m_memorization_infos.resize( _header.memorization_count );
+    m_memorized_spells.resize( _header.memorized_count );
+    m_items.resize( _header.items_count );
 }

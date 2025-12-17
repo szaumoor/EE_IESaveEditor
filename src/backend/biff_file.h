@@ -21,9 +21,9 @@ public:
 private:
     explicit BiffFile( std::string_view path ) noexcept;
 
-    BiffHeader _header{};
-    std::vector<FileEntry> _file_entries;
-    std::vector<TileEntry> _tile_entries;
+    BiffHeader m_header{};
+    std::vector<FileEntry> m_file_entries;
+    std::vector<TileEntry> m_tile_entries;
 
     void check_for_malformation() noexcept override;
 };
