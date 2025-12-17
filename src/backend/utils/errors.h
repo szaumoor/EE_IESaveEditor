@@ -1,6 +1,7 @@
 #ifndef EESAVEEDITOR_ERRORS_H
 #define EESAVEEDITOR_ERRORS_H
 
+#include <expected>
 #include <string_view>
 
 #include "aliases.h"
@@ -40,8 +41,11 @@ public:
     [[nodiscard]] IEErrorType type() const noexcept;
 
 private:
-    const IEErrorType error_type;
-    std::string_view error_message;
+    const IEErrorType m_error_type;
+    std::string_view m_error_message;
 };
+
+template<typename IEType>
+using Possible = std::expected<IEType, IEError>;
 
 #endif //EESAVEEDITOR_ERRORS_H

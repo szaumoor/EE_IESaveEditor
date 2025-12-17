@@ -17,7 +17,7 @@ PossibleBiffFile BiffFile::open( const std::string_view path ) noexcept
         return std::unexpected( IEError( IEErrorType::Unreadable ) );
 
     BiffFile biff( path );
-    auto& header = biff._header;
+    auto& header = biff.m_header;
     StructWriter writer( file_handle );
     writer.into( header );
     biff.check_for_malformation();
@@ -27,14 +27,14 @@ PossibleBiffFile BiffFile::open( const std::string_view path ) noexcept
 
     if ( header.count_of_file_entries > 0 )
     {
-        biff._file_entries.resize( header.count_of_file_entries );
-        writer.into( biff._file_entries, header.offset_to_file_entries );
+        biff.m_file_entries.resize( header.count_of_file_entries );
+        writer.into( biff.m_file_entries, header.offset_to_file_entries );
     }
 
     if ( header.count_of_tile_entries > 0 )
     {
-        biff._tile_entries.resize( header.count_of_tile_entries );
-        writer.into( biff._tile_entries,
+        biff.m_tile_entries.resize( header.count_of_tile_entries );
+        writer.into( biff.m_tile_entries,
                      header.offset_to_file_entries + sizeof( FileEntry ) * header.count_of_file_entries );
     }
 
@@ -46,8 +46,8 @@ BiffFile::BiffFile( const std::string_view path ) noexcept
 
 void BiffFile::check_for_malformation() noexcept
 {
-    const bool valid_signature = _header.signature.to_string() == kBiffSignature;
-    const bool valid_version   = _header.version.to_string() == kBiffFileVersion;
+    const bool valid_signature = m_header.signature.to_string() == kBiffSignature;
+    const bool valid_version   = m_header.version.to_string() == kBiffFileVersion;
 
-    good = valid_signature && valid_version;
+    m_good = valid_signature && valid_version;
 }
