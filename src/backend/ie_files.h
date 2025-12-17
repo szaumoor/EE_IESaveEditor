@@ -10,16 +10,16 @@ public:
 
     [[nodiscard]] explicit operator bool() const noexcept
     {
-        return good;
+        return m_good;
     }
 
 protected:
-    explicit IEFile( const std::string_view path ) : _path( path ) { }
-    bool good = false;
+    explicit IEFile( const std::string_view path ) : m_path( path ) { }
+    bool m_good = false;
 
     virtual void check_for_malformation() noexcept = 0;
 
-    const std::string_view _path;
+    const std::string_view m_path;
 };
 
 

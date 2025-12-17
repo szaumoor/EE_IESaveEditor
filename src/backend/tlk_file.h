@@ -10,9 +10,7 @@
 #include <string_view>
 #include <vector>
 
-class TlkFile;
-using TlkLookup       = std::expected<std::string_view, IEError>;
-using PossibleTlkFile = std::expected<TlkFile, IEError>;
+using TlkLookup = Possible<std::string_view>;
 
 class TlkFile final : public IEFile
 {
@@ -27,7 +25,7 @@ public:
     u32 length() const noexcept;
 
     [[nodiscard]]
-    static PossibleTlkFile open( std::string_view path );
+    static Possible<TlkFile> open( std::string_view path );
 
     [[nodiscard]]
     const std::string_view* begin() const;
@@ -37,9 +35,9 @@ public:
 private:
     explicit TlkFile( std::string_view path ) noexcept;
 
-    TlkFileHeader _header{};
-    std::vector<char> _string_data;
-    std::vector<std::string_view> _cached_strings;
+    TlkFileHeader m_header{};
+    std::vector<char> m_string_data;
+    std::vector<std::string_view> m_cached_strings;
 
     void check_for_malformation() noexcept override;
 };

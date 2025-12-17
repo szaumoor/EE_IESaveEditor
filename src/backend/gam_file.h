@@ -5,42 +5,36 @@
 #include <string_view>
 #include <vector>
 
-#include "binary_layouts/gam.h"
 #include "cre_file.h"
 #include "ie_files.h"
-#include "utils/helper_structs.h"
+#include "binary_layouts/gam.h"
 #include "utils/errors.h"
-
-class GamFile;
-using PossibleGamFile = std::expected<GamFile, IEError>;
+#include "utils/helper_structs.h"
 
 class GamFile final : public IEFile
 {
 public:
     [[nodiscard]]
-    static PossibleGamFile open( std::string_view path ) noexcept;
-
+    static Possible<GamFile> open( std::string_view path ) noexcept;
     bool save_gam();
-
-    GamHeader _header{};
 
 private:
     explicit GamFile( std::string_view path ) noexcept;
 
-    std::vector<GamCharacterData> _party_members;
-    std::vector<CreFile> _party_cre_files;
-    std::vector<GamCharacterData> _non_party_members;
-    std::vector<CreFile> _non_party_cre_files;
-    std::vector<GamGlobalVariable> _variables;
-    std::vector<GamJournalEntry> _journal_entries;
-    std::vector<GamLocationInfo> _stored_locations;
-    std::vector<GamLocationInfo> _pocket_plane_info;
+    GamHeader m_header{};
+    std::vector<GamCharacterData> m_party_members;
+    std::vector<CreFile> m_party_cre_files;
+    std::vector<GamCharacterData> m_non_party_members;
+    std::vector<CreFile> m_non_party_cre_files;
+    std::vector<GamGlobalVariable> m_variables;
+    std::vector<GamJournalEntry> m_journal_entries;
+    std::vector<GamLocationInfo> m_stored_locations;
+    std::vector<GamLocationInfo> m_pocket_plane_info;
 
-    GamFamiliarInfo _familiar_info{};
-    std::vector<Resref> _familiar_extras;
+    GamFamiliarInfo m_familiar_info{};
+    std::vector<Resref> m_familiar_extras;
 
     void check_for_malformation() noexcept override;
-
     void prep_containers();
 };
 

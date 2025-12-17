@@ -56,13 +56,13 @@ public:
 private:
     CreHeader _header{};
 
-    std::vector<CreKnownSpell> _known_spells;
-    std::vector<CreSpellMemorizationInfo> _memorization_infos;
-    std::vector<CreSpellMemorizedSpell> _memorized_spells;
-    std::vector<EffectVariant> _effects;
-    std::vector<CreInventoryItem> _items;
+    std::vector<CreKnownSpell> m_known_spells;
+    std::vector<CreSpellMemorizationInfo> m_memorization_infos;
+    std::vector<CreSpellMemorizedSpell> m_memorized_spells;
+    std::vector<EffectVariant> m_effects;
+    std::vector<CreInventoryItem> m_items;
 
-    CreItemSlots _item_slots{};
+    CreItemSlots m_item_slots{};
 
     inline void resize_vecs() noexcept;
 
@@ -71,7 +71,7 @@ private:
     {
         std::vector<T> tmp( cre._header.effects_count );
         writer.into( tmp );
-        cre._effects.insert( cre._effects.end(), tmp.begin(), tmp.end() );
+        cre.m_effects.insert( cre.m_effects.end(), tmp.begin(), tmp.end() );
     }
 };
 
