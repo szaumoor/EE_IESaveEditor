@@ -27,7 +27,10 @@ public:
     void into( Struct& st, const u32 offset = 0 ) const
     {
         if ( offset > 0 ) [[likely]]
+        {
             m_file_handle.seekg( offset, std::ios::beg );
+        }
+
         m_file_handle.read( reinterpret_cast<char*>(&st), sizeof( Struct ) );
     }
 
@@ -43,7 +46,10 @@ public:
     void into( std::vector<Struct>& st, const u32 offset = 0 ) const
     {
         if ( offset > 0 ) [[likely]]
+        {
             m_file_handle.seekg( offset, std::ios::beg );
+        }
+
         m_file_handle.read( reinterpret_cast<char*>(st.data()),
                           static_cast<std::streamsize>(st.size() * sizeof( Struct )) );
     }
@@ -61,7 +67,10 @@ public:
     void out( Struct& st, const u32 offset = 0 ) const
     {
         if ( offset > 0 ) [[likely]]
+        {
             m_file_handle.seekp( offset, std::ios::beg );
+        }
+
         m_file_handle.write( reinterpret_cast<const char*>(&st), sizeof( Struct ) );
     }
 

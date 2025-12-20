@@ -69,6 +69,8 @@ private:
     template<typename T>
     void read_effects( CreFile& cre, const StructWriter& writer )
     {
+        static_assert(std::is_same_v<T, EmbeddedEffFileV1> || std::is_same_v<T, EmbeddedEffFileV2>);
+
         std::vector<T> tmp( cre._header.effects_count );
         writer.into( tmp );
         cre.m_effects.insert( cre.m_effects.end(), tmp.begin(), tmp.end() );

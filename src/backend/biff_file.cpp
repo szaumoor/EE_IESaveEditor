@@ -9,7 +9,7 @@
 static constexpr std::string_view kBiffSignature( "BIFF" );
 static constexpr std::string_view kBiffFileVersion( "V1  " );
 
-PossibleBiffFile BiffFile::open( const std::string_view path ) noexcept
+Possible<BiffFile> BiffFile::open( const std::string_view path ) noexcept
 {
     std::ifstream file_handle( path.data(), std::ios::binary );
 

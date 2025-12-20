@@ -15,10 +15,10 @@ public:
 
 protected:
     explicit IEFile( const std::string_view path ) : m_path( path ) { }
-    bool m_good = false;
 
     virtual void check_for_malformation() noexcept = 0;
 
+    bool m_good = false;
     const std::string_view m_path;
 };
 
