@@ -18,5 +18,5 @@ TempCreator::TempCreator(const string_view name,
 
 TempCreator::~TempCreator()
 {
-    fs::remove(std::filesystem::path(name));
+    fs::remove(fs::path(name));
 }

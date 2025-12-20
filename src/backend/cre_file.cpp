@@ -41,11 +41,11 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 
     switch ( header.eff_structure_version )
     {
-        case 0:
-            [[unlikely]] cre.read_effects<EmbeddedEffFileV1>( cre, writer );
+        [[unlikely]] case 0:
+            cre.read_effects<EmbeddedEffFileV1>( cre, writer );
             break;
-        case 1:
-            [[likely]] cre.read_effects<EmbeddedEffFileV2>( cre, writer );
+        [[likely]] case 1:
+            cre.read_effects<EmbeddedEffFileV2>( cre, writer );
             break;
         default:
             std::unreachable(); // should check for corrupt values anyway
