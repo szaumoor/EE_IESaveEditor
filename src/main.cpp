@@ -28,6 +28,5 @@ int main( int argc, char* argv[] )
     MainWindow window;
     center_window( window );
     window.show();
-
     return QApplication::exec();
 }
