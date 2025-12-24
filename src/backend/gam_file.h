@@ -1,7 +1,6 @@
 #ifndef GAM_FILE_H
 #define GAM_FILE_H
 
-#include <expected>
 #include <string_view>
 #include <vector>
 
@@ -14,8 +13,8 @@
 class GamFile final : public IEFile
 {
 public:
-    [[nodiscard]]
-    static Possible<GamFile> open( std::string_view path ) noexcept;
+
+    static Possible<GamFile> open( std::string_view path );
     bool save_gam();
 
 private:

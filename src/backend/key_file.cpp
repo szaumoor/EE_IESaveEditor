@@ -12,11 +12,11 @@ using std::ifstream;
 static constexpr string_view kKeyFileSig( "KEY " );
 static constexpr string_view kKeyFileVersion( "V1  " );
 
-Possible<KeyFile> KeyFile::open( const string_view path ) noexcept
+Possible<KeyFile> KeyFile::open( const string_view path )
 {
     ifstream file_handle( path.data(), std::ios::binary );
 
-    if ( !file_handle )
+    if ( not file_handle )
         return std::unexpected( IEError( IEErrorType::Unreadable ) );
 
     KeyFile key( path );
@@ -24,7 +24,7 @@ Possible<KeyFile> KeyFile::open( const string_view path ) noexcept
     writer.into( key.m_header );
     key.check_for_malformation();
 
-    if ( !key )
+    if ( not key )
         return std::unexpected( IEError( IEErrorType::Malformed ) );
 
     key.m_biff_entries.resize( key.m_header.biff_count );

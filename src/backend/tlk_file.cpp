@@ -21,7 +21,7 @@ namespace rng = std::ranges;
 static constexpr string_view kTlkFileSig( "TLK " );
 static constexpr string_view kTlkFileVersion( "V1  " );
 
-TlkLookup TlkFile::at_index( const strref index ) const noexcept
+Possible<string_view> TlkFile::at( const strref index ) const noexcept
 {
     if ( index >= length() )
         return std::unexpected( IEError( IEErrorType::OutOfBounds,
@@ -29,20 +29,15 @@ TlkLookup TlkFile::at_index( const strref index ) const noexcept
     return m_cached_strings[index];
 }
 
-TlkLookup TlkFile::operator[]( const strref index ) const noexcept
+Possible<string_view> TlkFile::operator[]( const strref index ) const noexcept
 {
-    return at_index( index );
-}
-
-u32 TlkFile::length() const noexcept
-{
-    return m_header.entry_count;
+    return at( index );
 }
 
 Possible<TlkFile> TlkFile::open( string_view path )
 {
     ifstream file_handle( path.data(), std::ios::binary );
-    if ( !file_handle )
+    if ( not file_handle )
         return std::unexpected( IEError( IEErrorType::Unreadable ) );
 
     TlkFile tlk( path );
@@ -52,11 +47,10 @@ Possible<TlkFile> TlkFile::open( string_view path )
     writer.into( header );
     tlk.check_for_malformation();
 
-    if ( !tlk )
+    if ( not tlk )
         return std::unexpected( IEError( IEErrorType::Malformed ) );
 
-    vector<TlkFileEntry> _entries;
-    _entries.resize( tlk.length() );
+    vector<TlkFileEntry> _entries( tlk.length() );
     writer.into( _entries, sizeof( TlkFileHeader ) );
 
     file_handle.seekg( header.offset_to_str_data, std::ios::beg );
@@ -64,11 +58,16 @@ Possible<TlkFile> TlkFile::open( string_view path )
     tlk.m_cached_strings.reserve( tlk.length() );
 
     rng::for_each( _entries, [&tlk]( const TlkFileEntry& entry ) {
-        const std::string_view st( tlk.m_string_data.data() + entry.offset_to_string, entry.string_length );
-        tlk.m_cached_strings.push_back( st );
+        tlk.m_cached_strings.emplace_back( tlk.m_string_data.data() + entry.offset_to_string,
+                                           entry.string_length );
     } );
 
     return std::move( tlk );
+}
+
+u32 TlkFile::length() const noexcept
+{
+    return m_header.entry_count;
 }
 
 const std::string_view* TlkFile::begin() const
