@@ -15,14 +15,14 @@ static constexpr std::string_view kRealGam(TEST_RES_DIR "/BALDUR.gam");
 TEST( GamFileTests, GamIsUnreadableTest )
 {
     const auto gam = GamFile::open("nonexistent.gam");
-    ASSERT_TRUE( !gam && gam.error().type() == IEErrorType::Unreadable );
+    ASSERT_TRUE( not gam && gam.error().type() == IEErrorType::Unreadable );
 }
 
 TEST( GamFileTests, GamIsMalformedVersion )
 {
     const TempCreator temp("invalid_version.gam", "GAME", "Invl");
     const auto gam = GamFile::open(temp.name);
-    ASSERT_TRUE( !gam && gam.error().type() == IEErrorType::Malformed );
+    ASSERT_TRUE( not gam && gam.error().type() == IEErrorType::Malformed );
 }
 
 TEST( GamFileTests, RealGamIsReadableAndValid )
@@ -49,7 +49,7 @@ TEST( GamFileTests, GamIsMalformedSignature )
 {
     const TempCreator temp("invalid_signature.gam", "XXXX", "V2.0");
     const auto gam = GamFile::open(temp.name);
-    ASSERT_TRUE( !gam && gam.error().type() == IEErrorType::Malformed );
+    ASSERT_TRUE( not gam && gam.error().type() == IEErrorType::Malformed );
 }
 
 // TEST(GamFileTests, GamHeaderCanBeWritten)

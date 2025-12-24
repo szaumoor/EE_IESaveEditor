@@ -5,15 +5,13 @@
 #include "binary_layouts/key_biff.h"
 #include "utils/errors.h"
 
-#include <expected>
 #include <string_view>
 #include <vector>
 
 class BiffFile final : IEFile
 {
 public:
-    [[nodiscard]]
-    static Possible<BiffFile> open( std::string_view path ) noexcept;
+    static Possible<BiffFile> open( std::string_view path );
 
 private:
     explicit BiffFile( std::string_view path ) noexcept;

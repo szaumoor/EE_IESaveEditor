@@ -16,11 +16,11 @@ static constexpr string_view kGamFileSig( "GAME" );
 static constexpr string_view kGamFileVersion_2_0( "V2.0" );
 static constexpr string_view kGamFileVersion_2_1( "V2.1" );
 
-Possible<GamFile> GamFile::open( const string_view path ) noexcept
+Possible<GamFile> GamFile::open( const string_view path )
 {
     ifstream file_handle( path.data(), std::ios::binary );
 
-    if ( !file_handle )
+    if ( not file_handle )
         return std::unexpected( IEError( IEErrorType::Unreadable ) );
 
     GamFile gam( path );
@@ -30,7 +30,7 @@ Possible<GamFile> GamFile::open( const string_view path ) noexcept
     writer.into( header );
     gam.check_for_malformation();
 
-    if ( !gam )
+    if ( not gam )
         return std::unexpected( IEError( IEErrorType::Malformed ) );
 
     gam.prep_containers();

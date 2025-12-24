@@ -10,7 +10,8 @@
  * Enum class that provide constants for different errors related to
  * interacting with the IE files.
  */
-enum class [[nodiscard]] IEErrorType : u8
+enum struct [[nodiscard("Do not discard error types")]]
+    IEErrorType : u8
 {
     NotFound    = 0,
     Unreadable  = 1,
@@ -32,13 +33,15 @@ public:
      * Return the error message associated with the error type.
      * @return std::string_view with the error message
      */
-    [[nodiscard]] std::string_view what() const noexcept;
+    [[nodiscard("Don't ignore error messages")]]
+    std::string_view what() const noexcept;
 
     /**
      * Returns the error type associated with the error.
      * @return IEErrorType associated with the error.
      */
-    [[nodiscard]] IEErrorType type() const noexcept;
+    [[nodiscard("Don't ignore error types")]]
+    IEErrorType type() const noexcept;
 
 private:
     const IEErrorType m_error_type;
@@ -46,6 +49,11 @@ private:
 };
 
 template<typename IEType>
-using Possible = std::expected<IEType, IEError>;
+class [[nodiscard("Do not ignore std::expected")]] Possible : public std::expected<IEType, IEError>
+{
+    using std::expected<IEType, IEError>::expected;
+};
+
+// using Possible = std::expected<IEType, IEError>;
 
 #endif //EESAVEEDITOR_ERRORS_H
