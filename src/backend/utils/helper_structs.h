@@ -10,7 +10,7 @@ using strref = u32;
 #pragma pack(push, 1)
 
 /**
- * Templatized char array to represent a char array in IE files.
+ * Parameterized char array to represent a char array in IE files.
  * Provides helper method to convert to a std::string which removes
  * all null characters.
  *
@@ -19,7 +19,7 @@ using strref = u32;
 template<u32 Length>
 struct CharArray
 {
-    static_assert( Length <= 32 );
+    static_assert( Length > 0 and Length <= 32 );
     char value[Length];
 
     /**
@@ -30,15 +30,15 @@ struct CharArray
     [[nodiscard]]
     std::string to_string() const
     {
-        return std::move( trim_nulls( std::string( value, Length ) ) );
+        return trim_nulls( std::string( value, Length ));
     }
 
 private:
-    static std::string&& trim_nulls( std::string&& str ) noexcept
+    static std::string trim_nulls( std::string str ) noexcept
     {
         if ( const auto null_pos = str.find_first_of( '\0' ); null_pos != std::string::npos )
             str.resize( null_pos );
-        return std::move( str );
+        return str;
     }
 };
 

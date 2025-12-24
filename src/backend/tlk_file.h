@@ -10,27 +10,18 @@
 #include <string_view>
 #include <vector>
 
-using TlkLookup = Possible<std::string_view>;
 
 class TlkFile final : public IEFile
 {
 public:
-    [[nodiscard]]
-    TlkLookup at_index( strref index ) const noexcept;
+    Possible<std::string_view> at( strref index ) const noexcept; // NOLINT(*-use-nodiscard)
+    Possible<std::string_view> operator[]( strref index ) const noexcept;
 
-    [[nodiscard]]
-    TlkLookup operator[]( strref index ) const noexcept;
-
-    [[nodiscard]]
-    u32 length() const noexcept;
-
-    [[nodiscard]]
     static Possible<TlkFile> open( std::string_view path );
 
-    [[nodiscard]]
-    const std::string_view* begin() const;
-    [[nodiscard]]
-    const std::string_view* end() const;
+    [[nodiscard]] u32 length() const noexcept;
+    [[nodiscard]] const std::string_view* begin() const;
+    [[nodiscard]] const std::string_view* end() const;
 
 private:
     explicit TlkFile( std::string_view path ) noexcept;

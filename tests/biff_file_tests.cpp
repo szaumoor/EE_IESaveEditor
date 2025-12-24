@@ -13,21 +13,21 @@ static constexpr std::string_view kRealBiffWithTilesets(TEST_RES_DIR "/25ArMisc.
 TEST( BiffFileTests, BiffIsUnreadableTest )
 {
     const auto biff = BiffFile::open("nonexistent.biff");
-    ASSERT_TRUE( !biff && biff.error().type() == IEErrorType::Unreadable );
+    ASSERT_TRUE( not biff && biff.error().type() == IEErrorType::Unreadable );
 }
 
 TEST( BiffFileTests, BiffIsMalformedVersion )
 {
     const TempCreator temp("invalid_version.biff", "BIFF", "Invl");
     const auto biff = BiffFile::open(temp.name);
-    ASSERT_TRUE( !biff && biff.error().type() == IEErrorType::Malformed );
+    ASSERT_TRUE( not biff && biff.error().type() == IEErrorType::Malformed );
 }
 
 TEST( BiffFileTests, BiffIsMalformedSig )
 {
     const TempCreator temp("invalid_version.biff", "BUFF", "V1  ");
     const auto biff = BiffFile::open(temp.name);
-    ASSERT_TRUE( !biff && biff.error().type() == IEErrorType::Malformed );
+    ASSERT_TRUE( not biff && biff.error().type() == IEErrorType::Malformed );
 }
 
 TEST( BiffFileTests, RealBiffIsReadableAndValid )
