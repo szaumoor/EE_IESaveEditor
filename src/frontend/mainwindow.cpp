@@ -1,7 +1,7 @@
 #include "mainwindow.h"
-#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QCloseEvent>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QDesktopServices>
@@ -21,7 +21,22 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::M
 
 void MainWindow::closeEvent(QCloseEvent* event)
 {
-    quit();
+    if (not savegame)
+    {
+        event->accept();
+        return;
+    }
+
+    const auto prompt = QMessageBox::question(
+        this,
+        "Warning",
+        "Are you sure you want to quit the application? All unsaved changes will be lost."
+    );
+
+    if ( prompt == QMessageBox::StandardButton::Yes )
+        event->accept();
+    else
+        event->ignore();
 }
 
 void MainWindow::set_up_connections()
@@ -31,7 +46,7 @@ void MainWindow::set_up_connections()
     connect( ui->actionGibberlings, &QAction::triggered, this, &MainWindow::open_discord_g3 );
     connect( ui->actionInfinityEngine, &QAction::triggered, this, &MainWindow::open_discord_ie );
     connect( ui->actionGitHub, &QAction::triggered, this, &MainWindow::open_github_repo );
-    connect( ui->actionQuit, &QAction::triggered, this, &MainWindow::quit );
+    connect( ui->actionQuit, &QAction::triggered, this, QApplication::quit );
     connect( ui->actionOpen, &QAction::triggered, this, &MainWindow::open_file );
 }
 
@@ -58,8 +73,8 @@ void MainWindow::show_about()
         this,
         "About",
         "<h2>EE Save Editor</h2>"
-        "<p>Author: szaumoor, a.k.a. 'RoyalProtector'</p>"
-        "<p>Contact: royalprotector@keemail.me</p>"
+        "<p>Author: szaumoor, a.k.a. 'Kaelyn'</p>"
+        "<p>Contact: kaelyn@tuta.io</p>"
         "<p><a href='https://github.com/szaumoor'>My GitHub</a></p>"
         "<p>Version: 0.1</p>"
         "<p>Powered by C++ and the Qt Framework</p>"
@@ -88,7 +103,7 @@ void MainWindow::open_my_mods()
 
 void MainWindow::open_forum()
 {
-    QDesktopServices::openUrl( QUrl( "https://www.gibberlings3.net/profile/12720-royalprotector/" ) );
+    QDesktopServices::openUrl( QUrl( "https://www.gibberlings3.net/profile/12720-kaelyn/" ) );
 }
 
 void MainWindow::open_discord_g3()
@@ -114,16 +129,4 @@ void MainWindow::open_github_repo()
         qDebug() << "Error opening link to visit github! Link copied to clipboard.";
         QApplication::clipboard()->setText( "https://github.com/szaumoor/EE_IESaveEditor" );
     }
-}
-
-void MainWindow::quit()
-{
-    const auto prompt = QMessageBox::question(
-        this,
-        "Warning",
-        "Are you sure you want to quit the application? All unsaved changes will be lost."
-    );
-
-    if ( prompt == QMessageBox::StandardButton::Yes )
-        QApplication::quit();
 }
