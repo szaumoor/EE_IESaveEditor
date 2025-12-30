@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QWidget>
+#include "../backend/gam_file.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -19,17 +20,16 @@ class MainWindow final : public QMainWindow
 
 public:
     explicit MainWindow( QWidget* parent = nullptr );
-    void closeEvent( QCloseEvent* event );
     ~MainWindow() override;
 
 private:
     Ui::MainWindow* ui;
-
+    void closeEvent( QCloseEvent* event ) override;
+    std::optional<GamFile> savegame { std::nullopt  };
     void set_up_connections();
     void set_up_shortcuts() const;
 
 private slots:
-    void quit();
     void show_about();
     void open_file();
     static void open_forum();
