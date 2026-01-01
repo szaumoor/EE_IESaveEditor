@@ -106,6 +106,8 @@ set(ALL_TEST_SOURCES
     ${GAM_TEST_SOURCES}
     ${STRING_TEST_SOURCES}
     ${BIFF_TEST_SOURCES}
+        src/backend/binary_layouts/bmp.h
+        tests/bitmap_tests.cpp
 )
 
 set(PROJECT_SOURCES
