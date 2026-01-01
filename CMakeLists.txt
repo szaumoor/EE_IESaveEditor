@@ -54,6 +54,8 @@ set(BACKEND_SOURCES
     src/backend/utils/errors.h
     src/backend/utils/errors.cpp
     src/backend/utils/io.h
+        src/backend/binary_layouts/spl.h
+        src/backend/binary_layouts/bam.h
 )
 
 set(TEST_COMMON

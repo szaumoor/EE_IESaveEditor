@@ -15,7 +15,7 @@ public:
     static Possible<KeyFile> open( std::string_view path );
 
 private:
-    explicit KeyFile( std::string_view path ) noexcept;
+    using IEFile::IEFile;
 
     KeyFileHeader m_header{};
     std::vector<BiffEntry> m_biff_entries;
