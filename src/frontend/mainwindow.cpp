@@ -19,6 +19,11 @@ MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::M
     set_up_shortcuts();
 }
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (not savegame)
@@ -62,11 +67,6 @@ void MainWindow::set_up_shortcuts() const
     ui->actionSave->setShortcutContext( Qt::ApplicationShortcut );
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
 void MainWindow::show_about()
 {
     QMessageBox::information(
@@ -96,14 +96,14 @@ void MainWindow::open_file()
         qDebug() << "User selected" << dir;
 }
 
-void MainWindow::open_my_mods()
-{
-    QDesktopServices::openUrl( QUrl( "https://szaumoor.github.io/IEModLinks/" ) );
-}
-
 void MainWindow::open_forum()
 {
     QDesktopServices::openUrl( QUrl( "https://www.gibberlings3.net/profile/12720-kaelyn/" ) );
+}
+
+void MainWindow::open_my_mods()
+{
+    QDesktopServices::openUrl( QUrl( "https://szaumoor.github.io/IEModLinks/" ) );
 }
 
 void MainWindow::open_discord_g3()

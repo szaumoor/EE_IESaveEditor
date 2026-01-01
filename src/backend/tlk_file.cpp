@@ -25,7 +25,7 @@ Possible<string_view> TlkFile::at( const strref index ) const noexcept
 {
     if ( index >= length() )
         return std::unexpected( IEError( IEErrorType::OutOfBounds,
-                                         std::format( "TLK: Index {} is out of bounds [0-{}].", index, length() ) ) );
+                                         std::format( "TLK: Index {} is out of bounds [0-{}].", index, length()-1 ) ) );
     return m_cached_strings[index];
 }
 
@@ -79,8 +79,6 @@ const std::string_view* TlkFile::end() const
 {
     return &m_cached_strings.back();
 }
-
-TlkFile::TlkFile( const string_view path ) noexcept : IEFile( path ) { }
 
 void TlkFile::check_for_malformation() noexcept
 {

@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <ios>
+#include <iostream>
 
 #include "ie_files.h"
 #include "utils/io.h"
@@ -10,6 +11,7 @@ using std::ifstream;
 
 static constexpr std::string_view kBiffSignature( "BIFF" );
 static constexpr std::string_view kBiffFileVersion( "V1  " );
+
 
 Possible<BiffFile> BiffFile::open( const std::string_view path )
 {
@@ -39,12 +41,19 @@ Possible<BiffFile> BiffFile::open( const std::string_view path )
         writer.into( biff.m_tile_entries,
                      header.offset_to_file_entries + sizeof( FileEntry ) * header.count_of_file_entries );
     }
+    // biff.m_spells.reserve(header.count_of_file_entries);
+    for (const auto& entry : biff.m_file_entries)
+    {
+        if (entry.resource_type == ResourceType::FileTypeSpl)
+        {
+            SplHeader spl_header{};
+            writer.into(spl_header, entry.offset);
+            biff.m_spells.push_back( spl_header );
+        }
+    }
 
-    return std::move( biff );
+    return biff;
 }
-
-BiffFile::BiffFile( const std::string_view path ) noexcept
-    : IEFile( path ) { }
 
 void BiffFile::check_for_malformation() noexcept
 {
