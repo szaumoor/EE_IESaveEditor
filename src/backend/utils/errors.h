@@ -40,7 +40,6 @@ public:
      * Returns the error type associated with the error.
      * @return IEErrorType associated with the error.
      */
-    [[nodiscard("Don't ignore error types")]]
     IEErrorType type() const noexcept;
 
 private:

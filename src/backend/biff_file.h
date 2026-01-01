@@ -8,19 +8,22 @@
 #include <string_view>
 #include <vector>
 
+#include "binary_layouts/spl.h"
+
 class BiffFile final : IEFile
 {
 public:
     static Possible<BiffFile> open( std::string_view path );
 
 private:
-    explicit BiffFile( std::string_view path ) noexcept;
+    using IEFile::IEFile;
+    void check_for_malformation() noexcept override;
 
+public:
     BiffHeader m_header{};
     std::vector<FileEntry> m_file_entries;
     std::vector<TileEntry> m_tile_entries;
-
-    void check_for_malformation() noexcept override;
+    std::vector<SplHeader> m_spells;
 };
 
 #endif // BIFF_FILES_H

@@ -6,10 +6,8 @@
 #include "utils/aliases.h"
 #include "utils/errors.h"
 
-#include <expected>
 #include <string_view>
 #include <vector>
-
 
 class TlkFile final : public IEFile
 {
@@ -24,7 +22,7 @@ public:
     [[nodiscard]] const std::string_view* end() const;
 
 private:
-    explicit TlkFile( std::string_view path ) noexcept;
+    using IEFile::IEFile;
 
     TlkFileHeader m_header{};
     std::vector<char> m_string_data;

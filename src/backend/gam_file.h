@@ -18,7 +18,7 @@ public:
     bool save_gam();
 
 private:
-    explicit GamFile( std::string_view path ) noexcept;
+    using IEFile::IEFile;
 
     GamHeader m_header{};
     std::vector<GamCharacterData> m_party_members;
