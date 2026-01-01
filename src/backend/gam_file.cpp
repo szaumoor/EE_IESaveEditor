@@ -64,8 +64,6 @@ bool GamFile::save_gam()
     return true;
 }
 
-GamFile::GamFile( const std::string_view path ) noexcept : IEFile( path ) { }
-
 void GamFile::check_for_malformation() noexcept
 {
     const bool valid_signature = m_header.signature.to_string() == kGamFileSig;

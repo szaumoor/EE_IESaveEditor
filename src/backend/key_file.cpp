@@ -36,8 +36,6 @@ Possible<KeyFile> KeyFile::open( const string_view path )
     return key;
 }
 
-KeyFile::KeyFile( const string_view path ) noexcept : IEFile( path ) { }
-
 void KeyFile::check_for_malformation() noexcept
 {
     const bool valid_signature = m_header.signature.to_string() == kKeyFileSig;
