@@ -17,14 +17,12 @@ struct BmpFileHeader
 
 struct BmpOs2Header
 {
-    u16 header_size;           
+    u32 header_size;
     u16 width;                 
     u16 height;                
     u16 planes;                
     u16 bits_per_pixel;        
 };
-
-using BmpOsData = BmpOs2Header;
 
 struct BmpV3Header
 {
@@ -84,23 +82,25 @@ struct BmpV4Header
 
 struct BmpV5Header
 {
-    
     u32 header_size;           
     i32 width;                 
     i32 height;                
     u16 planes;                
-    u16 bits_per_pixel;        
+    u16 bits_per_pixel;
+
     u32 compression;           
     u32 image_size;            
     i32 x_pixels_per_meter;    
     i32 y_pixels_per_meter;    
     u32 colors_used;           
-    u32 colors_important;      
+    u32 colors_important;
+
     u32 red_mask;              
     u32 green_mask;            
     u32 blue_mask;             
     u32 alpha_mask;            
-    u32 color_space_type;      
+    u32 color_space_type;
+
     i32 red_x;                 
     i32 red_y;                 
     i32 red_z;                 
@@ -109,12 +109,12 @@ struct BmpV5Header
     i32 green_z;               
     i32 blue_x;                
     i32 blue_y;                
-    i32 blue_z;                
+    i32 blue_z;
+
     u32 gamma_red;             
     u32 gamma_green;           
-    u32 gamma_blue;            
+    u32 gamma_blue;
 
-    
     u32 intent;                
     u32 profile_data;          
     u32 profile_size;          
@@ -123,9 +123,10 @@ struct BmpV5Header
 
 #pragma pack(pop)
 
-static_assert(sizeof(BmpFileHeader) == 0x0E);
-static_assert(sizeof(BmpOs2Header) == 10);
-static_assert(sizeof(BmpV3Header) == 38);
+static_assert(sizeof(BmpFileHeader) == 14);
+static_assert(sizeof(BmpOs2Header) == 12);
+static_assert(sizeof(BmpV3Header) == 40);
+static_assert(sizeof(BmpV4Header) == 108);
 static_assert(sizeof(BmpV5Header) == 124);
 
 #endif 
