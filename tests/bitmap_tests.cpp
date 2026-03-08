@@ -3,7 +3,6 @@
 #include <filesystem>
 #include <fstream>
 #include <string_view>
-#include <print>
 
 #include "../src/backend/binary_layouts/bmp.h"
 #include "../src/backend/utils/io.h"
