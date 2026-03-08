@@ -1,22 +1,38 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "../backend/biff_file.h"
+#include "../backend/key_file.h"
+
+#include <QClipboard>
 #include <QCloseEvent>
+#include <QDesktopServices>
+#include <QFileDialog>
 #include <QMainWindow>
 #include <QMessageBox>
-#include <QDesktopServices>
-#include <QClipboard>
-#include <QFileDialog>
 #include <QString>
+#include <QTimer>
 #include <QWidget>
 
+#include <tuple>
+
+#include "gui_helpers.h"
+
+class KeyFile;
+class BiffFile;
+
+using ResourceResults = std::tuple<
+    Possible<TlkFile>,
+    Possible<BiffFile>,
+    Possible<KeyFile>
+>;
 
 MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::MainWindow )
 {
     ui->setupUi( this );
-
     set_up_connections();
     set_up_shortcuts();
+    QTimer::singleShot(0, this, &MainWindow::reload_resources);
 }
 
 MainWindow::~MainWindow()
@@ -47,12 +63,14 @@ void MainWindow::closeEvent(QCloseEvent* event)
 void MainWindow::set_up_connections()
 {
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::show_about );
-    connect( ui->actionForum, &QAction::triggered, this, &MainWindow::open_forum );
+    connect( ui->actionModForum, &QAction::triggered, this, &MainWindow::open_forum );
     connect( ui->actionGibberlings, &QAction::triggered, this, &MainWindow::open_discord_g3 );
     connect( ui->actionInfinityEngine, &QAction::triggered, this, &MainWindow::open_discord_ie );
     connect( ui->actionGitHub, &QAction::triggered, this, &MainWindow::open_github_repo );
     connect( ui->actionQuit, &QAction::triggered, this, QApplication::quit );
     connect( ui->actionOpen, &QAction::triggered, this, &MainWindow::open_file );
+    connect( ui-> openFromToolbar, &QAction::triggered, this, &MainWindow::open_file );
+    connect( ui->actionReload, &QAction::triggered, this, &MainWindow::reload_resources );
 }
 
 void MainWindow::set_up_shortcuts() const
@@ -94,6 +112,31 @@ void MainWindow::open_file()
         qDebug() << "User cancelled";
     else
         qDebug() << "User selected" << dir;
+}
+
+void MainWindow::reload_resources()
+{
+    run_task_with_progress<ResourceResults>(this,{ui->menubar, ui->toolBar},"Loading resources...",
+        [] {
+            return std::make_tuple(
+                TlkFile::open(TEST_RES_DIR "/dialog.tlk"),
+                BiffFile::open(TEST_RES_DIR "/Spells.bif"),
+                KeyFile::open(TEST_RES_DIR "/chitin.key")
+            );
+        },
+        [this](ResourceResults results)
+        {
+            auto [get_tlk, biff, key] = results;
+
+            if (get_tlk)
+            {
+                qInfo() << "TLK OK";
+                tlk.emplace(get_tlk.value());
+            }
+
+            if (biff) qInfo() << "BIFF OK";
+            if (key)  qInfo() << "KEY OK";
+        });
 }
 
 void MainWindow::open_forum()

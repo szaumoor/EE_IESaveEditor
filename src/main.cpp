@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QLocale>
 #include <QScreen>
+#include <QThread>
 #include <QTranslator>
 
 #include "frontend/mainwindow.h"
@@ -14,6 +15,8 @@ inline void center_window( MainWindow& window )
 int main( int argc, char* argv[] )
 {
     QApplication app( argc, argv );
+    QThread::currentThread()->setObjectName( "Main thread" );
+    qInfo() << "Starting application..." << "Started" << QThread::currentThread();
 
     QTranslator translator; // auto-generated code for translations, unused for now
     const QStringList uiLanguages = QLocale::system().uiLanguages();
@@ -24,7 +27,6 @@ int main( int argc, char* argv[] )
             QApplication::installTranslator( &translator );
         break;
     }
-
     MainWindow window;
     center_window( window );
     window.show();

@@ -17,7 +17,7 @@ using EffectVariant = std::variant<EmbeddedEffFileV1, EmbeddedEffFileV2>;
  *  of the save editor. Since both versions differ quite significantly in presentation
  *  this provides a common interface to access the important data.
  */
-class Effect
+class Effect final
 {
 public:
     static Effect from( const EmbeddedEffFileV1& eff );
@@ -46,7 +46,7 @@ private:
     Resref resource{};
 };
 
-class CreFile
+class CreFile final
 {
 public:
     static CreFile read( std::ifstream& file, u32 offset );

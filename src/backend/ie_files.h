@@ -7,18 +7,17 @@ class IEFile
 {
 public:
     virtual ~IEFile() = default;
+protected:
+    explicit IEFile( const std::string_view path ) noexcept
+        : m_path( path ) { }
+
+    virtual void check_for_malformation() noexcept = 0;
 
     [[nodiscard]]
     explicit operator bool() const noexcept
     {
         return m_good;
     }
-
-protected:
-    explicit IEFile( const std::string_view path ) noexcept
-        : m_path( path ) { }
-
-    virtual void check_for_malformation() noexcept = 0;
 
     bool m_good = false;
     const std::string_view m_path;
