@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 #include <QWidget>
+
 #include "../backend/gam_file.h"
+#include "../backend/tlk_file.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -21,6 +23,7 @@ class MainWindow final : public QMainWindow
 public:
     explicit MainWindow( QWidget* parent = nullptr );
     ~MainWindow() override;
+    std::optional<TlkFile> tlk;
 
 private:
     Ui::MainWindow* ui;
@@ -32,6 +35,7 @@ private:
 private slots:
     void show_about();
     void open_file();
+    void reload_resources();
     static void open_forum();
     static void open_my_mods();
     static void open_discord_g3();

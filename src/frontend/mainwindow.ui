@@ -32,6 +32,15 @@
   <property name="toolTip">
    <string>A save editor for the Enhanced Editions of the IE games</string>
   </property>
+  <property name="iconSize">
+   <size>
+    <width>36</width>
+    <height>36</height>
+   </size>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -40,6 +49,9 @@
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -72,20 +84,34 @@
      <addaction name="actionGibberlings"/>
      <addaction name="actionInfinityEngine"/>
     </widget>
+    <widget class="QMenu" name="menuForum">
+     <property name="title">
+      <string>Forum</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/g3.png</normaloff>:/img/g3.png</iconset>
+     </property>
+     <addaction name="actionMyProfile"/>
+     <addaction name="actionModForum"/>
+    </widget>
     <addaction name="actionAbout"/>
     <addaction name="menuDiscord"/>
-    <addaction name="actionForum"/>
+    <addaction name="menuForum"/>
     <addaction name="actionGitHub"/>
-    <addaction name="actionRoyalProtector_s_Mods"/>
+    <addaction name="actionMyMods"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="minimumSize">
     <size>
      <width>0</width>
-     <height>50</height>
+     <height>0</height>
     </size>
    </property>
    <property name="movable">
@@ -122,11 +148,6 @@
    </property>
    <property name="text">
     <string>About...</string>
-   </property>
-  </action>
-  <action name="actionForum">
-   <property name="text">
-    <string>Forum...</string>
    </property>
   </action>
   <action name="actionGibberlings">
@@ -174,9 +195,9 @@
     <string>Quit</string>
    </property>
   </action>
-  <action name="actionRoyalProtector_s_Mods">
+  <action name="actionMyMods">
    <property name="text">
-    <string>RoyalProtector's Mods</string>
+    <string>My Mods</string>
    </property>
   </action>
   <action name="openFromToolbar">
@@ -240,6 +261,16 @@
    </property>
    <property name="text">
     <string>Settings...</string>
+   </property>
+  </action>
+  <action name="actionMyProfile">
+   <property name="text">
+    <string>My profile...</string>
+   </property>
+  </action>
+  <action name="actionModForum">
+   <property name="text">
+    <string>Mod Forum</string>
    </property>
   </action>
  </widget>
