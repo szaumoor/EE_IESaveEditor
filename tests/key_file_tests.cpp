@@ -1,39 +1,39 @@
 #include <gtest/gtest.h>
 
-#include <filesystem>
-#include <fstream>
 #include <string_view>
 
-#include "../src/backend/utils/errors.h"
 #include "../src/backend/key_file.h"
+#include "../src/backend/utils/errors.h"
 
 #include "utils/tests_helper.h"
 
-static constexpr std::string_view kRealKey("../tests/res/chitin.key");
+
+static constexpr std::string_view kRealKey( TEST_RES_DIR "/chitin.key" );
 
 TEST( KeyFileTest, KeyIsUnreadableTest )
 {
     const auto key = KeyFile::open( "nonexistent.key" );
-    ASSERT_TRUE( !key && key.error().type() == IEErrorType::Unreadable );
+    ASSERT_TRUE( not key && key.error().type() == IEErrorType::Unreadable );
 }
 
-TEST(KeyFileTest, KeyIsMalformedVersion)
+TEST( KeyFileTest, KeyIsMalformedVersion )
 {
-    const TempCreator temp("invalid_version.key", "KEY ", "Invl");
+    const TempCreator temp( "invalid_version.key", "KEY ", "Invl" );
     const auto key = KeyFile::open( temp.name );
-    ASSERT_TRUE( !key && key.error().type() == IEErrorType::Malformed );
+    ASSERT_TRUE( not key && key.error().type() == IEErrorType::Malformed );
 }
 
 TEST( KeyFileTest, KeyIsMalformedSignature )
 {
     const TempCreator temp( "invalid_signature.key", "XXXX", "V1  " );
     const auto key = KeyFile::open( temp.name );
-    ASSERT_TRUE( !key && key.error().type() == IEErrorType::Malformed );
+    ASSERT_TRUE( not key && key.error().type() == IEErrorType::Malformed );
 }
 
 TEST( KeyFileTest, RealKeyIsReadableAndValid )
 {
-    ASSERT_TRUE( KeyFile::open(kRealKey).has_value() );
+    const auto key = KeyFile::open( kRealKey );
+    ASSERT_TRUE( key.has_value() );
 }
 
 TEST( KeyFileTest, KeyIsReadableAndValid )

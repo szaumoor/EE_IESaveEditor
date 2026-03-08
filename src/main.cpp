@@ -1,7 +1,8 @@
 #include <QApplication>
-// #include <QLocale>
+#include <QLocale>
 #include <QScreen>
-// #include <QTranslator>
+#include <QThread>
+#include <QTranslator>
 
 #include "frontend/mainwindow.h"
 
@@ -14,18 +15,20 @@ inline void center_window( MainWindow& window )
 int main( int argc, char* argv[] )
 {
     QApplication app( argc, argv );
+    QThread::currentThread()->setObjectName( "Main thread" );
+    qInfo() << "Starting application..." << "Started" << QThread::currentThread();
 
-    // QTranslator translator;
-    // if (translator.load(QLocale(), "app", "_", ":src/frontend/translations")) {
-    //     QApplication::installTranslator(&translator);
-    // }
-    //
-    // auto a = QCoreApplication::translate("Menu", "FILE");
-    // qDebug() << a;
-
+    QTranslator translator; // auto-generated code for translations, unused for now
+    const QStringList uiLanguages = QLocale::system().uiLanguages();
+    for ( const QString &locale : uiLanguages )
+    {
+        const QString baseName = "EE_SaveEditor_" + QLocale( locale ).name();
+        if ( translator.load( ":/translations/" + baseName ) )
+            QApplication::installTranslator( &translator );
+        break;
+    }
     MainWindow window;
     center_window( window );
     window.show();
-
     return QApplication::exec();
 }

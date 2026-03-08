@@ -3,7 +3,6 @@
 
 #include "binary_layouts/cre.h"
 #include "utils/aliases.h"
-#include "utils/errors.h"
 
 #include <variant>
 #include <vector>
@@ -18,7 +17,7 @@ using EffectVariant = std::variant<EmbeddedEffFileV1, EmbeddedEffFileV2>;
  *  of the save editor. Since both versions differ quite significantly in presentation
  *  this provides a common interface to access the important data.
  */
-class Effect
+class Effect final
 {
 public:
     static Effect from( const EmbeddedEffFileV1& eff );
@@ -47,7 +46,7 @@ private:
     Resref resource{};
 };
 
-class CreFile
+class CreFile final
 {
 public:
     static CreFile read( std::ifstream& file, u32 offset );
@@ -57,22 +56,24 @@ public:
 private:
     CreHeader _header{};
 
-    std::vector<CreKnownSpell> _known_spells;
-    std::vector<CreSpellMemorizationInfo> _memorization_infos;
-    std::vector<CreSpellMemorizedSpell> _memorized_spells;
-    std::vector<EffectVariant> _effects;
-    std::vector<CreInventoryItem> _items;
+    std::vector<CreKnownSpell> m_known_spells;
+    std::vector<CreSpellMemorizationInfo> m_memorization_infos;
+    std::vector<CreSpellMemorizedSpell> m_memorized_spells;
+    std::vector<EffectVariant> m_effects;
+    std::vector<CreInventoryItem> m_items;
 
-    CreItemSlots _item_slots{};
+    CreItemSlots m_item_slots{};
 
     inline void resize_vecs() noexcept;
 
     template<typename T>
-    void read_effects(CreFile& cre, const StructWriter& writer)
+    void read_effects( CreFile& cre, const StructWriter& writer )
     {
-        std::vector<T> tmp(cre._header.effects_count);
-        writer.into(tmp);
-        cre._effects.insert(cre._effects.end(), tmp.begin(), tmp.end());
+        static_assert(std::is_same_v<T, EmbeddedEffFileV1> || std::is_same_v<T, EmbeddedEffFileV2>);
+
+        std::vector<T> tmp( cre._header.effects_count );
+        writer.into( tmp );
+        cre.m_effects.insert( cre.m_effects.end(), tmp.begin(), tmp.end() );
     }
 };
 

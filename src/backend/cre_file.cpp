@@ -1,13 +1,10 @@
-#include "utils/aliases.h"
 #include "cre_file.h"
+#include "utils/aliases.h"
+#include "utils/io.h"
 
-#include <expected>
 #include <fstream>
-#include <ranges>
 #include <utility>
 #include <vector>
-
-#include "utils/io.h"
 
 Effect Effect::from( const EmbeddedEffFileV1& eff )
 {
@@ -25,14 +22,6 @@ Effect Effect::from( const EmbeddedEffFileV2& eff )
     return effect;
 }
 
-void CreFile::resize_vecs() noexcept
-{
-    _known_spells.resize( _header.known_spells_count );
-    _memorization_infos.resize( _header.memorization_count );
-    _memorized_spells.resize( _header.memorized_count );
-    _items.resize( _header.items_count );
-}
-
 CreFile CreFile::read( std::ifstream& file, const u32 offset )
 {
     CreFile cre;
@@ -42,21 +31,21 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 
     cre.resize_vecs();
 
-    writer.into( cre._known_spells, offset + cre._header.known_spells_offset );
-    writer.into( cre._memorization_infos, offset + header.memorization_offset );
-    writer.into( cre._memorized_spells, offset + cre._header.memorized_offset );
-    writer.into( cre._items, offset + cre._header.items_offset );
-    writer.into( cre._item_slots, offset + cre._header.item_slots_offset );
+    writer.into( cre.m_known_spells, offset + cre._header.known_spells_offset );
+    writer.into( cre.m_memorization_infos, offset + header.memorization_offset );
+    writer.into( cre.m_memorized_spells, offset + cre._header.memorized_offset );
+    writer.into( cre.m_items, offset + cre._header.items_offset );
+    writer.into( cre.m_item_slots, offset + cre._header.item_slots_offset );
 
     file.seekg( offset + cre._header.effects_offset, std::ios::beg );
 
-    switch (header.eff_structure_version)
+    switch ( header.eff_structure_version )
     {
-        case 0: [[unlikely]]
-            cre.read_effects<EmbeddedEffFileV1>(cre, writer);
+        [[unlikely]] case 0:
+            cre.read_effects<EmbeddedEffFileV1>( cre, writer );
             break;
-        case 1: [[likely]]
-            cre.read_effects<EmbeddedEffFileV2>(cre, writer);
+        [[likely]] case 1:
+            cre.read_effects<EmbeddedEffFileV2>( cre, writer );
             break;
         default:
             std::unreachable(); // should check for corrupt values anyway
@@ -67,15 +56,22 @@ CreFile CreFile::read( std::ifstream& file, const u32 offset )
 
 std::vector<Effect> CreFile::effects()
 {
-
     std::vector<Effect> out;
-    out.reserve( _effects.size() );
+    out.reserve( m_effects.size() );
 
-    for (const auto& eff : _effects)
+    for ( const auto& eff : m_effects )
     {
-        std::visit([&](const auto& instance) {
-            out.push_back(std::move(Effect::from(instance)));
-        }, eff);
+        std::visit( [&]( const auto& instance ) {
+            out.push_back( std::move( Effect::from( instance ) ) );
+        }, eff );
     }
     return out;
+}
+
+void CreFile::resize_vecs() noexcept
+{
+    m_known_spells.resize( _header.known_spells_count );
+    m_memorization_infos.resize( _header.memorization_count );
+    m_memorized_spells.resize( _header.memorized_count );
+    m_items.resize( _header.items_count );
 }

@@ -1,45 +1,32 @@
 #ifndef TLK_FILE_H
 #define TLK_FILE_H
 
-#include "binary_layouts/tlk.h"
 #include "ie_files.h"
+#include "binary_layouts/tlk.h"
 #include "utils/aliases.h"
 #include "utils/errors.h"
 
-#include <expected>
 #include <string_view>
 #include <vector>
-
-class TlkFile;
-using TlkLookup       = std::expected<std::string_view, IEError>;
-using PossibleTlkFile = std::expected<TlkFile, IEError>;
 
 class TlkFile final : public IEFile
 {
 public:
-    [[nodiscard]]
-    TlkLookup at_index( strref index ) const noexcept;
+    Possible<std::string_view> at( strref index ) const noexcept; // NOLINT(*-use-nodiscard)
+    Possible<std::string_view> operator[]( strref index ) const noexcept;
 
-    [[nodiscard]]
-    TlkLookup operator[]( strref index ) const noexcept;
+    static Possible<TlkFile> open( std::string_view path );
 
-    [[nodiscard]]
-    u32 length() const noexcept;
-
-    [[nodiscard]]
-    static PossibleTlkFile open( std::string_view path );
-
-    [[nodiscard]]
-    const std::string_view* begin() const;
-    [[nodiscard]]
-    const std::string_view* end() const;
+    [[nodiscard]] u32 length() const noexcept;
+    [[nodiscard]] const std::string_view* begin() const;
+    [[nodiscard]] const std::string_view* end() const;
 
 private:
-    explicit TlkFile( std::string_view path ) noexcept;
+    using IEFile::IEFile;
 
-    TlkFileHeader _header{};
-    std::vector<char> _string_data;
-    std::vector<std::string_view> _cached_strings;
+    TlkFileHeader m_header{};
+    std::vector<char> m_string_data;
+    std::vector<std::string_view> m_cached_strings;
 
     void check_for_malformation() noexcept override;
 };
