@@ -4,7 +4,7 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
-enum ResourceType : u16
+enum class ResourceType : u16
 {
     NotFound      = 0x0000,
     FileTypeBmp   = 0x0001,

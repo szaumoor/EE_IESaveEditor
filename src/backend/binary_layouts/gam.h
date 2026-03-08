@@ -145,12 +145,12 @@ struct GamLocationInfo
 #pragma pack(pop)
 
 static_assert( sizeof( GamCharacterStats ) == 116, "GamCharacterStats size is incorrect" );
-static_assert( sizeof( GamHeader ) == 180, "GamHeader size is incorrect" );
-static_assert( sizeof( GamCharacterData ) == 352, "GamCharacterData size is incorrect" );
-static_assert( sizeof( GamHeader ) == 180, "GamHeader size is incorrect" );
+static_assert( sizeof( GamHeader )         == 180, "GamHeader size is incorrect" );
+static_assert( sizeof( GamCharacterData )  == 352, "GamCharacterData size is incorrect" );
+static_assert( sizeof( GamHeader )         == 180, "GamHeader size is incorrect" );
 static_assert( sizeof( GamGlobalVariable ) == 84, "GamGlobalVariable size is incorrect" );
-static_assert( sizeof( GamJournalEntry ) == 12, "GamJournalEntry size is incorrect" );
-static_assert( sizeof( GamFamiliarInfo ) == 400, "GamFamiliarInfo size is incorrect" );
-static_assert( sizeof( GamLocationInfo ) == 12, "GamLocationInfo size is incorrect" );
+static_assert( sizeof( GamJournalEntry )   == 12, "GamJournalEntry size is incorrect" );
+static_assert( sizeof( GamFamiliarInfo )   == 400, "GamFamiliarInfo size is incorrect" );
+static_assert( sizeof( GamLocationInfo )   == 12, "GamLocationInfo size is incorrect" );
 
 #endif //EESAVEEDITOR_GAM_H

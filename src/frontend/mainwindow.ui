@@ -25,11 +25,33 @@
   <property name="windowTitle">
    <string notr="true">EE Save Editor</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../../resources/resource.qrc">
+    <normaloff>:/img/shield.ico</normaloff>:/img/shield.ico</iconset>
+  </property>
   <property name="toolTip">
    <string>A save editor for the Enhanced Editions of the IE games</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <property name="iconSize">
+   <size>
+    <width>36</width>
+    <height>36</height>
+   </size>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>0</x>
@@ -38,11 +60,13 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuSome_text">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
     <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSettings"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -53,18 +77,62 @@
      <property name="title">
       <string>Discord</string>
      </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/discord.png</normaloff>:/img/discord.png</iconset>
+     </property>
      <addaction name="actionGibberlings"/>
      <addaction name="actionInfinityEngine"/>
     </widget>
+    <widget class="QMenu" name="menuForum">
+     <property name="title">
+      <string>Forum</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/g3.png</normaloff>:/img/g3.png</iconset>
+     </property>
+     <addaction name="actionMyProfile"/>
+     <addaction name="actionModForum"/>
+    </widget>
     <addaction name="actionAbout"/>
     <addaction name="menuDiscord"/>
-    <addaction name="actionForum"/>
+    <addaction name="menuForum"/>
     <addaction name="actionGitHub"/>
+    <addaction name="actionMyMods"/>
    </widget>
-   <addaction name="menuSome_text"/>
+   <addaction name="menuFile"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::ToolBarArea::NoToolBarArea</set>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="openFromToolbar"/>
+   <addaction name="saveFromToolbar"/>
+   <addaction name="actionReload"/>
+  </widget>
   <action name="actionOpen">
    <property name="icon">
     <iconset theme="QIcon::ThemeIcon::FolderNew"/>
@@ -74,16 +142,19 @@
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/information.png</normaloff>:/img/information.png</iconset>
+   </property>
    <property name="text">
     <string>About...</string>
    </property>
   </action>
-  <action name="actionForum">
-   <property name="text">
-    <string>Forum...</string>
-   </property>
-  </action>
   <action name="actionGibberlings">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/g3.png</normaloff>:/img/g3.png</iconset>
+   </property>
    <property name="text">
     <string>Gibberlings3...</string>
    </property>
@@ -92,6 +163,10 @@
    </property>
   </action>
   <action name="actionInfinityEngine">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/bg.png</normaloff>:/img/bg.png</iconset>
+   </property>
    <property name="text">
     <string>Infinity Engine...</string>
    </property>
@@ -100,19 +175,107 @@
    </property>
   </action>
   <action name="actionGitHub">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/github.png</normaloff>:/img/github.png</iconset>
+   </property>
    <property name="text">
     <string>GitHub...</string>
+   </property>
+   <property name="toolTip">
+    <string>Discord servers where you can find me and many other enthusiasts of the games</string>
    </property>
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset theme="emblem-unreadable"/>
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/out.png</normaloff>:/img/out.png</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
    </property>
   </action>
+  <action name="actionMyMods">
+   <property name="text">
+    <string>My Mods</string>
+   </property>
+  </action>
+  <action name="openFromToolbar">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/open-folder.png</normaloff>:/img/open-folder.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a saved game</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="saveFromToolbar">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/diskette.png</normaloff>:/img/diskette.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save changes made to the game</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/diskette.png</normaloff>:/img/diskette.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save...</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/refresh_2.png</normaloff>:/img/refresh_2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reload</string>
+   </property>
+   <property name="toolTip">
+    <string>Reload the game's resources</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/setting.png</normaloff>:/img/setting.png</iconset>
+   </property>
+   <property name="text">
+    <string>Settings...</string>
+   </property>
+  </action>
+  <action name="actionMyProfile">
+   <property name="text">
+    <string>My profile...</string>
+   </property>
+  </action>
+  <action name="actionModForum">
+   <property name="text">
+    <string>Mod Forum</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
  <connections/>
 </ui>
