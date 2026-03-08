@@ -6,6 +6,11 @@
 
 #pragma pack(push, 1)
 
+enum struct BmpHeaderSize : u32
+{
+    v3 = 40, v4 = 108, v5 = 124
+};
+
 struct BmpFileHeader
 {
     CharArray<2>  signature;          
@@ -42,8 +47,6 @@ struct BmpV3Header
     u32 colors_used;           
     u32 colors_important;      
 };
-
-
 
 struct BmpV4Header
 {
