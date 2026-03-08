@@ -1,10 +1,9 @@
-#include "ie_files.h"
 #include "tlk_file.h"
-
-#include <algorithm>
+#include "ie_files.h"
 
 #include "utils/io.h"
 
+#include <algorithm>
 #include <expected>
 #include <format>
 #include <fstream>

@@ -20,6 +20,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Concurrent)
 
 enable_testing()
 
@@ -54,8 +55,10 @@ set(BACKEND_SOURCES
     src/backend/utils/errors.h
     src/backend/utils/errors.cpp
     src/backend/utils/io.h
-        src/backend/binary_layouts/spl.h
-        src/backend/binary_layouts/bam.h
+    src/backend/binary_layouts/spl.h
+    src/backend/binary_layouts/bam.h
+        src/backend/game_resources.cpp
+        src/backend/game_resources.h
 )
 
 set(TEST_COMMON
@@ -106,8 +109,11 @@ set(ALL_TEST_SOURCES
     ${GAM_TEST_SOURCES}
     ${STRING_TEST_SOURCES}
     ${BIFF_TEST_SOURCES}
-        src/backend/binary_layouts/bmp.h
-        tests/bitmap_tests.cpp
+    src/backend/binary_layouts/bmp.h
+    tests/bitmap_tests.cpp
+        src/backend/game_resources.cpp
+        src/backend/game_resources.h
+        src/backend/binary_layouts/itm.h
 )
 
 set(PROJECT_SOURCES
@@ -118,7 +124,8 @@ set(PROJECT_SOURCES
 )
 
 
-add_library (backend ${BACKEND_SOURCES})
+add_library (backend ${BACKEND_SOURCES}
+        src/backend/binary_layouts/itm.h)
 
 set(FRONTEND_SOURCES
     ${BACKEND_SOURCES}
@@ -127,6 +134,8 @@ set(FRONTEND_SOURCES
     src/frontend/mainwindow.h
     src/frontend/mainwindow.ui
     ${RES_FILES}
+    src/frontend/gui_helpers.h
+        src/frontend/disable_guard.h
 )
 
 add_executable(tlk_file_test
@@ -216,6 +225,7 @@ else()
 endif()
 
 target_link_libraries(EE_SaveEditor PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(EE_SaveEditor PRIVATE Qt6::Concurrent)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
