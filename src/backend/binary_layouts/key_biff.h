@@ -111,7 +111,6 @@ struct ResourceEntry
 
 #pragma pack(pop)
 
-
 static_assert( sizeof( BiffHeader ) == 20, "BiffHeader size is incorrect" );
 static_assert( sizeof( BiffEntry ) == 12, "BiffEntry size is incorrect" );
 static_assert( sizeof( ResourceEntry ) == 14, "ResourceEntry size is incorrect" );
