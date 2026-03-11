@@ -17,3 +17,4 @@ out
 build
 .qtcreator
 .clang-format
+*.ui.autosave
