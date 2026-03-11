@@ -5,8 +5,6 @@
 
 #include <string>
 
-using strref = u32;
-
 #pragma pack(push, 1)
 
 /**

@@ -1,10 +1,10 @@
 #ifndef EE_SAVEEDITOR_ITM_H
 #define EE_SAVEEDITOR_ITM_H
 
-#pragma pack(push,1)
-
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
+
+#pragma pack(push,1)
 
 struct ItmHeader {
     CharArray<4> signature;
@@ -44,11 +44,11 @@ struct ItmHeader {
 
 static_assert(offsetof(ItmHeader, signature) == 0x0000, "signature offset mismatch");
 static_assert(offsetof(ItmHeader, version) == 0x0004, "version offset mismatch");
-static_assert(offsetof(ItmHeader, replacement_item_resref) == 0x0010, "replacement_item_resref offset mismatch");
+static_assert(offsetof(ItmHeader, replacement_item) == 0x0010, "replacement item offset mismatch");
 static_assert(offsetof(ItmHeader, flags) == 0x0018, "flags offset mismatch");
 static_assert(offsetof(ItmHeader, min_level) == 0x0024, "min_level offset mismatch");
 static_assert(offsetof(ItmHeader, price) == 0x0034, "price offset mismatch");
-static_assert(offsetof(ItmHeader, inventory_icon_resref) == 0x003A, "inventory icon offset mismatch");
+static_assert(offsetof(ItmHeader, inventory_icon) == 0x003A, "inventory icon offset mismatch");
 static_assert(offsetof(ItmHeader, weight_dword) == 0x004C, "weight offset mismatch");
 static_assert(offsetof(ItmHeader, enchantment) == 0x0060, "enchantment offset mismatch");
 

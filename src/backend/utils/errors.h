@@ -5,7 +5,9 @@
 #include <string_view>
 
 #include "aliases.h"
+#include "../ie_string.h"
 
+class IEFile;
 /**
  * Enum class that provide constants for different errors related to
  * interacting with the IE files.
@@ -47,12 +49,11 @@ private:
     std::string_view m_error_message;
 };
 
-template<typename IEType>
-class [[nodiscard("Do not ignore std::expected")]] Possible : public std::expected<IEType, IEError>
+template<typename T>
+class [[nodiscard("Do not ignore a Possible (expected) value")]] Possible : public std::expected<T, IEError>
 {
-    using std::expected<IEType, IEError>::expected;
+    static_assert( std::is_base_of_v<IEFile, T> || std::same_as<T, IEStringView>);
+    using std::expected<T, IEError>::expected;
 };
-
-// using Possible = std::expected<IEType, IEError>;
 
 #endif //EESAVEEDITOR_ERRORS_H

@@ -1,7 +1,6 @@
 #ifndef EE_SAVEEDITOR_UI_HELPERS_H
 #define EE_SAVEEDITOR_UI_HELPERS_H
 
-#include <QFuture>
 #include <QFutureWatcher>
 #include <QProgressDialog>
 #include <QtConcurrentRun>
@@ -18,15 +17,15 @@ inline auto infinite_progress_dialog( QWidget* parent, const QString& message )
 }
 
 template <typename Result, typename Task, typename OnFinished>
-void run_task_with_progress(QWidget* parent, const std::initializer_list<QWidget*> managed_widgets, const QString& message, Task&& task, OnFinished&& onFinished)
+void run_task_with_progress(QWidget* parent, const std::initializer_list<QWidget*> managed_widgets,
+                            const QString& message, Task&& task, OnFinished&& onFinished)
 {
     auto* ui_guard = new UiDisableGuard(parent, managed_widgets);
     auto* progress = infinite_progress_dialog(parent, message);
     progress->show();
 
-    QFuture<Result> future = QtConcurrent::run(std::forward<Task>(task));
+    auto future = QtConcurrent::run(std::forward<Task>(task));
     auto* watcher = new QFutureWatcher<Result>(parent);
-
     QObject::connect(watcher, &QFutureWatcher<Result>::finished, parent,
     [watcher, progress, onFinished = std::forward<OnFinished>(onFinished), ui_guard]() mutable
         {

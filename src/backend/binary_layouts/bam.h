@@ -55,8 +55,8 @@ struct BamV2DataBlock
 
 
 static_assert(sizeof(BamV2CycleEntry) == 0x04);
-static_assert(sizeof(BamV2DataBlock) == 0x1C);
+static_assert(sizeof(BamV2DataBlock)  == 0x1C);
 static_assert(sizeof(BamV2FrameEntry) == 0x0C);
-static_assert(sizeof(BamV2Header) == 0x20);
+static_assert(sizeof(BamV2Header)     == 0x20);
 
 #endif //EE_SAVEEDITOR_BAM_H

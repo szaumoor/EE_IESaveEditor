@@ -17,6 +17,12 @@ public:
     static Possible<GamFile> open( std::string_view path );
     bool save_gam();
 
+    [[nodiscard]]
+    auto party_members() const
+    {
+        return m_party_members;
+    }
+
 private:
     using IEFile::IEFile;
 

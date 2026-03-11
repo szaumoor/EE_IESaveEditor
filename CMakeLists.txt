@@ -57,8 +57,9 @@ set(BACKEND_SOURCES
     src/backend/utils/io.h
     src/backend/binary_layouts/spl.h
     src/backend/binary_layouts/bam.h
-        src/backend/game_resources.cpp
-        src/backend/game_resources.h
+    src/backend/game_resources.cpp
+    src/backend/game_resources.h
+        src/backend/ie_string.h
 )
 
 set(TEST_COMMON
@@ -111,9 +112,10 @@ set(ALL_TEST_SOURCES
     ${BIFF_TEST_SOURCES}
     src/backend/binary_layouts/bmp.h
     tests/bitmap_tests.cpp
-        src/backend/game_resources.cpp
-        src/backend/game_resources.h
-        src/backend/binary_layouts/itm.h
+    src/backend/game_resources.cpp
+    src/backend/game_resources.h
+    src/backend/binary_layouts/itm.h
+        src/backend/ie_string.h
 )
 
 set(PROJECT_SOURCES
@@ -134,8 +136,10 @@ set(FRONTEND_SOURCES
     src/frontend/mainwindow.h
     src/frontend/mainwindow.ui
     ${RES_FILES}
-    src/frontend/gui_helpers.h
-        src/frontend/disable_guard.h
+    src/frontend/helpers/gui_helpers.h
+    src/frontend/helpers/disable_guard.h
+    src/frontend/helpers/qt_io.h
+        src/frontend/helpers/dialogs.h
 )
 
 add_executable(tlk_file_test
@@ -201,6 +205,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(EE_SaveEditor
         MANUAL_FINALIZATION
         ${FRONTEND_SOURCES}
+        src/frontend/views/savegamewidget.h src/frontend/views/savegamewidget.cpp src/frontend/views/savegamewidget.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET EE_SaveEditor APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

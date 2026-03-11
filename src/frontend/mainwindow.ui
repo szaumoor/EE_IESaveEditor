@@ -22,6 +22,11 @@
     <height>480</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>14</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string notr="true">EE Save Editor</string>
   </property>
@@ -34,8 +39,8 @@
   </property>
   <property name="iconSize">
    <size>
-    <width>36</width>
-    <height>36</height>
+    <width>48</width>
+    <height>48</height>
    </size>
   </property>
   <property name="toolButtonStyle">
@@ -57,10 +62,26 @@
      <x>0</x>
      <y>0</y>
      <width>640</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
    <widget class="QMenu" name="menuFile">
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>File</string>
     </property>
@@ -117,9 +138,6 @@
    <property name="movable">
     <bool>false</bool>
    </property>
-   <property name="allowedAreas">
-    <set>Qt::ToolBarArea::NoToolBarArea</set>
-   </property>
    <property name="floatable">
     <bool>false</bool>
    </property>
@@ -140,6 +158,11 @@
    <property name="text">
     <string>Open...</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="icon">
@@ -148,6 +171,11 @@
    </property>
    <property name="text">
     <string>About...</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionGibberlings">
@@ -185,6 +213,11 @@
    <property name="toolTip">
     <string>Discord servers where you can find me and many other enthusiasts of the games</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionQuit">
    <property name="icon">
@@ -194,10 +227,20 @@
    <property name="text">
     <string>Quit</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionMyMods">
    <property name="text">
     <string>My Mods</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
   </action>
   <action name="openFromToolbar">
@@ -238,6 +281,11 @@
    <property name="text">
     <string>Save...</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionReload">
    <property name="icon">
@@ -262,15 +310,30 @@
    <property name="text">
     <string>Settings...</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionMyProfile">
    <property name="text">
     <string>My profile...</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionModForum">
    <property name="text">
     <string>Mod Forum</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
    </property>
   </action>
  </widget>
