@@ -52,7 +52,7 @@ Possible<GamFile> GamFile::open( const string_view path )
     writer.into( gam.m_familiar_info, header.familiar_info_offset );
     writer.into( gam.m_familiar_extras, header.familiar_extra_offset );
 
-    return std::move( gam );
+    return gam;
 }
 
 bool GamFile::save_gam()

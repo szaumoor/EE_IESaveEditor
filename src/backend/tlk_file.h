@@ -9,11 +9,13 @@
 #include <string_view>
 #include <vector>
 
+#include "ie_string.h"
+
 class TlkFile final : public IEFile
 {
 public:
-    Possible<std::string_view> at( strref index ) const noexcept; // NOLINT(*-use-nodiscard)
-    Possible<std::string_view> operator[]( strref index ) const noexcept;
+    Possible<IEStringView> at( strref index ) const noexcept; // NOLINT(*-use-nodiscard)
+    Possible<IEStringView> operator[]( strref index ) const noexcept;
 
     static Possible<TlkFile> open( std::string_view path );
 
@@ -21,14 +23,14 @@ public:
     [[nodiscard]] const std::string_view* begin() const;
     [[nodiscard]] const std::string_view* end() const;
 
-private:
     using IEFile::IEFile;
 
+private:
     TlkFileHeader m_header{};
     std::vector<char> m_string_data;
     std::vector<std::string_view> m_cached_strings;
-
     void check_for_malformation() noexcept override;
+
 };
 
 #endif // TLK_FILE_H

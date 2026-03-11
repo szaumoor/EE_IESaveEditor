@@ -16,7 +16,8 @@
 
 #include <tuple>
 
-#include "gui_helpers.h"
+#include "helpers/gui_helpers.h"
+#include "helpers/qt_io.h"
 
 class KeyFile;
 class BiffFile;
@@ -101,17 +102,30 @@ void MainWindow::show_about()
 
 void MainWindow::open_file()
 {
-    const QString dir = QFileDialog::getExistingDirectory(
+    const QString path = QFileDialog::getExistingDirectory(
         this,
         tr( "Select folder" ),
         QString(),
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
     );
 
-    if ( dir.isEmpty() )
-        qDebug() << "User cancelled";
-    else
-        qDebug() << "User selected" << dir;
+    if ( path.isEmpty() )
+        return;
+
+    const auto gamPath = extend_path( {path, "BALDUR.gam"} );
+    qDebug() << gamPath;
+    auto gam = GamFile::open( gamPath.toStdString() );
+
+    if (gam)
+    {
+        qDebug() << "Gam was opened";
+        savegame.emplace(gam.value());
+
+        for (const auto& character : savegame->party_members())
+        {
+            qDebug() << character.character_name.to_string();
+        }
+    }
 }
 
 void MainWindow::reload_resources()

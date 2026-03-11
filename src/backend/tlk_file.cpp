@@ -1,6 +1,5 @@
 #include "tlk_file.h"
 #include "ie_files.h"
-
 #include "utils/io.h"
 
 #include <algorithm>
@@ -20,15 +19,15 @@ namespace rng = std::ranges;
 static constexpr string_view kTlkFileSig( "TLK " );
 static constexpr string_view kTlkFileVersion( "V1  " );
 
-Possible<string_view> TlkFile::at( const strref index ) const noexcept
+Possible<IEStringView> TlkFile::at( const strref index ) const noexcept
 {
     if ( index >= length() )
         return std::unexpected( IEError( IEErrorType::OutOfBounds,
                                          std::format( "TLK: Index {} is out of bounds [0-{}].", index, length()-1 ) ) );
-    return m_cached_strings[index];
+    return IEStringView(m_cached_strings[index], index);
 }
 
-Possible<string_view> TlkFile::operator[]( const strref index ) const noexcept
+Possible<IEStringView> TlkFile::operator[]( const strref index ) const noexcept
 {
     return at( index );
 }
@@ -61,7 +60,7 @@ Possible<TlkFile> TlkFile::open( string_view path )
                                            entry.string_length );
     } );
 
-    return std::move( tlk );
+    return tlk;
 }
 
 u32 TlkFile::length() const noexcept

@@ -8,7 +8,6 @@
 #include "binary_layouts/key_biff.h"
 #include "utils/errors.h"
 
-
 class KeyFile final : public IEFile
 {
 public:

@@ -23,7 +23,7 @@ public:
     }
 
 private:
-    std::vector<QWidget*> widgets;
+    QList<QWidget*> widgets;
 };
 
 #endif //EE_SAVEEDITOR_DISABLE_GUARD_H
