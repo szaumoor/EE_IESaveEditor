@@ -53,6 +53,14 @@ public:
 
     std::vector<Effect> effects();
 
+public:
+    [[nodiscard]]
+    auto header() const
+    {
+        return _header;
+    }
+
+
 private:
     CreHeader _header{};
 

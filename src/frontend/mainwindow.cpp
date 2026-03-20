@@ -28,7 +28,7 @@ using ResourceResults = std::tuple<
     Possible<KeyFile>
 >;
 
-MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::MainWindow )
+MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::MainWindow ), dlg(this)
 {
     ui->setupUi( this );
     set_up_connections();
@@ -49,16 +49,13 @@ void MainWindow::closeEvent(QCloseEvent* event)
         return;
     }
 
-    const auto prompt = QMessageBox::question(
-        this,
-        "Warning",
-        "Are you sure you want to quit the application? All unsaved changes will be lost."
-    );
-
-    if ( prompt == QMessageBox::StandardButton::Yes )
-        event->accept();
-    else
-        event->ignore();
+    dlg.warn_and("Are you sure you want to quit the application? All unsaved changes will be lost.",
+        [&event](const auto& prompt) {
+        if ( prompt == QMessageBox::StandardButton::Yes )
+            event->accept();
+        else
+            event->ignore();
+    });
 }
 
 void MainWindow::set_up_connections()
@@ -72,6 +69,8 @@ void MainWindow::set_up_connections()
     connect( ui->actionOpen, &QAction::triggered, this, &MainWindow::open_file );
     connect( ui-> openFromToolbar, &QAction::triggered, this, &MainWindow::open_file );
     connect( ui->actionReload, &QAction::triggered, this, &MainWindow::reload_resources );
+    connect( ui-> actionAboutQt, &QAction::triggered, QApplication::aboutQt);
+    connect(ui->widget, &SaveGameWidget::save_changed,this, &MainWindow::onSavegameWidgetDataLoaded);
 }
 
 void MainWindow::set_up_shortcuts() const
@@ -86,18 +85,21 @@ void MainWindow::set_up_shortcuts() const
     ui->actionSave->setShortcutContext( Qt::ApplicationShortcut );
 }
 
-void MainWindow::show_about()
+void MainWindow::load_ui() const
 {
-    QMessageBox::information(
-        this,
-        "About",
-        "<h2>EE Save Editor</h2>"
+    if (!savegame) return;
+
+    ui->widget->inject_data( savegame.value() );
+}
+
+void MainWindow::show_about() const
+{
+    dlg.about("<h2>EE Save Editor</h2>"
         "<p>Author: szaumoor, a.k.a. 'Kaelyn'</p>"
         "<p>Contact: kaelyn@tuta.io</p>"
         "<p><a href='https://github.com/szaumoor'>My GitHub</a></p>"
         "<p>Version: 0.1</p>"
-        "<p>Powered by C++ and the Qt Framework</p>"
-    );
+        "<p>Powered by C++ and the Qt Framework</p>");
 }
 
 void MainWindow::open_file()
@@ -126,7 +128,11 @@ void MainWindow::open_file()
             qDebug() << character.character_name.to_string();
         }
     }
+
+    load_ui();
 }
+
+
 
 void MainWindow::reload_resources()
 {
@@ -186,4 +192,9 @@ void MainWindow::open_github_repo()
         qDebug() << "Error opening link to visit github! Link copied to clipboard.";
         QApplication::clipboard()->setText( "https://github.com/szaumoor/EE_IESaveEditor" );
     }
+}
+
+void MainWindow::onSavegameWidgetDataLoaded()
+{
+    qDebug() << "Widget loaded data";
 }

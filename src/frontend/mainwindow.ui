@@ -49,7 +49,11 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout"/>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="SaveGameWidget" name="widget" native="true"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -117,6 +121,8 @@
      <addaction name="actionModForum"/>
     </widget>
     <addaction name="actionAbout"/>
+    <addaction name="actionAboutQt"/>
+    <addaction name="separator"/>
     <addaction name="menuDiscord"/>
     <addaction name="menuForum"/>
     <addaction name="actionGitHub"/>
@@ -235,7 +241,7 @@
   </action>
   <action name="actionMyMods">
    <property name="text">
-    <string>My Mods</string>
+    <string>My Mods...</string>
    </property>
    <property name="font">
     <font>
@@ -318,7 +324,7 @@
   </action>
   <action name="actionMyProfile">
    <property name="text">
-    <string>My profile...</string>
+    <string>My Profile...</string>
    </property>
    <property name="font">
     <font>
@@ -336,7 +342,20 @@
     </font>
    </property>
   </action>
+  <action name="actionAboutQt">
+   <property name="text">
+    <string>About Qt...</string>
+   </property>
+  </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SaveGameWidget</class>
+   <extends>QWidget</extends>
+   <header>savegamewidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../resources/resource.qrc"/>
  </resources>
