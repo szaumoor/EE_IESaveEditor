@@ -139,7 +139,7 @@ set(FRONTEND_SOURCES
     src/frontend/helpers/gui_helpers.h
     src/frontend/helpers/disable_guard.h
     src/frontend/helpers/qt_io.h
-        src/frontend/helpers/dialogs.h
+    src/frontend/helpers/dialogs.h
 )
 
 add_executable(tlk_file_test
@@ -231,6 +231,10 @@ endif()
 
 target_link_libraries(EE_SaveEditor PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(EE_SaveEditor PRIVATE Qt6::Concurrent)
+target_include_directories(EE_SaveEditor
+    PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/frontend/views
+)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
