@@ -6,6 +6,7 @@
 
 #include "../backend/gam_file.h"
 #include "../backend/tlk_file.h"
+#include "helpers/dialogs.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -31,9 +32,11 @@ private:
     std::optional<GamFile> savegame { std::nullopt  };
     void set_up_connections();
     void set_up_shortcuts() const;
+    void load_ui() const;
+    Dialogs dlg;
 
 private slots:
-    void show_about();
+    void show_about() const;
     void open_file();
     void reload_resources();
     static void open_forum();
@@ -41,6 +44,7 @@ private slots:
     static void open_discord_g3();
     static void open_discord_ie();
     static void open_github_repo();
+    void onSavegameWidgetDataLoaded();
 };
 
 #endif //EESAVEEDITOR_MAINWINDOW_H

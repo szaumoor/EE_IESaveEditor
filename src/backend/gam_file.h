@@ -23,6 +23,12 @@ public:
         return m_party_members;
     }
 
+    [[nodiscard]]
+    auto party_members_cre() const
+    {
+        return m_party_cre_files;
+    }
+
 private:
     using IEFile::IEFile;
 
