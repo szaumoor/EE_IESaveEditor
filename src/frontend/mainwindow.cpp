@@ -31,6 +31,7 @@ using ResourceResults = std::tuple<
 MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::MainWindow ), dlg(this)
 {
     ui->setupUi( this );
+    ui->widget->setVisible( false );
     set_up_connections();
     set_up_shortcuts();
     QTimer::singleShot(0, this, &MainWindow::reload_resources);
@@ -70,7 +71,6 @@ void MainWindow::set_up_connections()
     connect( ui-> openFromToolbar, &QAction::triggered, this, &MainWindow::open_file );
     connect( ui->actionReload, &QAction::triggered, this, &MainWindow::reload_resources );
     connect( ui-> actionAboutQt, &QAction::triggered, QApplication::aboutQt);
-    connect(ui->widget, &SaveGameWidget::save_changed,this, &MainWindow::onSavegameWidgetDataLoaded);
 }
 
 void MainWindow::set_up_shortcuts() const
@@ -87,9 +87,11 @@ void MainWindow::set_up_shortcuts() const
 
 void MainWindow::load_ui() const
 {
-    if (!savegame) return;
+    if (!savegame)
+        return;
 
     ui->widget->inject_data( savegame.value() );
+    ui->widget->setVisible( true );
 }
 
 void MainWindow::show_about() const
@@ -107,7 +109,7 @@ void MainWindow::open_file()
     const QString path = QFileDialog::getExistingDirectory(
         this,
         tr( "Select folder" ),
-        QString(),
+        QString("/home/marcos/.local/share/Baldur's Gate II - Enhanced Edition/save"),
         QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
     );
 
@@ -115,18 +117,11 @@ void MainWindow::open_file()
         return;
 
     const auto gamPath = extend_path( {path, "BALDUR.gam"} );
-    qDebug() << gamPath;
     auto gam = GamFile::open( gamPath.toStdString() );
 
     if (gam)
     {
-        qDebug() << "Gam was opened";
         savegame.emplace(gam.value());
-
-        for (const auto& character : savegame->party_members())
-        {
-            qDebug() << character.character_name.to_string();
-        }
     }
 
     load_ui();
@@ -182,6 +177,7 @@ void MainWindow::open_discord_ie()
     if ( const bool ok = QDesktopServices::openUrl( QUrl( "https://discord.gg/NWw65ags7S" ) ); !ok )
     {
         qDebug() << "Error opening link to join discord!";
+
     }
 }
 
@@ -192,9 +188,4 @@ void MainWindow::open_github_repo()
         qDebug() << "Error opening link to visit github! Link copied to clipboard.";
         QApplication::clipboard()->setText( "https://github.com/szaumoor/EE_IESaveEditor" );
     }
-}
-
-void MainWindow::onSavegameWidgetDataLoaded()
-{
-    qDebug() << "Widget loaded data";
 }
