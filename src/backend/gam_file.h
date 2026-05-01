@@ -24,7 +24,7 @@ public:
     }
 
     [[nodiscard]]
-    auto party_members_cre() const
+    auto& party_members_cre() const
     {
         return m_party_cre_files;
     }

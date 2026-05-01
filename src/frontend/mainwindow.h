@@ -26,9 +26,11 @@ public:
     ~MainWindow() override;
     std::optional<TlkFile> tlk;
 
+protected:
+    void closeEvent( QCloseEvent* event ) override;
+
 private:
     Ui::MainWindow* ui;
-    void closeEvent( QCloseEvent* event ) override;
     std::optional<GamFile> savegame { std::nullopt  };
     void set_up_connections();
     void set_up_shortcuts() const;
@@ -44,7 +46,6 @@ private slots:
     static void open_discord_g3();
     static void open_discord_ie();
     static void open_github_repo();
-    void onSavegameWidgetDataLoaded();
 };
 
 #endif //EESAVEEDITOR_MAINWINDOW_H

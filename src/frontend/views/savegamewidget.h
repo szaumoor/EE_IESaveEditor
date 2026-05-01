@@ -20,6 +20,8 @@ public:
 private:
     Ui::SaveGameWidget* ui;
     std::optional<GamFile> gam { std:: nullopt };
+    void left();
+    void right();
 
 public slots:
     void inject_data(const GamFile& file);
