@@ -14,6 +14,9 @@
 class TlkFile final : public IEFile
 {
 public:
+    TlkFile( const TlkFile& other );
+    TlkFile( TlkFile&& other ) noexcept;
+
     Possible<IEStringView> at( strref index ) const noexcept; // NOLINT(*-use-nodiscard)
     Possible<IEStringView> operator[]( strref index ) const noexcept;
 
@@ -25,11 +28,14 @@ public:
 
     using IEFile::IEFile;
 
+protected:
+    void check_for_malformation() noexcept override;
+
 private:
     TlkFileHeader m_header{};
     std::vector<char> m_string_data;
     std::vector<std::string_view> m_cached_strings;
-    void check_for_malformation() noexcept override;
+    void rebuild_cached_strings( const TlkFile& other );
 
 };
 

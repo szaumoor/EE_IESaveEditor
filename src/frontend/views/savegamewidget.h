@@ -2,7 +2,10 @@
 #define SAVEGAMEWIDGET_H
 
 #include <QWidget>
+
 #include "../../backend/gam_file.h"
+#include "../../backend/tlk_file.h"
+#include "../helpers/dialogs.h"
 
 class GamFile;
 
@@ -10,24 +13,27 @@ namespace Ui {
     class SaveGameWidget;
 }
 
-class SaveGameWidget : public QWidget {
+class SaveGameWidget final : public QWidget {
     Q_OBJECT
 
 public:
     explicit SaveGameWidget(QWidget* parent = nullptr);
     ~SaveGameWidget() override;
 
-private:
-    Ui::SaveGameWidget* ui;
-    std::optional<GamFile> gam { std:: nullopt };
-    void left();
-    void right();
-
 public slots:
-    void inject_data(const GamFile& file);
+    void inject_data(const GamFile& file, const TlkFile& tlk_file);
 
 signals:
     void save_changed(const GamFile& file);
+
+private:
+    Ui::SaveGameWidget* ui;
+    std::optional<GamFile> gam { std:: nullopt };
+    std::optional<TlkFile> tlk { std::nullopt };
+    Dialogs dlg;
+    void complete_ui(u32 index);
+
+
 };
 
 #endif // SAVEGAMEWIDGET_H

@@ -13,14 +13,13 @@ class KeyFile final : public IEFile
 public:
     static Possible<KeyFile> open( std::string_view path );
 
+protected:
+    void check_for_malformation() noexcept override;
 private:
     using IEFile::IEFile;
-
     KeyFileHeader m_header{};
     std::vector<BiffEntry> m_biff_entries;
     std::vector<ResourceEntry> m_resource_entries;
-
-    void check_for_malformation() noexcept override;
 };
 
 #endif // KEY_FILE_H

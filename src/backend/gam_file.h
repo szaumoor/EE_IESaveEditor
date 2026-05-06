@@ -13,22 +13,20 @@
 class GamFile final : public IEFile
 {
 public:
-
     static Possible<GamFile> open( std::string_view path );
     bool save_gam();
 
     [[nodiscard]]
-    auto party_members() const
-    {
-        return m_party_members;
-    }
+    auto party_members() const noexcept{ return m_party_members; }
 
     [[nodiscard]]
-    auto& party_members_cre() const
-    {
-        return m_party_cre_files;
-    }
+    auto& party_members_cre() const noexcept{ return m_party_cre_files; }
 
+    [[nodiscard]]
+    auto& header() const noexcept{ return m_header; }
+
+protected:
+    void check_for_malformation() noexcept override;
 private:
     using IEFile::IEFile;
 
@@ -44,8 +42,6 @@ private:
 
     GamFamiliarInfo m_familiar_info{};
     std::vector<Resref> m_familiar_extras;
-
-    void check_for_malformation() noexcept override;
     void prep_containers();
 };
 

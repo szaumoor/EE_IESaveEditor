@@ -62,3 +62,20 @@ TEST( TlkFileTest, TlkHasCantAccessInvalidIndexes )
     EXPECT_TRUE( !result1.has_value() );
     EXPECT_TRUE( !result2.has_value() );
 }
+
+TEST( TlkFileTest, CopyOwnsItsCachedStrings )
+{
+    const auto opened = TlkFile::open( kRealTlk );
+    ASSERT_TRUE( opened.has_value() );
+
+    const TlkFile& original = opened.value();
+    const TlkFile copied( original );
+
+    const auto original_lookup = original.at( 1 );
+    const auto copied_lookup = copied.at( 1 );
+
+    ASSERT_TRUE( original_lookup.has_value() );
+    ASSERT_TRUE( copied_lookup.has_value() );
+    EXPECT_EQ( copied_lookup->std_view(), original_lookup->std_view() );
+    EXPECT_NE( copied_lookup->std_view().data(), original_lookup->std_view().data() );
+}

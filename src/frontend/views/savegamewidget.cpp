@@ -1,20 +1,89 @@
 #include "savegamewidget.h"
 #include "ui_savegamewidget.h"
+#include "../../backend/tlk_file.h"
+
+#include <QShortcut>
 
 SaveGameWidget::SaveGameWidget(QWidget* parent)
-    : QWidget(parent), ui(new Ui::SaveGameWidget)
+    : QWidget(parent), ui(new Ui::SaveGameWidget), dlg(this)
 {
-    ui->setupUi(this);
-    connect( ui->pmember_back, &QPushButton::clicked, this, []() {
-        qDebug() << "pmember_back";
+     ui->setupUi(this);
+
+    auto* decrease_shortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Left), this);
+    decrease_shortcut->setContext(Qt::WindowShortcut);
+
+    connect(decrease_shortcut, &QShortcut::activated, this, [this]() {
+        ui->slider_pmember->setValue(ui->slider_pmember->value() - ui->slider_pmember->singleStep());
+    });
+
+    auto* increase_shortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Right), this);
+    increase_shortcut->setContext(Qt::WindowShortcut);
+
+    connect(increase_shortcut, &QShortcut::activated, this, [this]() {
+        ui->slider_pmember->setValue(ui->slider_pmember->value() + ui->slider_pmember->singleStep());
+    });
+
+    connect( ui->slider_pmember, &QSlider::valueChanged, this, [this]() {
+        complete_ui( ui->slider_pmember->value() );
     } );
 
-    connect( ui->pmember_forward, &QPushButton::clicked, this, []() {
-        qDebug() << "pmember_forward";
-    } );
+    auto slider_policy = ui->slider_pmember->sizePolicy();
+    slider_policy.setRetainSizeWhenHidden( true );
+    ui->slider_pmember->setSizePolicy(slider_policy);
 
-    ui->pmember_back->setShortcut( QKeySequence( Qt::CTRL | Qt::Key_Left ) );
-    ui->pmember_forward->setShortcut( QKeySequence( Qt::CTRL | Qt::Key_Right ) );
+    ui->globals_table->horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
+    ui->locals_table->horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
+
+    ui->tabWidget->setStyleSheet(R"(
+        QTabBar::tab {
+            font-weight: normal;
+        }
+        QTabBar::tab:selected {
+            font-weight: bold;
+        }
+    )");
+
+    ui->slider_pmember->setStyleSheet(R"(
+    QSlider::groove:horizontal {
+        border: 1px solid #777;
+        height: 8px;
+        background: #c8c8c8;
+        border-radius: 4px;
+    }
+
+    QSlider::sub-page:horizontal {
+        background: #2d7dd2;
+        border: 1px solid #2d7dd2;
+        height: 8px;
+        border-radius: 4px;
+    }
+
+    QSlider::add-page:horizontal {
+        background: #d6d6d6;
+        border: 1px solid #999;
+        height: 8px;
+        border-radius: 4px;
+    }
+
+    QSlider::handle:horizontal {
+        background: #ffffff;
+        border: 2px solid #2d7dd2;
+        width: 18px;
+        height: 18px;
+        margin: -6px 0;
+        border-radius: 9px;
+    }
+
+    QSlider::handle:horizontal:hover {
+        background: #eaf3ff;
+        border: 2px solid #1b5fa7;
+    }
+
+    QSlider::handle:horizontal:pressed {
+        background: #2d7dd2;
+        border: 2px solid #174f8a;
+    }
+)");
 }
 
 SaveGameWidget::~SaveGameWidget()
@@ -22,16 +91,24 @@ SaveGameWidget::~SaveGameWidget()
     delete ui;
 }
 
-void SaveGameWidget::inject_data( const GamFile& file )
+void SaveGameWidget::complete_ui(const u32 index)
 {
-    gam.emplace( file );
+    const auto& members = gam->party_members();
+    const auto& cre_members = gam->party_members_cre();
 
-    if (!gam)
-        return;
+    if (members.size() == 1)
+        ui->slider_pmember->hide();
+    else
+    {
+        ui->slider_pmember->setRange(0, static_cast<int>(members.size()) - 1);
+        ui->slider_pmember->setVisible(true);
+    }
+
     setEnabled( true );
-    const auto& party_member = gam->party_members()[0];
-    const CreFile& cre_party_member = gam->party_members_cre()[0];
-    
+
+    const auto& party_member = members[index];
+    const CreFile& cre_party_member = cre_members[index];
+
     const auto [strength,
                 strength_bonus,
                 intelligence,
@@ -105,4 +182,57 @@ void SaveGameWidget::inject_data( const GamFile& file )
 
     ui->name_label->setPlainText( QString::fromStdString( party_member.name.to_string() ) );
 
+    ui->stat_hide_shadows->setValue(cre_party_member.header().hide_in_shadows);
+    ui->stat_move_silently->setValue(cre_party_member.header().move_silently);
+    ui->stat_find_traps->setValue(cre_party_member.header().find_traps);
+    ui->stat_detect_illusions->setValue(cre_party_member.header().detect_illusion);
+    ui->stat_set_traps->setValue(cre_party_member.header().set_traps);
+    ui->stat_pickpocket->setValue(cre_party_member.header().pick_pockets);
+    ui->stat_open_locks->setValue(cre_party_member.header().open_locks);
+
+    ui->stat_first_level->setValue(cre_party_member.header().class_levels[0]);
+    ui->stat_second_level->setValue(cre_party_member.header().class_levels[1]);
+    ui->stat_third_level->setValue(cre_party_member.header().class_levels[2]);
+
+    ui->stat_lore->setValue(cre_party_member.header().lore);
+    ui->stat_intoxication->setValue(cre_party_member.header().intoxication);
+    ui->stat_morale->setValue(cre_party_member.header().morale);
+    ui->stat_morale_break->setValue(cre_party_member.header().morale_break);
+    ui->stat_morale_rec->setValue(cre_party_member.header().morale_recovery_time);
+
+    ui->stat_fatigue->setValue(cre_party_member.header().fatigue);
+
+    ui->stat_gold->setValue( static_cast<i32>(gam->header().party_gold) );
+    ui->stat_reputation->setValue( static_cast<i32>(gam->header().party_reputation) );
+    ui->stat_xp->setValue( static_cast<i32>(cre_party_member.header().xp_gained_kills) );
+    ui->stat_xp_for_kill->setValue( static_cast<i32>(cre_party_member.header().xp_creature) );
+
+    ui->stat_strongest_xp->setValue( static_cast<i32>(party_member.character_stats.most_powerful_vanquished_xp) );
+
+
+    if ( const auto strongest_killed = tlk->at( party_member.character_stats.most_powerful_vanquished_name))
+        ui->label_strongest_name->setPlainText( QString::fromStdString( strongest_killed->std_string() ));
+
+    ui->stat_cur_hp->setValue( cre_party_member.header().current_hit_points );
+    ui->stat_max_hp->setValue( cre_party_member.header().max_hit_points );
+}
+
+void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
+{
+    gam.emplace( file );
+
+    if (!gam)
+    {
+        dlg.error("Error loading data into the UI");
+        return;
+    }
+
+    tlk.emplace( tlk_file );
+
+    if (!tlk)
+    {
+        dlg.error("Error loading TLK file");
+        return;
+    }
+    complete_ui(0);
 }
