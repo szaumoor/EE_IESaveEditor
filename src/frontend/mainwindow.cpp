@@ -31,7 +31,7 @@ using ResourceResults = std::tuple<
 MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::MainWindow ), dlg(this)
 {
     ui->setupUi( this );
-    ui->widget->setVisible( false );
+    ui->savegame_widget->setVisible( false );
     set_up_connections();
     set_up_shortcuts();
     QTimer::singleShot(0, this, &MainWindow::reload_resources);
@@ -89,9 +89,8 @@ void MainWindow::load_ui() const
 {
     if (!savegame)
         return;
-
-    ui->widget->inject_data( savegame.value() );
-    ui->widget->setVisible( true );
+    ui->savegame_widget->inject_data( savegame.value(), tlk.value() );
+    ui->savegame_widget->setVisible( true );
 }
 
 void MainWindow::show_about() const
@@ -131,7 +130,8 @@ void MainWindow::open_file()
 
 void MainWindow::reload_resources()
 {
-    run_task_with_progress<ResourceResults>(this,{ui->menubar, ui->toolBar},"Loading resources...",
+    run_task_with_progress<ResourceResults>(this,
+        {ui->menubar, ui->toolBar, ui->savegame_widget},"Loading resources...",
         [] {
             return std::make_tuple(
                 TlkFile::open(TEST_RES_DIR "/dialog.tlk"),

@@ -116,6 +116,8 @@ set(ALL_TEST_SOURCES
     src/backend/game_resources.h
     src/backend/binary_layouts/itm.h
         src/backend/ie_string.h
+        src/frontend/profiles/games.h
+        src/frontend/profiles/constants.h
 )
 
 set(PROJECT_SOURCES
@@ -140,6 +142,9 @@ set(FRONTEND_SOURCES
     src/frontend/helpers/disable_guard.h
     src/frontend/helpers/qt_io.h
     src/frontend/helpers/dialogs.h
+        src/frontend/profiles/settings.cpp
+        src/frontend/profiles/games.h
+        src/frontend/profiles/constants.h
 )
 
 add_executable(tlk_file_test
