@@ -42,7 +42,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="SaveGameWidget" name="widget" native="true"/>
+       <widget class="SaveGameWidget" name="savegame_widget" native="true"/>
       </item>
      </layout>
     </item>

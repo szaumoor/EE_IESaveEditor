@@ -19,6 +19,24 @@ namespace rng = std::ranges;
 static constexpr string_view kTlkFileSig( "TLK " );
 static constexpr string_view kTlkFileVersion( "V1  " );
 
+TlkFile::TlkFile( const TlkFile& other )
+    : IEFile( other.m_path ),
+      m_header( other.m_header ),
+      m_string_data( other.m_string_data )
+{
+    m_good = other.m_good;
+    rebuild_cached_strings( other );
+}
+
+TlkFile::TlkFile( TlkFile&& other ) noexcept
+    : IEFile( other.m_path ),
+      m_header( other.m_header ),
+      m_string_data( std::move( other.m_string_data ) ),
+      m_cached_strings( std::move( other.m_cached_strings ) )
+{
+    m_good = other.m_good;
+}
+
 Possible<IEStringView> TlkFile::at( const strref index ) const noexcept
 {
     if ( index >= length() )
@@ -84,4 +102,28 @@ void TlkFile::check_for_malformation() noexcept
     const bool valid_version   = m_header.version.to_string() == kTlkFileVersion;
 
     m_good = valid_signature && valid_version;
+}
+
+void TlkFile::rebuild_cached_strings( const TlkFile& other )
+{
+    m_cached_strings.clear();
+    m_cached_strings.reserve( other.m_cached_strings.size() );
+
+    if ( other.m_cached_strings.empty() )
+        return;
+
+    const char* old_base = other.m_string_data.data();
+    const char* new_base = m_string_data.data();
+
+    for ( const auto& view : other.m_cached_strings )
+    {
+        if ( view.data() == nullptr )
+        {
+            m_cached_strings.emplace_back();
+            continue;
+        }
+
+        const auto offset = static_cast<size_t>( view.data() - old_base );
+        m_cached_strings.emplace_back( new_base + offset, view.size() );
+    }
 }

@@ -15,9 +15,11 @@ class BiffFile final : IEFile
 public:
     static Possible<BiffFile> open( std::string_view path );
 
+protected:
+    void check_for_malformation() noexcept override;
+
 private:
     using IEFile::IEFile;
-    void check_for_malformation() noexcept override;
 
 public:
     BiffHeader m_header{};

@@ -50,16 +50,10 @@ class CreFile final
 {
 public:
     static CreFile read( std::ifstream& file, u32 offset );
-
     std::vector<Effect> effects();
 
-public:
     [[nodiscard]]
-    auto header() const
-    {
-        return _header;
-    }
-
+    auto header() const noexcept { return _header; }
 
 private:
     CreHeader _header{};

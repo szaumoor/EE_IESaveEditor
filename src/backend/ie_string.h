@@ -1,6 +1,7 @@
 #ifndef EE_SAVEEDITOR_IE_STRING_H
 #define EE_SAVEEDITOR_IE_STRING_H
 
+#include <string>
 #include <string_view>
 
 #include "utils/aliases.h"
@@ -18,9 +19,10 @@ public:
         return lhs == rhs.m_view;
     }
 
-    [[nodiscard]] constexpr std::string_view std_view() const { return m_view; }
+    [[nodiscard]] constexpr std::string_view std_view() const noexcept { return m_view; }
+    [[nodiscard]] constexpr std::string std_string() const { return std::string( m_view ); }
     [[nodiscard]] constexpr u32 size() const { return m_view.length(); }
-    [[nodiscard]] constexpr strref tlk_index() const { return m_tlk_index; }
+    [[nodiscard]] constexpr strref tlk_index() const noexcept { return m_tlk_index; }
 private:
     friend class TlkFile;
     explicit constexpr IEStringView( const std::string_view view, const strref tlk_index) noexcept
