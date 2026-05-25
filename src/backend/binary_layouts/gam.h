@@ -94,14 +94,24 @@ struct GamCharacterData
 
 struct GamGlobalVariable
 {
-    CharArray<32> variable_name; // 0x0000
-    u16 type; // 0x0020 (b0=int,b1=float,b2=script name,b3=resref,b4=strref,b5=dword)
-    u16 unused0; // 0x0022
-    u32 unused1; // 0x0024
-    u32 int_value; // 0x0028
-    double unused3; // 0x002C
-    CharArray<32> unused; // 0x0034
+    CharArray<32> variable_name = {}; // 0x0000
+    u16 type = 0; // 0x0020 (b0=int,b1=float,b2=script name,b3=resref,b4=strref,b5=dword)
+    u16 unused0 = 0; // 0x0022
+    u32 unused1 = 0; // 0x0024
+    u32 int_value = 0; // 0x0028
+    double unused3 = 0; // 0x002C
+    CharArray<32> unused = {}; // 0x0034
+
+    GamGlobalVariable() = default;
+
+    GamGlobalVariable(const std::string& name, const u32 value)
+    {
+        variable_name.assign_string( name );
+        int_value = value;
+    }
 };
+
+using GamLocalVariable = GamGlobalVariable;
 
 struct GamJournalEntry
 {

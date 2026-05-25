@@ -6,14 +6,14 @@
 #include "../../backend/utils/aliases.h"
 #include "../../backend/utils/errors.h"
 
-namespace game {
+namespace Game {
 
-    enum class Type : i8 { None=-1, Bgee=0, Bg2ee=1, Iwdee=2 };
+    enum class Type : i8 { Bgee=0, Bg2ee=1, Iwdee=2 };
 
     inline std::expected<Type, QString> parse( const i8 game )
     {
-        if ( game < -1 || game > 2 )
-            return std::unexpected("Valid values for Game are -1 to -2 (none, bgee, bg2ee, iwdee)");
+        if ( game < 0 || game > 2 )
+            return std::unexpected("Valid values for Game are 0-2 (bgee, bg2ee, iwdee)");
         return static_cast<Type>(game);
     }
 

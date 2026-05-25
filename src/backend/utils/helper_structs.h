@@ -4,6 +4,7 @@
 #include "../utils/aliases.h"
 
 #include <string>
+#include <algorithm>
 
 #pragma pack(push, 1)
 
@@ -28,15 +29,30 @@ struct CharArray
     [[nodiscard]]
     std::string to_string() const
     {
-        return trim_nulls( std::string( value, Length ));
+        const auto* end = value + Length;
+        const auto* null_pos = std::find(value, end, '\0');
+        return std::string(value, null_pos);
     }
 
-private:
-    static std::string trim_nulls( std::string str ) noexcept
+    [[nodiscard]]
+    static std::optional<CharArray> from_string(std::string_view text) noexcept
     {
-        if ( const auto null_pos = str.find_first_of( '\0' ); null_pos != std::string::npos )
-            str.resize( null_pos );
-        return str;
+        if (text.size() > Length)
+            return std::nullopt;
+
+        CharArray result{};
+        std::copy(text.begin(), text.end(), result.value);
+        return result;
+    }
+
+    bool assign_string( const std::string_view text) noexcept {
+        auto converted = from_string(text);
+
+        if (!converted)
+            return false;
+
+        *this = *converted;
+        return true;
     }
 };
 

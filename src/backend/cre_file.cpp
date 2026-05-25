@@ -25,19 +25,19 @@ Effect Effect::from( const EmbeddedEffFileV2& eff )
 CreFile CreFile::read( std::ifstream& file, const u32 offset )
 {
     CreFile cre;
-    auto& header = cre._header;
+    auto& header = cre.m_header;
     const StructWriter writer( file );
     writer.into( header );
 
     cre.resize_vecs();
 
-    writer.into( cre.m_known_spells, offset + cre._header.known_spells_offset );
+    writer.into( cre.m_known_spells, offset + cre.m_header.known_spells_offset );
     writer.into( cre.m_memorization_infos, offset + header.memorization_offset );
-    writer.into( cre.m_memorized_spells, offset + cre._header.memorized_offset );
-    writer.into( cre.m_items, offset + cre._header.items_offset );
-    writer.into( cre.m_item_slots, offset + cre._header.item_slots_offset );
+    writer.into( cre.m_memorized_spells, offset + cre.m_header.memorized_offset );
+    writer.into( cre.m_items, offset + cre.m_header.items_offset );
+    writer.into( cre.m_item_slots, offset + cre.m_header.item_slots_offset );
 
-    file.seekg( offset + cre._header.effects_offset, std::ios::beg );
+    file.seekg( offset + cre.m_header.effects_offset, std::ios::beg );
 
     switch ( header.eff_structure_version )
     {
@@ -70,8 +70,8 @@ std::vector<Effect> CreFile::effects()
 
 void CreFile::resize_vecs() noexcept
 {
-    m_known_spells.resize( _header.known_spells_count );
-    m_memorization_infos.resize( _header.memorization_count );
-    m_memorized_spells.resize( _header.memorized_count );
-    m_items.resize( _header.items_count );
+    m_known_spells.resize( m_header.known_spells_count );
+    m_memorization_infos.resize( m_header.memorization_count );
+    m_memorized_spells.resize( m_header.memorized_count );
+    m_items.resize( m_header.items_count );
 }

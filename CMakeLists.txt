@@ -145,6 +145,8 @@ set(FRONTEND_SOURCES
         src/frontend/profiles/settings.cpp
         src/frontend/profiles/games.h
         src/frontend/profiles/constants.h
+        src/frontend/views/variable_table_model.cpp
+        src/frontend/views/variable_table_model.h
 )
 
 add_executable(tlk_file_test

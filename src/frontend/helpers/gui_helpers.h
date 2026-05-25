@@ -40,4 +40,9 @@ void run_task_with_progress(QWidget* parent, const std::initializer_list<QWidget
     watcher->setFuture(future);
 }
 
+inline bool open_url( const QString& url )
+{
+    return QDesktopServices::openUrl( QUrl(url));
+}
+
 #endif //EE_SAVEEDITOR_UI_HELPERS_H

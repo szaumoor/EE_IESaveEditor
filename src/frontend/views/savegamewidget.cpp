@@ -4,10 +4,35 @@
 
 #include <QShortcut>
 
+
 SaveGameWidget::SaveGameWidget(QWidget* parent)
     : QWidget(parent), ui(new Ui::SaveGameWidget), dlg(this)
 {
-     ui->setupUi(this);
+    ui->setupUi(this);
+
+    m_global_model = new VariableTableModel(this);
+    ui->globals_table->setModel( m_global_model );
+    ui->globals_table->setSelectionBehavior( QAbstractItemView::SelectRows );
+    ui->globals_table->setSelectionMode( QAbstractItemView::SingleSelection );
+
+    m_local_model = new VariableTableModel(this);
+    ui->locals_table->setModel( m_local_model );
+    ui->locals_table->setSelectionBehavior( QAbstractItemView::SelectRows );
+    ui->locals_table->setSelectionMode( QAbstractItemView::SingleSelection );
+
+    const auto* deleteShortcut = new QShortcut(QKeySequence::Delete, ui->globals_table);
+
+    connect(deleteShortcut, &QShortcut::activated, this, [this]() {
+        const QModelIndex current = ui->globals_table->currentIndex();
+
+        if (!current.isValid())
+            return;
+
+        dlg.warn_and( "Are you sure you want to delete this variable?", [&](auto response) {
+            if (response == QMessageBox::StandardButton::Yes)
+                ui->globals_table->model()->removeRow(current.row());
+        } );
+    });
 
     auto* decrease_shortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Left), this);
     decrease_shortcut->setContext(Qt::WindowShortcut);
@@ -91,9 +116,29 @@ SaveGameWidget::~SaveGameWidget()
     delete ui;
 }
 
+void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
+{
+    gam.emplace( file );
+
+    if (!gam)
+    {
+        dlg.error("Error loading data into the UI");
+        return;
+    }
+
+    tlk.emplace( tlk_file );
+
+    if (!tlk)
+    {
+        dlg.error("Error loading TLK file");
+        return;
+    }
+    complete_ui(0);
+}
+
 void SaveGameWidget::complete_ui(const u32 index)
 {
-    const auto& members = gam->party_members();
+    const auto& members     = gam->party_members();
     const auto& cre_members = gam->party_members_cre();
 
     if (members.size() == 1)
@@ -106,16 +151,16 @@ void SaveGameWidget::complete_ui(const u32 index)
 
     setEnabled( true );
 
-    const auto& party_member = members[index];
+    const auto& party_member        = members[index];
     const CreFile& cre_party_member = cre_members[index];
 
     const auto [strength,
-                strength_bonus,
-                intelligence,
-                wisdom,
-                dexterity,
-                constitution,
-                charisma
+        strength_bonus,
+        intelligence,
+        wisdom,
+        dexterity,
+        constitution,
+        charisma
     ] = cre_party_member.header().stats;
 
     ui->stat_strength->setValue( strength );
@@ -127,31 +172,32 @@ void SaveGameWidget::complete_ui(const u32 index)
     ui->stat_charisma->setValue( charisma );
 
     const auto [ac_natural,
-                ac_effective,
-                ac_crushing,
-                ac_missile,
-                ac_piercing,
-                ac_slashing
+        ac_effective,
+        ac_crushing,
+        ac_missile,
+        ac_piercing,
+        ac_slashing
     ] = cre_party_member.header().armor_class;
 
-    ui->ac_base->setValue( ac_natural );
+    ui->ac_base->setValue( ac_effective );
     ui->ac_effective->setValue( ac_effective );
     ui->ac_piercing->setValue( ac_piercing );
     ui->ac_crush->setValue( ac_crushing );
     ui->ac_slashing->setValue( ac_slashing );
     ui->ac_missile->setValue( ac_missile );
 
+
     const auto [resist_fire,
-                resist_cold,
-                resist_electricity,
-                resist_acid,
-                resist_magic,
-                resist_magic_fire,
-                resist_magic_cold,
-                resist_slashing,
-                resist_crushing,
-                resist_piercing,
-                resist_missile
+        resist_cold,
+        resist_electricity,
+        resist_acid,
+        resist_magic,
+        resist_magic_fire,
+        resist_magic_cold,
+        resist_slashing,
+        resist_crushing,
+        resist_piercing,
+        resist_missile
     ] = cre_party_member.header().resistances;
 
     ui->resist_acid->setValue(resist_acid);
@@ -168,10 +214,10 @@ void SaveGameWidget::complete_ui(const u32 index)
     ui->resist_missile->setValue( resist_missile  );
 
     const auto [saving_throw_vs_death,
-                saving_throw_vs_wands,
-                saving_throw_vs_poly,
-                saving_throw_vs_breath,
-                saving_throw_vs_spell
+        saving_throw_vs_wands,
+        saving_throw_vs_poly,
+        saving_throw_vs_breath,
+        saving_throw_vs_spell
     ] = cre_party_member.header().saving_throws;
 
     ui->save_death->setValue( saving_throw_vs_death);
@@ -209,30 +255,15 @@ void SaveGameWidget::complete_ui(const u32 index)
 
     ui->stat_strongest_xp->setValue( static_cast<i32>(party_member.character_stats.most_powerful_vanquished_xp) );
 
+    ui->stat_base_thac0->setValue( cre_party_member.header().thac0 );
+
 
     if ( const auto strongest_killed = tlk->at( party_member.character_stats.most_powerful_vanquished_name))
         ui->label_strongest_name->setPlainText( QString::fromStdString( strongest_killed->std_string() ));
 
     ui->stat_cur_hp->setValue( cre_party_member.header().current_hit_points );
     ui->stat_max_hp->setValue( cre_party_member.header().max_hit_points );
-}
 
-void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
-{
-    gam.emplace( file );
-
-    if (!gam)
-    {
-        dlg.error("Error loading data into the UI");
-        return;
-    }
-
-    tlk.emplace( tlk_file );
-
-    if (!tlk)
-    {
-        dlg.error("Error loading TLK file");
-        return;
-    }
-    complete_ui(0);
+    m_global_model->set_variables( gam->globals() );
+    m_local_model->set_variables( cre_party_member.locals() );
 }

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+#include "variable_table_model.h"
 #include "../../backend/gam_file.h"
 #include "../../backend/tlk_file.h"
 #include "../helpers/dialogs.h"
@@ -32,7 +33,8 @@ private:
     std::optional<TlkFile> tlk { std::nullopt };
     Dialogs dlg;
     void complete_ui(u32 index);
-
+    VariableTableModel* m_global_model = nullptr;
+    VariableTableModel* m_local_model = nullptr;
 
 };
 
