@@ -25,6 +25,9 @@ public:
     [[nodiscard]]
     auto& header() const noexcept{ return m_header; }
 
+    [[nodiscard]]
+    auto& globals() const noexcept{ return m_variables; }
+
 protected:
     void check_for_malformation() noexcept override;
 private:

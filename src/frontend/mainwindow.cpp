@@ -28,7 +28,8 @@ using ResourceResults = std::tuple<
     Possible<KeyFile>
 >;
 
-MainWindow::MainWindow( QWidget* parent ) : QMainWindow( parent ), ui( new Ui::MainWindow ), dlg(this)
+MainWindow::MainWindow( QWidget* parent )
+    : QMainWindow( parent ), ui( new Ui::MainWindow ), dlg(this)
 {
     ui->setupUi( this );
     ui->savegame_widget->setVisible( false );
@@ -89,6 +90,7 @@ void MainWindow::load_ui() const
 {
     if (!savegame)
         return;
+
     ui->savegame_widget->inject_data( savegame.value(), tlk.value() );
     ui->savegame_widget->setVisible( true );
 }
@@ -116,9 +118,8 @@ void MainWindow::open_file()
         return;
 
     const auto gamPath = extend_path( {path, "BALDUR.gam"} );
-    auto gam = GamFile::open( gamPath.toStdString() );
 
-    if (gam)
+    if (auto gam = GamFile::open( gamPath.toStdString() ))
     {
         savegame.emplace(gam.value());
     }
@@ -156,34 +157,31 @@ void MainWindow::reload_resources()
 
 void MainWindow::open_forum()
 {
-    QDesktopServices::openUrl( QUrl( "https://www.gibberlings3.net/profile/12720-kaelyn/" ) );
+    if ( !open_url( "https://www.gibberlings3.net/profile/12720-kaelyn/" ) )
+        qDebug() << "Error opening link to open mod forum!";
 }
 
 void MainWindow::open_my_mods()
 {
-    QDesktopServices::openUrl( QUrl( "https://szaumoor.github.io/IEModLinks/" ) );
+    if ( !open_url("https://szaumoor.github.io/IEModLinks/" ) )
+        qDebug() << "Error opening link to my mods!";
 }
 
 void MainWindow::open_discord_g3()
 {
-    if ( const bool ok = QDesktopServices::openUrl( QUrl( "https://discord.com/invite/yTzjMTb" ) ); !ok )
-    {
+    if ( !open_url( "https://discord.com/invite/yTzjMTb" ) )
         qDebug() << "Error opening link to join discord!";
-    }
 }
 
 void MainWindow::open_discord_ie()
 {
-    if ( const bool ok = QDesktopServices::openUrl( QUrl( "https://discord.gg/NWw65ags7S" ) ); !ok )
-    {
+    if ( !open_url( "https://discord.gg/NWw65ags7S" ) )
         qDebug() << "Error opening link to join discord!";
-
-    }
 }
 
 void MainWindow::open_github_repo()
 {
-    if ( const bool ok = QDesktopServices::openUrl( QUrl( "https://github.com/szaumoor/EE_IESaveEditor" ) ); !ok )
+    if ( !open_url( "https://github.com/szaumoor/EE_IESaveEditor" ) )
     {
         qDebug() << "Error opening link to visit github! Link copied to clipboard.";
         QApplication::clipboard()->setText( "https://github.com/szaumoor/EE_IESaveEditor" );

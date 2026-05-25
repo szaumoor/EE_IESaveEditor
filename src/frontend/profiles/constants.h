@@ -6,30 +6,30 @@
 
 namespace consts
 {
-    inline QString HomeDir              = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    constexpr auto SettingsAuthor       = "Kaelyn";
-    constexpr auto SettingsAppName      = "IE Save Editor";
-    constexpr auto SettingsGameFolders  = "GameFolders";
-    constexpr auto SettingsGameBGEE     = "GameBGEE";
-    constexpr auto SettingsSavesBGEE    = "SavesBGEE";
-    constexpr auto SettingsGameBG2EE    = "GameBG2EE";
-    constexpr auto SettingsSavesBG2EE   = "SavesBG2EE";
-    constexpr auto SettingsGameIWDEE    = "GameIWDEE";
-    constexpr auto SettingsSavesIWDEE   = "SavesIWDEE";
-    constexpr auto SettingsSelectedGame = "SelectedGame";
-    constexpr auto SettingsGameLanguage = "GameLanguage";
+    inline QString kHomeDir              = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    constexpr auto kSettingsAuthor       = "Kaelyn";
+    constexpr auto kSettingsAppName      = "IE Save Editor";
+    constexpr auto kSettingsGameFolders  = "GameFolders";
+    constexpr auto kSettingsGameBGEE     = "GameBGEE";
+    constexpr auto kSettingsSavesBGEE    = "SavesBGEE";
+    constexpr auto kSettingsGameBG2EE    = "GameBG2EE";
+    constexpr auto kSettingsSavesBG2EE   = "SavesBG2EE";
+    constexpr auto kSettingsGameIWDEE    = "GameIWDEE";
+    constexpr auto kSettingsSavesIWDEE   = "SavesIWDEE";
+    constexpr auto kSettingsSelectedGame = "SelectedGame";
+    constexpr auto kSettingsGameLanguage = "GameLanguage";
 
-    constexpr auto GamFilename    = "BALDUR.gam";
-    constexpr auto DialogTLK      = "dialog.tlk";
-    constexpr auto LangEng        = "en_US";
-    constexpr auto LangGerman     = "de_DE";
-    constexpr auto LangEs         = "es_ES";
-    constexpr auto LangFr         = "fr_FR";
-    constexpr auto LangIt         = "it_IT";
-    constexpr auto LangKorean     = "ko_KR";
-    constexpr auto LangPortuguese = "pl_PL";
-    constexpr auto LangRussian    = "ru_RU";
-    constexpr auto LangChinese    = "zh_CN";
+    constexpr auto kGamFilename    = "BALDUR.gam";
+    constexpr auto kDialogTLK      = "dialog.tlk";
+    constexpr auto kLangEng        = "en_US";
+    constexpr auto kLangGerman     = "de_DE";
+    constexpr auto kLangEs         = "es_ES";
+    constexpr auto kLangFr         = "fr_FR";
+    constexpr auto kLangIt         = "it_IT";
+    constexpr auto kLangKorean     = "ko_KR";
+    constexpr auto kLangPortuguese = "pl_PL";
+    constexpr auto kLangRussian    = "ru_RU";
+    constexpr auto kLangChinese    = "zh_CN";
 }
 
 #endif // CONSTANTS_H

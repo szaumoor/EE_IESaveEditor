@@ -2,8 +2,10 @@
 #define CRE_FILE_H
 
 #include "binary_layouts/cre.h"
+#include "binary_layouts/gam.h"
 #include "utils/aliases.h"
 
+#include <ranges>
 #include <variant>
 #include <vector>
 
@@ -53,10 +55,23 @@ public:
     std::vector<Effect> effects();
 
     [[nodiscard]]
-    auto header() const noexcept { return _header; }
+    auto header() const noexcept { return m_header; }
+    [[nodiscard]]
+    auto effects() const noexcept { return m_effects; }
+    [[nodiscard]]
+    auto locals() const noexcept {
+        using std::views::transform;
+        using std::views::filter;
+
+        auto vars = effects()
+            | transform([](auto el){ return std::get<1>(el);})
+            | filter([](auto el) { return el.opcode == 187;})
+            | transform([](auto el) { return GamLocalVariable(el.variable_name.to_string(), el.parameter1 ); });
+        return std::vector(vars.begin(), vars.end());
+    }
 
 private:
-    CreHeader _header{};
+    CreHeader m_header{};
 
     std::vector<CreKnownSpell> m_known_spells;
     std::vector<CreSpellMemorizationInfo> m_memorization_infos;
@@ -73,7 +88,7 @@ private:
     {
         static_assert(std::is_same_v<T, EmbeddedEffFileV1> || std::is_same_v<T, EmbeddedEffFileV2>);
 
-        std::vector<T> tmp( cre._header.effects_count );
+        std::vector<T> tmp( cre.m_header.effects_count );
         writer.into( tmp );
         cre.m_effects.insert( cre.m_effects.end(), tmp.begin(), tmp.end() );
     }
