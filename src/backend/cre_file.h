@@ -43,7 +43,7 @@ private:
     u32 opcode     = 0;
     u32 timing     = 0;
     u32 duration   = 0;
-    u32 parameter1 = 0;
+    i32 parameter1 = 0;
     u32 parameter2 = 0;
     Resref resource{};
 };
@@ -67,6 +67,7 @@ public:
             | transform([](auto el){ return std::get<1>(el);})
             | filter([](auto el) { return el.opcode == 187;})
             | transform([](auto el) { return GamLocalVariable(el.variable_name.to_string(), el.parameter1 ); });
+
         return std::vector(vars.begin(), vars.end());
     }
 

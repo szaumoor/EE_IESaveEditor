@@ -1,8 +1,6 @@
 #ifndef SAVEGAMEWIDGET_H
 #define SAVEGAMEWIDGET_H
 
-#include <QWidget>
-
 #include "variable_table_model.h"
 #include "../../backend/gam_file.h"
 #include "../../backend/tlk_file.h"
@@ -32,7 +30,7 @@ private:
     std::optional<GamFile> gam { std:: nullopt };
     std::optional<TlkFile> tlk { std::nullopt };
     Dialogs dlg;
-    void complete_ui(u32 index);
+    bool complete_ui(int index);
     VariableTableModel* m_global_model = nullptr;
     VariableTableModel* m_local_model = nullptr;
 

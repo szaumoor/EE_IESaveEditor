@@ -1,42 +1,45 @@
 #include "variable_table_model.h"
+#include <algorithm>
+
+using std::in_range;
 
 
 VariableTableModel::VariableTableModel( QObject* parent )
-    : QAbstractTableModel( parent )
-{
-}
+    : QAbstractTableModel( parent ) {}
 
 int VariableTableModel::rowCount( const QModelIndex& parent ) const
 {
-    if (parent.isValid())
+    if ( parent.isValid() )
         return 0;
-
     return static_cast<int>(m_variables.size());
 }
 
 int VariableTableModel::columnCount( const QModelIndex& parent ) const
 {
-    if (parent.isValid())
+    if ( parent.isValid() )
         return 0;
-
     return 2;
 }
 
 QVariant VariableTableModel::data( const QModelIndex& index, int role ) const
 {
-    if (not index.isValid())
+    if ( not index.isValid() )
         return {};
 
     const auto row = index.row();
+
+    if ( not in_range<size_t>(row) )
+        return {};
+
     const auto col = index.column();
 
-    const auto& var = m_variables[static_cast<long long>(row)];
+    const auto& var = m_variables[static_cast<size_t>(row)];
     const auto name = QString::fromStdString(var.variable_name.to_string());
     const auto value = var.int_value;
 
-    if (role == Qt::DisplayRole || role == Qt::EditRole)
+    if ( role == Qt::DisplayRole || role == Qt::EditRole )
     {
-        switch (col)
+        switch ( col )
         {
             case 0: return name;
             case 1: return value;
@@ -44,8 +47,9 @@ QVariant VariableTableModel::data( const QModelIndex& index, int role ) const
         }
     }
 
-    if (role == Qt::TextAlignmentRole) {
-        if (col == 1)
+    if ( role == Qt::TextAlignmentRole )
+    {
+        if ( col == 1 )
             return Qt::AlignCenter;
     }
 
@@ -81,10 +85,9 @@ void VariableTableModel::set_variables( std::vector<GamGlobalVariable> variables
 
 const GamGlobalVariable* VariableTableModel::at( const int row ) const
 {
-    if (row < 0 || row >= static_cast<int>(m_variables.size()))
+    if ( !in_range<size_t>(row) || static_cast<size_t>(row) >= m_variables.size() )
         return nullptr;
-
-    return &m_variables[row];
+    return &m_variables[static_cast<size_t>(row)];
 }
 
 Qt::ItemFlags VariableTableModel::flags( const QModelIndex& index ) const
@@ -93,7 +96,6 @@ Qt::ItemFlags VariableTableModel::flags( const QModelIndex& index ) const
         return Qt::NoItemFlags;
 
     Qt::ItemFlags result = QAbstractTableModel::flags(index);
-
     switch (index.column()) {
         case 0:
         case 1:
@@ -111,18 +113,18 @@ bool VariableTableModel::setData( const QModelIndex& index, const QVariant& valu
     if (!index.isValid() || role != Qt::EditRole)
         return false;
 
-    const int row = index.row();
-    const int col = index.column();
+    const auto row = index.row();
+    const auto col = index.column();
 
-    if (row < 0 || row >= m_variables.size())
+    if ( !in_range<size_t>(row) || static_cast<size_t>(row) >= m_variables.size() )
         return false;
 
-    if (col < 0 || col >= columnCount(QModelIndex{}))
+    if ( col < 0 || col >= columnCount(QModelIndex{}) )
         return false;
 
-    auto& var = m_variables[row];
+    auto& var = m_variables[static_cast<size_t>(row)];
 
-    switch (col) {
+    switch ( col ) {
         case 0: {
             if ( !var.variable_name.assign_string( value.toString().toStdString() ) )
                 return false;
@@ -135,11 +137,9 @@ bool VariableTableModel::setData( const QModelIndex& index, const QVariant& valu
 
             if (!ok)
                 return false;
-
             var.int_value = parsed;
             break;
         }
-
         default:
             return false;
     }
@@ -151,11 +151,14 @@ bool VariableTableModel::setData( const QModelIndex& index, const QVariant& valu
 
 bool VariableTableModel::removeRows(const int row, const int count, const QModelIndex& parent)
 {
-    if (parent.isValid() || count != 1 || row < 0 || row >= m_variables.size())
+    if ( parent.isValid() || count != 1 || !in_range<size_t>(row) ||
+        static_cast<size_t>(row) >= m_variables.size() )
+    {
         return false;
+    }
 
-    beginRemoveRows(parent, row, row);
-    m_variables.erase(m_variables.begin() + row);
+    beginRemoveRows( parent, row, row );
+    m_variables.erase(m_variables.begin() + row );
     endRemoveRows();
 
     return true;

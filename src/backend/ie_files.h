@@ -1,7 +1,7 @@
 #ifndef IE_FILES_H
 #define IE_FILES_H
 
-#include <string_view>
+#include <string>
 
 class IEFile
 {
@@ -20,7 +20,7 @@ protected:
     }
 
     bool m_good = false;
-    const std::string_view m_path;
+    const std::string m_path;
 };
 
 

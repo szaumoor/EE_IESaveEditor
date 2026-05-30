@@ -7,16 +7,19 @@ using std::string_view;
 using std::ofstream;
 namespace fs = std::filesystem;
 
-TempCreator::TempCreator(const string_view name,
-                         const string_view signature,
-                         const string_view version) : name(name)
+namespace ZS
 {
-    ofstream ofs(name.data(), std::ios::binary);
-    ofs.write(signature.data(), 4);
-    ofs.write(version.data(), 4);
-}
+    TempCreator::TempCreator(const string_view name,
+                             const string_view signature,
+                             const string_view version) : m_name(name)
+    {
+        ofstream ofs(name.data(), std::ios::binary);
+        ofs.write(signature.data(), 4);
+        ofs.write(version.data(), 4);
+    }
 
-TempCreator::~TempCreator()
-{
-    fs::remove(fs::path(name));
+    TempCreator::~TempCreator()
+    {
+        fs::remove(fs::path(m_name));
+    }
 }

@@ -6,7 +6,6 @@
 
 #include "../src/backend/gam_file.h"
 #include "../src/backend/utils/errors.h"
-#include "../src/backend/utils/io.h"
 
 #include "utils/tests_helper.h"
 
@@ -20,8 +19,8 @@ TEST( GamFileTests, GamIsUnreadableTest )
 
 TEST( GamFileTests, GamIsMalformedVersion )
 {
-    const TempCreator temp("invalid_version.gam", "GAME", "Invl");
-    const auto gam = GamFile::open(temp.name);
+    const ZS::TempCreator temp("invalid_version.gam", "GAME", "Invl");
+    const auto gam = GamFile::open(temp.m_name);
     ASSERT_TRUE( not gam && gam.error().type() == IEErrorType::Malformed );
 }
 
@@ -33,22 +32,22 @@ TEST( GamFileTests, RealGamIsReadableAndValid )
 
 TEST( GamFileTests, GamIsReadableAndValid )
 {
-    const TempCreator temp("valid_version.gam", "GAME", "V2.0");
-    const auto gam = GamFile::open(temp.name);
+    const ZS::TempCreator temp("valid_version.gam", "GAME", "V2.0");
+    const auto gam = GamFile::open(temp.m_name);
     ASSERT_TRUE( gam.has_value() );
 }
 
 TEST( GamFileTests, GamIsReadableAndValidTwoPointOne )
 {
-    const TempCreator temp("valid_version.gam", "GAME", "V2.1");
-    const auto gam = GamFile::open(temp.name);
+    const ZS::TempCreator temp("valid_version.gam", "GAME", "V2.1");
+    const auto gam = GamFile::open(temp.m_name);
     ASSERT_TRUE( gam.has_value() );
 }
 
 TEST( GamFileTests, GamIsMalformedSignature )
 {
-    const TempCreator temp("invalid_signature.gam", "XXXX", "V2.0");
-    const auto gam = GamFile::open(temp.name);
+    const ZS::TempCreator temp("invalid_signature.gam", "XXXX", "V2.0");
+    const auto gam = GamFile::open(temp.m_name);
     ASSERT_TRUE( not gam && gam.error().type() == IEErrorType::Malformed );
 }
 

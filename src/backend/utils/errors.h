@@ -28,8 +28,8 @@ enum struct [[nodiscard("Do not discard error types")]]
 class IEError
 {
 public:
-    explicit IEError( IEErrorType error_t, std::string_view error_m ) noexcept;
-    explicit IEError( IEErrorType error_t ) noexcept;
+    explicit IEError( IEErrorType error_type, std::string_view error_m ) noexcept;
+    explicit IEError( IEErrorType error_type ) noexcept;
 
     /**
      * Return the error message associated with the error type.

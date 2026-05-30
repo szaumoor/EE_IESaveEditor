@@ -36,6 +36,8 @@ private:
     std::vector<char> m_string_data;
     std::vector<std::string_view> m_cached_strings;
     void rebuild_cached_strings( const TlkFile& other );
+    bool string_data_in_range(const TlkFileEntry& entry) const noexcept;
+    void if_in_range( const TlkFileEntry& entry);
 
 };
 

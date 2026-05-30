@@ -19,10 +19,11 @@ namespace rng = std::ranges;
 static constexpr string_view kTlkFileSig( "TLK " );
 static constexpr string_view kTlkFileVersion( "V1  " );
 
-TlkFile::TlkFile( const TlkFile& other )
-    : IEFile( other.m_path ),
+TlkFile::TlkFile( const TlkFile& other ) :
+      IEFile( other.m_path ),
       m_header( other.m_header ),
       m_string_data( other.m_string_data )
+
 {
     m_good = other.m_good;
     rebuild_cached_strings( other );
@@ -66,16 +67,15 @@ Possible<TlkFile> TlkFile::open( string_view path )
     if ( not tlk )
         return std::unexpected( IEError( IEErrorType::Malformed ) );
 
-    vector<TlkFileEntry> _entries( tlk.length() );
-    writer.into( _entries, sizeof( TlkFileHeader ) );
+    vector<TlkFileEntry> entries( tlk.length() );
+    writer.into( entries, sizeof( TlkFileHeader ) );
 
     file_handle.seekg( header.offset_to_str_data, std::ios::beg );
     tlk.m_string_data = vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
     tlk.m_cached_strings.reserve( tlk.length() );
 
-    rng::for_each( _entries, [&tlk]( const TlkFileEntry& entry ) {
-        tlk.m_cached_strings.emplace_back( tlk.m_string_data.data() + entry.offset_to_string,
-                                           entry.string_length );
+    rng::for_each( entries, [&tlk]( const TlkFileEntry& entry ) {
+        tlk.if_in_range( entry );
     } );
 
     return tlk;
@@ -126,4 +126,16 @@ void TlkFile::rebuild_cached_strings( const TlkFile& other )
         const auto offset = static_cast<size_t>( view.data() - old_base );
         m_cached_strings.emplace_back( new_base + offset, view.size() );
     }
+}
+
+bool TlkFile::string_data_in_range( const TlkFileEntry& entry) const noexcept
+{
+    const u32 string_bytes = entry.offset_to_string+entry.string_length;
+    return string_bytes <= m_string_data.size();
+}
+
+void TlkFile::if_in_range( const TlkFileEntry& entry )
+{
+    if ( string_data_in_range( entry ) ) [[likely]]
+        m_cached_strings.emplace_back( m_string_data.data()+entry.offset_to_string, entry.string_length );
 }
