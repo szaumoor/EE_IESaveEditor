@@ -38,7 +38,7 @@ Possible<BiffFile> BiffFile::open( const std::string_view path )
     {
         biff.m_tile_entries.resize( header.count_of_tile_entries );
         writer.into( biff.m_tile_entries,
-                     header.offset_to_file_entries + sizeof( FileEntry ) * header.count_of_file_entries );
+                     header.offset_to_file_entries + static_cast<u32>(sizeof( FileEntry )) * header.count_of_file_entries );
     }
     // biff.m_spells.reserve(header.count_of_file_entries);
     for (const auto& entry : biff.m_file_entries)

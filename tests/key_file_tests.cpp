@@ -18,15 +18,15 @@ TEST( KeyFileTest, KeyIsUnreadableTest )
 
 TEST( KeyFileTest, KeyIsMalformedVersion )
 {
-    const TempCreator temp( "invalid_version.key", "KEY ", "Invl" );
-    const auto key = KeyFile::open( temp.name );
+    const ZS::TempCreator temp( "invalid_version.key", "KEY ", "Invl" );
+    const auto key = KeyFile::open( temp.m_name );
     ASSERT_TRUE( not key && key.error().type() == IEErrorType::Malformed );
 }
 
 TEST( KeyFileTest, KeyIsMalformedSignature )
 {
-    const TempCreator temp( "invalid_signature.key", "XXXX", "V1  " );
-    const auto key = KeyFile::open( temp.name );
+    const ZS::TempCreator temp( "invalid_signature.key", "XXXX", "V1  " );
+    const auto key = KeyFile::open( temp.m_name );
     ASSERT_TRUE( not key && key.error().type() == IEErrorType::Malformed );
 }
 
@@ -38,7 +38,7 @@ TEST( KeyFileTest, RealKeyIsReadableAndValid )
 
 TEST( KeyFileTest, KeyIsReadableAndValid )
 {
-    const TempCreator temp( "valid_key.key", "KEY ", "V1  " );
-    const auto key = KeyFile::open( temp.name );
+    const ZS::TempCreator temp( "valid_key.key", "KEY ", "V1  " );
+    const auto key = KeyFile::open( temp.m_name );
     ASSERT_TRUE( key.has_value() );
 }

@@ -22,15 +22,15 @@ TEST( BiffFileTests, BiffIsUnreadableTest )
 
 TEST( BiffFileTests, BiffIsMalformedVersion )
 {
-    const TempCreator temp("invalid_version.biff", "BIFF", "Invl");
-    const auto biff = BiffFile::open(temp.name);
+    const ZS::TempCreator temp("invalid_version.biff", "BIFF", "Invl");
+    const auto biff = BiffFile::open(temp.m_name);
     ASSERT_TRUE( not biff && biff.error().type() == IEErrorType::Malformed );
 }
 
 TEST( BiffFileTests, BiffIsMalformedSig )
 {
-    const TempCreator temp("invalid_version.biff", "BUFF", "V1  ");
-    const auto biff = BiffFile::open(temp.name);
+    const ZS::TempCreator temp("invalid_version.biff", "BUFF", "V1  ");
+    const auto biff = BiffFile::open(temp.m_name);
     ASSERT_TRUE( not biff && biff.error().type() == IEErrorType::Malformed );
 }
 

@@ -21,7 +21,7 @@ public:
 
     [[nodiscard]] constexpr std::string_view std_view() const noexcept { return m_view; }
     [[nodiscard]] constexpr std::string std_string() const { return std::string( m_view ); }
-    [[nodiscard]] constexpr u32 size() const { return m_view.length(); }
+    [[nodiscard]] constexpr u32 size() const { return static_cast<u32>(m_view.length()); }
     [[nodiscard]] constexpr strref tlk_index() const noexcept { return m_tlk_index; }
 private:
     friend class TlkFile;
