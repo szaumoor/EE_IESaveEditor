@@ -76,6 +76,25 @@ jobs:
         with:
           name: EESaveEditor.exe
           path: ./out/EESaveEditor.exe
+  sanitizer-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Install cmake
+        uses: lukka/get-cmake@latest
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.8.2
+          modules: 'qt5compat'
+          cache: true
+      - name: Configure
+        run: cmake -G Ninja -B out-asan -DCMAKE_BUILD_TYPE=Debug -DENABLE_SANITIZERS=ON
+      - name: Build tests
+        run: cmake --build out-asan --target all_tests
+      - name: Run tests
+        run: ./out-asan/all_tests
   release:
     needs: [build, build-win]
     runs-on: ubuntu-latest

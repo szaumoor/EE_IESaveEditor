@@ -4,6 +4,8 @@
 
 #include <QShortcut>
 
+using std::in_range;
+
 
 SaveGameWidget::SaveGameWidget(QWidget* parent)
     : QWidget(parent), ui(new Ui::SaveGameWidget), dlg(this)
@@ -22,7 +24,7 @@ SaveGameWidget::SaveGameWidget(QWidget* parent)
 
     const auto* deleteShortcut = new QShortcut(QKeySequence::Delete, ui->globals_table);
 
-    connect(deleteShortcut, &QShortcut::activated, this, [this]() {
+    connect(deleteShortcut, &QShortcut::activated, this, [this] {
         const QModelIndex current = ui->globals_table->currentIndex();
 
         if (!current.isValid())
@@ -37,19 +39,21 @@ SaveGameWidget::SaveGameWidget(QWidget* parent)
     auto* decrease_shortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Left), this);
     decrease_shortcut->setContext(Qt::WindowShortcut);
 
-    connect(decrease_shortcut, &QShortcut::activated, this, [this]() {
+    connect(decrease_shortcut, &QShortcut::activated, this, [this] {
         ui->slider_pmember->setValue(ui->slider_pmember->value() - ui->slider_pmember->singleStep());
     });
 
     auto* increase_shortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_Right), this);
     increase_shortcut->setContext(Qt::WindowShortcut);
 
-    connect(increase_shortcut, &QShortcut::activated, this, [this]() {
+    connect(increase_shortcut, &QShortcut::activated, this, [this] {
         ui->slider_pmember->setValue(ui->slider_pmember->value() + ui->slider_pmember->singleStep());
     });
 
-    connect( ui->slider_pmember, &QSlider::valueChanged, this, [this]() {
-        complete_ui( ui->slider_pmember->value() );
+    connect( ui->slider_pmember, &QSlider::valueChanged, this, [this] {
+        const auto slider_value = ui->slider_pmember->value();
+        //complete_ui( in_range<u32>(slider_value) ? static_cast<u32>(slider_value) : 0u );
+        complete_ui( slider_value );
     } );
 
     auto slider_policy = ui->slider_pmember->sizePolicy();
@@ -136,9 +140,14 @@ void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
     complete_ui(0);
 }
 
-void SaveGameWidget::complete_ui(const u32 index)
+bool SaveGameWidget::complete_ui(const int index)
 {
-    const auto& members     = gam->party_members();
+    if ( !in_range<u32>(index) )
+        return false;
+
+    const auto uindex = static_cast<u32>(index);
+
+    const auto& members = gam->party_members();
     const auto& cre_members = gam->party_members_cre();
 
     if (members.size() == 1)
@@ -151,8 +160,10 @@ void SaveGameWidget::complete_ui(const u32 index)
 
     setEnabled( true );
 
-    const auto& party_member        = members[index];
-    const CreFile& cre_party_member = cre_members[index];
+    const auto& party_member= members[uindex];
+    const CreFile& cre_party_member = cre_members[uindex];
+
+    const auto& cre_header = cre_party_member.header();
 
     const auto [strength,
         strength_bonus,
@@ -248,10 +259,31 @@ void SaveGameWidget::complete_ui(const u32 index)
 
     ui->stat_fatigue->setValue(cre_party_member.header().fatigue);
 
-    ui->stat_gold->setValue( static_cast<i32>(gam->header().party_gold) );
-    ui->stat_reputation->setValue( static_cast<i32>(gam->header().party_reputation) );
-    ui->stat_xp->setValue( static_cast<i32>(cre_party_member.header().xp_gained_kills) );
-    ui->stat_xp_for_kill->setValue( static_cast<i32>(cre_party_member.header().xp_creature) );
+    if (const auto gold = gam->header().party_gold; in_range<i32>(gold))
+        ui->stat_gold->setValue( static_cast<i32>(gold) );
+    else
+        qWarning() << "Gold outside of range of valid values:" << gold;
+
+    if (const auto reputation = gam->header().party_reputation; in_range<i32>(reputation))
+        ui->stat_reputation->setValue( static_cast<i32>(reputation) );
+    else
+        qWarning() << "Reputation outside of range of valid values:" << reputation;
+
+    if (const auto stat_xp = cre_header.xp_gained_kills; in_range<i32>(stat_xp))
+        ui->stat_xp->setValue( static_cast<i32>(stat_xp) );
+    else
+        qWarning() << "Stat XP outside of range of valid values:" << stat_xp;
+
+    if (const auto stat_xp_for_kill = cre_header.xp_creature; in_range<i32>(stat_xp_for_kill))
+        ui->stat_xp_for_kill->setValue( static_cast<i32>(stat_xp_for_kill) );
+    else
+        qWarning() << "XP for kill outside of range of valid values:" << stat_xp_for_kill;
+
+    if (const auto greater_vanquished = party_member.character_stats.most_powerful_vanquished_xp; in_range<i32>(greater_vanquished))
+        ui->stat_strongest_xp->setValue( static_cast<i32>(greater_vanquished) );
+    else
+        qWarning() << "XP of most powerful vanquished outside of range of valid values:" << greater_vanquished;
+
 
     ui->stat_strongest_xp->setValue( static_cast<i32>(party_member.character_stats.most_powerful_vanquished_xp) );
 
@@ -266,4 +298,6 @@ void SaveGameWidget::complete_ui(const u32 index)
 
     m_global_model->set_variables( gam->globals() );
     m_local_model->set_variables( cre_party_member.locals() );
+
+    return true;
 }

@@ -220,7 +220,7 @@ struct EmbeddedEffFileV1
     u16 opcode; // 0x00
     u8 target; // 0x02
     u8 power; // 0x03
-    u32 parameter1; // 0x04
+    i32 parameter1; // 0x04
     u32 parameter2; // 0x08
     u8 timing_mode; // 0x0C
     u8 dispel_resistance; // 0x0D
@@ -241,7 +241,7 @@ struct EmbeddedEffFileV2
     u32 opcode; // 0x08
     u32 target; // 0x0C
     u32 power; // 0x10
-    u32 parameter1; // 0x14
+    i32 parameter1; // 0x14
     u32 parameter2; // 0x18
     u32 timing_mode; // 0x1C
     u32 duration; // 0x20

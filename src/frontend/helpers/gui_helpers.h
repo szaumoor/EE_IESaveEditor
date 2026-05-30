@@ -27,7 +27,7 @@ void run_task_with_progress(QWidget* parent, const std::initializer_list<QWidget
     auto future = QtConcurrent::run(std::forward<Task>(task));
     auto* watcher = new QFutureWatcher<Result>(parent);
     QObject::connect(watcher, &QFutureWatcher<Result>::finished, parent,
-    [watcher, progress, onFinished = std::forward<OnFinished>(onFinished), ui_guard]() mutable
+    [watcher, progress, onFinished = std::forward<OnFinished>(onFinished), ui_guard] mutable
         {
             Result result = watcher->result();
             onFinished(result);
