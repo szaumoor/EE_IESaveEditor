@@ -1,11 +1,12 @@
 #include "savegamewidget.h"
 #include "ui_savegamewidget.h"
+#include "css.h"
+
 #include "../../backend/tlk_file.h"
 
 #include <QShortcut>
 
 using std::in_range;
-
 
 SaveGameWidget::SaveGameWidget(QWidget* parent)
     : QWidget(parent), ui(new Ui::SaveGameWidget), dlg(this)
@@ -30,7 +31,7 @@ SaveGameWidget::SaveGameWidget(QWidget* parent)
         if (!current.isValid())
             return;
 
-        dlg.warn_and( "Are you sure you want to delete this variable?", [&](auto response) {
+        dlg.warn_and( tr("Are you sure you want to delete this variable?"), [&](auto response) {
             if (response == QMessageBox::StandardButton::Yes)
                 ui->globals_table->model()->removeRow(current.row());
         } );
@@ -63,56 +64,8 @@ SaveGameWidget::SaveGameWidget(QWidget* parent)
     ui->globals_table->horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
     ui->locals_table->horizontalHeader()->setSectionResizeMode( QHeaderView::Stretch );
 
-    ui->tabWidget->setStyleSheet(R"(
-        QTabBar::tab {
-            font-weight: normal;
-        }
-        QTabBar::tab:selected {
-            font-weight: bold;
-        }
-    )");
-
-    ui->slider_pmember->setStyleSheet(R"(
-    QSlider::groove:horizontal {
-        border: 1px solid #777;
-        height: 8px;
-        background: #c8c8c8;
-        border-radius: 4px;
-    }
-
-    QSlider::sub-page:horizontal {
-        background: #2d7dd2;
-        border: 1px solid #2d7dd2;
-        height: 8px;
-        border-radius: 4px;
-    }
-
-    QSlider::add-page:horizontal {
-        background: #d6d6d6;
-        border: 1px solid #999;
-        height: 8px;
-        border-radius: 4px;
-    }
-
-    QSlider::handle:horizontal {
-        background: #ffffff;
-        border: 2px solid #2d7dd2;
-        width: 18px;
-        height: 18px;
-        margin: -6px 0;
-        border-radius: 9px;
-    }
-
-    QSlider::handle:horizontal:hover {
-        background: #eaf3ff;
-        border: 2px solid #1b5fa7;
-    }
-
-    QSlider::handle:horizontal:pressed {
-        background: #2d7dd2;
-        border: 2px solid #174f8a;
-    }
-)");
+    ui->tabWidget->setStyleSheet(css::kTabWidget);
+    ui->slider_pmember->setStyleSheet(css::kPartyMemberSlider);
 }
 
 SaveGameWidget::~SaveGameWidget()
@@ -126,7 +79,7 @@ void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
 
     if (!gam)
     {
-        dlg.error("Error loading data into the UI");
+        dlg.error(tr("Error loading data into the UI"));
         return;
     }
 
@@ -134,7 +87,7 @@ void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
 
     if (!tlk)
     {
-        dlg.error("Error loading TLK file");
+        dlg.error(tr("Error loading TLK file"));
         return;
     }
     complete_ui(0);

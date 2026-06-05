@@ -1,10 +1,16 @@
 #ifndef SAVEGAMEWIDGET_H
 #define SAVEGAMEWIDGET_H
 
+#include <optional>
+
 #include "variable_table_model.h"
+
 #include "../../backend/gam_file.h"
 #include "../../backend/tlk_file.h"
+
 #include "../helpers/dialogs.h"
+
+#include <QWidget>
 
 class GamFile;
 
@@ -21,7 +27,6 @@ public:
 
 public slots:
     void inject_data(const GamFile& file, const TlkFile& tlk_file);
-
 signals:
     void save_changed(const GamFile& file);
 
@@ -33,7 +38,6 @@ private:
     bool complete_ui(int index);
     VariableTableModel* m_global_model = nullptr;
     VariableTableModel* m_local_model = nullptr;
-
 };
 
 #endif // SAVEGAMEWIDGET_H

@@ -1,7 +1,9 @@
 #ifndef EE_SAVEEDITOR_QT_IO_H
 #define EE_SAVEEDITOR_QT_IO_H
 
-#include <qdir.h>
+#include <initializer_list>
+
+#include <QDir>
 #include <QString>
 
 inline QString extend_path( const std::initializer_list<QString> steps)

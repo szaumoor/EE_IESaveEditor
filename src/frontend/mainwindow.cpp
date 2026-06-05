@@ -1,20 +1,23 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "../backend/biff_file.h"
-#include "../backend/key_file.h"
-
+#include <QAction>
+#include <QApplication>
 #include <QClipboard>
 #include <QCloseEvent>
-#include <QDesktopServices>
 #include <QFileDialog>
+#include <QIcon>
 #include <QMainWindow>
+#include <QMenu>
 #include <QMessageBox>
 #include <QString>
 #include <QTimer>
 #include <QWidget>
 
 #include <tuple>
+
+#include "../backend/biff_file.h"
+#include "../backend/key_file.h"
 
 #include "helpers/gui_helpers.h"
 #include "helpers/qt_io.h"
@@ -32,6 +35,7 @@ MainWindow::MainWindow( QWidget* parent )
     : QMainWindow( parent ), ui( new Ui::MainWindow ), dlg(this)
 {
     ui->setupUi( this );
+    setup_tray_icon();
     ui->savegame_widget->setVisible( false );
     set_up_connections();
     set_up_shortcuts();
@@ -51,27 +55,30 @@ void MainWindow::closeEvent(QCloseEvent* event)
         return;
     }
 
-    dlg.warn_and("Are you sure you want to quit the application? All unsaved changes will be lost.",
-        [&event](const auto& prompt) {
-        if ( prompt == QMessageBox::StandardButton::Yes )
-            event->accept();
-        else
-            event->ignore();
-    });
+    dlg.warn_and(tr("Are you sure you want to quit the application? All unsaved changes will be lost."),
+     [&event](const auto& prompt) {
+         if ( prompt == QMessageBox::StandardButton::Yes )
+             event->accept();
+         else
+             event->ignore();
+     });
 }
 
 void MainWindow::set_up_connections()
 {
     connect( ui->actionAbout, &QAction::triggered, this, &MainWindow::show_about );
     connect( ui->actionModForum, &QAction::triggered, this, &MainWindow::open_forum );
+    connect( ui->actionMyProfile, &QAction::triggered, this, &MainWindow::open_forum_profile );
     connect( ui->actionGibberlings, &QAction::triggered, this, &MainWindow::open_discord_g3 );
     connect( ui->actionInfinityEngine, &QAction::triggered, this, &MainWindow::open_discord_ie );
+    connect( ui->actionKaelynsMods, &QAction::triggered, this, &MainWindow::open_discord_my_mods );
     connect( ui->actionGitHub, &QAction::triggered, this, &MainWindow::open_github_repo );
     connect( ui->actionQuit, &QAction::triggered, this, QApplication::quit );
     connect( ui->actionOpen, &QAction::triggered, this, &MainWindow::open_file );
     connect( ui-> openFromToolbar, &QAction::triggered, this, &MainWindow::open_file );
     connect( ui->actionReload, &QAction::triggered, this, &MainWindow::reload_resources );
     connect( ui-> actionAboutQt, &QAction::triggered, QApplication::aboutQt);
+    connect( ui-> actionMyMods, &QAction::triggered, this, &MainWindow::open_my_mods );
 }
 
 void MainWindow::set_up_shortcuts() const
@@ -95,14 +102,20 @@ void MainWindow::load_ui() const
     ui->savegame_widget->setVisible( true );
 }
 
+void MainWindow::set_always_on_top(const bool enabled)
+{
+    setWindowFlag(Qt::WindowStaysOnTopHint, enabled);
+    show();
+}
+
 void MainWindow::show_about() const
 {
-    dlg.about("<h2>EE Save Editor</h2>"
+    dlg.about(tr("<h2>EE Save Editor</h2>"
         "<p>Author: szaumoor, a.k.a. 'Kaelyn'</p>"
         "<p>Contact: kaelyn@tuta.io</p>"
         "<p><a href='https://github.com/szaumoor'>My GitHub</a></p>"
         "<p>Version: 0.1</p>"
-        "<p>Powered by C++ and the Qt Framework</p>");
+        "<p>Powered by C++ and the Qt Framework</p>"));
 }
 
 void MainWindow::open_file()
@@ -127,35 +140,65 @@ void MainWindow::open_file()
     load_ui();
 }
 
-
-
 void MainWindow::reload_resources()
 {
     run_task_with_progress<ResourceResults>(this,
-        {ui->menubar, ui->toolBar, ui->savegame_widget},"Loading resources...",
-        [] {
-            return std::make_tuple(
-                TlkFile::open(TEST_RES_DIR "/dialog.tlk"),
-                BiffFile::open(TEST_RES_DIR "/Spells.bif"),
-                KeyFile::open(TEST_RES_DIR "/chitin.key")
-            );
-        },
-        [this](ResourceResults results)
+    {ui->menubar, ui->toolBar, ui->savegame_widget}, tr("Loading resources..."),
+    [] {
+        return std::make_tuple(
+            TlkFile::open(TEST_RES_DIR "/dialog.tlk"),
+            BiffFile::open(TEST_RES_DIR "/Spells.bif"),
+            KeyFile::open(TEST_RES_DIR "/chitin.key")
+        );
+    },
+    [this](ResourceResults results)
+    {
+        auto [get_tlk, biff, key] = results;
+
+        if (get_tlk)
         {
-            auto [get_tlk, biff, key] = results;
+            qInfo() << "TLK OK";
+            tlk.emplace(get_tlk.value());
+        }
 
-            if (get_tlk)
-            {
-                qInfo() << "TLK OK";
-                tlk.emplace(get_tlk.value());
-            }
+        if (biff) qInfo() << "BIFF OK";
+        if (key)  qInfo() << "KEY OK";
+    });
+}
 
-            if (biff) qInfo() << "BIFF OK";
-            if (key)  qInfo() << "KEY OK";
-        });
+void MainWindow::setup_tray_icon()
+{
+    using ActivationReason = QSystemTrayIcon::ActivationReason;
+    trayIcon = new QSystemTrayIcon(QIcon(":/img/shield.ico"), this);
+    auto * trayMenu = new QMenu(this);
+    auto* alwaysOnTop = trayMenu->addAction(tr("Always on top"));
+    alwaysOnTop->setCheckable(true);
+    connect(alwaysOnTop, &QAction::toggled, this, &MainWindow::set_always_on_top);
+    trayMenu->addAction(tr("Quit"), this, &QApplication::quit);
+    trayIcon->setContextMenu( trayMenu );
+    connect(trayIcon, &QSystemTrayIcon::activated, this,
+    [this]( const ActivationReason reason) {
+            if (reason != QSystemTrayIcon::Trigger && reason != QSystemTrayIcon::DoubleClick)
+                return;
+
+            if (isMinimized())
+                showNormal();
+            else
+                show();
+        raise();
+        activateWindow();
+    });
+
+    trayIcon->show();
 }
 
 void MainWindow::open_forum()
+{
+    if ( !open_url( "https://www.gibberlings3.net/forums/topic/41304-ee-save-editor-new-save-editor-unreleased/" ) )
+        qDebug() << "Error opening link to open mod forum!";
+}
+
+void MainWindow::open_forum_profile()
 {
     if ( !open_url( "https://www.gibberlings3.net/profile/12720-kaelyn/" ) )
         qDebug() << "Error opening link to open mod forum!";
@@ -186,4 +229,10 @@ void MainWindow::open_github_repo()
         qDebug() << "Error opening link to visit github! Link copied to clipboard.";
         QApplication::clipboard()->setText( "https://github.com/szaumoor/EE_IESaveEditor" );
     }
+}
+
+void MainWindow::open_discord_my_mods()
+{
+    if ( !open_url( "https://discord.gg/DER6Ma92X4" ) )
+        qDebug() << "Error opening link to join discord!";
 }

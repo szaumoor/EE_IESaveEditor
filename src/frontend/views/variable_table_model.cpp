@@ -1,8 +1,8 @@
 #include "variable_table_model.h"
+
 #include <algorithm>
 
 using std::in_range;
-
 
 VariableTableModel::VariableTableModel( QObject* parent )
     : QAbstractTableModel( parent ) {}
@@ -68,8 +68,8 @@ QVariant VariableTableModel::headerData( const int section, const Qt::Orientatio
     {
         switch (section)
         {
-            case 0: return "Name";
-            case 1: return "Value";
+            case 0: return tr("Name");
+            case 1: return tr("Value");
             default : return {};
         }
     }

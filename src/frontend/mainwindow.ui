@@ -99,6 +99,7 @@
      </property>
      <addaction name="actionGibberlings"/>
      <addaction name="actionInfinityEngine"/>
+     <addaction name="actionKaelynsMods"/>
     </widget>
     <widget class="QMenu" name="menuForum">
      <property name="title">
@@ -336,6 +337,15 @@
   <action name="actionAboutQt">
    <property name="text">
     <string>About Qt...</string>
+   </property>
+  </action>
+  <action name="actionKaelynsMods">
+   <property name="icon">
+    <iconset resource="../../resources/resource.qrc">
+     <normaloff>:/img/dove.png</normaloff>:/img/dove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Kaelyn's Mods...</string>
    </property>
   </action>
  </widget>
