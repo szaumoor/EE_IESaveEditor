@@ -13,7 +13,7 @@ constexpr auto kAppName = "EE Save Editor";
 bool install_translation(QTranslator& translator)
 {
     const QStringList uiLanguages = QLocale::system().uiLanguages();
-//    const QStringList uiLanguages = {"es_ES" };
+   // const QStringList uiLanguages = {"es_ES" };
 
     for ( const QString& localeName : uiLanguages )
     {

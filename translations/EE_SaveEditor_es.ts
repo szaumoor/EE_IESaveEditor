@@ -183,367 +183,367 @@
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="68" />
             <source>Image goes here</source>
-            <translation type="unfinished" />
+            <translation> Imagen aquí </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="97" />
             <source>Press CTRL+Left-Arrow and CTRL+Right-Arrow to navigate between party members.</source>
-            <translation type="unfinished" />
+            <translation> Presiona CTRL+Izquierda y CTRL+Derecha para navegar entre miembros del grupo. </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="128" />
             <source>Statistics</source>
-            <translation type="unfinished" />
+            <translation> Estadísticas </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="140" />
             <source>Strength</source>
-            <translation type="unfinished" />
+            <translation> Fuerza </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="153" />
             <source>Dexterity</source>
-            <translation type="unfinished" />
+            <translation> Destreza </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="166" />
             <source>Exceptional</source>
-            <translation type="unfinished" />
+            <translation> Excepcional </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="179" />
             <source>Constitution</source>
-            <translation type="unfinished" />
+            <translation> Constitución </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="192" />
             <source>Intelligence</source>
-            <translation type="unfinished" />
+            <translation> Inteligencia </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="205" />
             <source>Wisdom</source>
-            <translation type="unfinished" />
+            <translation> Sabiduría </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="218" />
             <source>Charisma</source>
-            <translation type="unfinished" />
+            <translation> Carisma </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="362" />
             <source>Base THAC0</source>
-            <translation type="unfinished" />
+            <translation> THAC0 Base </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="391" />
             <source>Morale Break</source>
-            <translation type="unfinished" />
+            <translation> Límite Moral </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="420" />
             <source>Morale Rec</source>
-            <translation type="unfinished" />
+            <translation> Moral Rec </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="449" />
             <source>Lore</source>
-            <translation type="unfinished" />
+            <translation> Saber </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="462" />
             <source>Fatigue</source>
-            <translation type="unfinished" />
+            <translation> Fatiga </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="491" />
             <source>Intoxication</source>
-            <translation type="unfinished" />
+            <translation> Intoxicación </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="536" />
             <source>Morale</source>
-            <translation type="unfinished" />
+            <translation> Moral </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="549" />
             <source>Current HP</source>
-            <translation type="unfinished" />
+            <translation> HP Actual </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="578" />
             <source>Max HP</source>
-            <translation type="unfinished" />
+            <translation> HP Max </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="626" />
             <source>Levels</source>
-            <translation type="unfinished" />
+            <translation> Niveles </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="664" />
             <source>Characteristics</source>
-            <translation type="unfinished" />
+            <translation> Características </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="692" />
             <source>Gender</source>
-            <translation type="unfinished" />
+            <translation> Género </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="705" />
             <source>Race</source>
-            <translation type="unfinished" />
+        <translation> Raza </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="750" />
             <source>Alignment</source>
-            <translation type="unfinished" />
+            <translation> Alineamiento </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="763" />
             <source>Class</source>
-            <translation type="unfinished" />
+            <translation> Clase </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="792" />
             <source>Original Class</source>
-            <translation type="unfinished" />
+            <translation> Clase Original </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="821" />
             <source>Kit</source>
-            <translation type="unfinished" />
+            <translation> Kit </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="850" />
             <source>Racial Enemy</source>
-            <translation type="unfinished" />
+            <translation> Enemigo Racial </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="872" />
             <source>Defenses</source>
-            <translation type="unfinished" />
+            <translation> Defensas </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="884" />
             <source>AC (base)</source>
-            <translation type="unfinished" />
+            <translation> AC (base) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="897" />
             <source>AC (effective)</source>
-            <translation type="unfinished" />
+            <translation> AC (efectivo) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="910" />
             <source>Save vs. Death</source>
-            <translation type="unfinished" />
+            <translation> Salvar vs. Death </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="923" />
             <source>Save vs. Wand</source>
-            <translation type="unfinished" />
+            <translation> Salvar vs. Varita </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="936" />
             <source>Save vs. Polymorph</source>
-            <translation type="unfinished" />
+            <translation> Salvar vs. Polimorfar </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="949" />
             <source>Save vs. Spell</source>
-            <translation type="unfinished" />
+        <translation> Salvar vs. Hechizo </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="962" />
             <source>AC (piercing)</source>
-            <translation type="unfinished" />
+            <translation> AC (perforante) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="975" />
             <source>AC (crushing)</source>
-            <translation type="unfinished" />
+            <translation> AC (contundente) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="988" />
             <source>AC (slashing)</source>
-            <translation type="unfinished" />
+            <translation> AC (cortante) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1001" />
             <source>AC (missile)</source>
-            <translation type="unfinished" />
+            <translation> AC (misíl) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1014" />
             <source>Crushing Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Contundente </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1027" />
             <source>Slashing Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Cortante </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1040" />
             <source>Piercing Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Perforante </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1053" />
             <source>Missile Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Misíl </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1066" />
             <source>Fire Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Fuego </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1079" />
             <source>Cold Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Frío </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1092" />
             <source>Acid Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Ácido </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1105" />
             <source>Electricity Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Electricidad </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1118" />
             <source>Magic Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Magia </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1131" />
             <source>Magic Fire Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Fuego Mágico </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1144" />
             <source>Magic Cold Resistance</source>
-            <translation type="unfinished" />
+            <translation> Resistencia Frío Mágico </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1157" />
             <source>Save vs. Breath</source>
-            <translation type="unfinished" />
+            <translation> Salvar vs. Aliento </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1512" />
             <source>Thieving</source>
-            <translation type="unfinished" />
+            <translation> Habilidades de ladrón </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1543" />
             <source>Hide In Shadows</source>
-            <translation type="unfinished" />
+            <translation> Ocultarse en las sombras </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1556" />
             <source>Move Silently</source>
-            <translation type="unfinished" />
+            <translation> Moverse Silenciosamente </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1607" />
             <source>Find Traps</source>
-            <translation type="unfinished" />
+            <translation> Encontrar Trampas </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1639" />
             <source>Set Traps</source>
-            <translation type="unfinished" />
+            <translation> Usar Trampas </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1652" />
             <source>Detect Illusions</source>
-            <translation type="unfinished" />
+            <translation> Detectar Ilusiones </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1703" />
             <source>Pickpocket</source>
-            <translation type="unfinished" />
+            <translation> Robar Bolsillos </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1716" />
             <source>Open Locks</source>
-            <translation type="unfinished" />
+            <translation> Abrir Cerraduras </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1744" />
             <source>Misc stats</source>
-            <translation type="unfinished" />
+            <translation> Misceláneo </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1772" />
             <source>Gold</source>
-            <translation type="unfinished" />
+            <translation> Oro </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1801" />
             <source>Reputation</source>
-            <translation type="unfinished" />
+            <translation> Reputación </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1833" />
             <source>Experience</source>
-            <translation type="unfinished" />
+            <translation> Experiencia </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1865" />
             <source>XP for Kill</source>
-            <translation type="unfinished" />
+            <translation> XP al Matar </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1878" />
             <source>Strongest Kill XP</source>
-            <translation type="unfinished" />
+            <translation> XP Enemigo Más Fuerte </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1910" />
             <source>Strongest Kill Name</source>
-            <translation type="unfinished" />
+            <translation> Nombre Enemigo Más Fuerte </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1942" />
             <source>Chapter Kills</source>
-            <translation type="unfinished" />
+            <translation> Enemigos Derrotados (Capítulo) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1955" />
             <source>Chapter Kills XP</source>
-            <translation type="unfinished" />
+            <translation> XP Enemigos Derrotados (Capítulo) </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="1987" />
             <source>Game Kills</source>
-            <translation type="unfinished" />
+            <translation> Enemigos Derrotados </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="2019" />
             <source>Game Kills XP</source>
-            <translation type="unfinished" />
+            <translation> XP Enemigos Derrotados </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="2081" />
             <source>Game stats</source>
-            <translation type="unfinished" />
+            <translation> Estadísticas Juego </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="2086" />
             <source>Locals</source>
-            <translation type="unfinished" />
+            <translation> Locales </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.ui" line="2113" />
             <source>Globals</source>
-            <translation type="unfinished" />
+            <translation> Globales </translation>
         </message>
         <message>
             <location filename="../src/frontend/views/savegamewidget.cpp" line="34" />
