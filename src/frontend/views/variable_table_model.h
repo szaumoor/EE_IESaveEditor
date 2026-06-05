@@ -1,7 +1,11 @@
 #ifndef EE_SAVEEDITOR_VARIABLE_TABLE_MODEL_H
 #define EE_SAVEEDITOR_VARIABLE_TABLE_MODEL_H
 
-#include <qabstractitemmodel.h>
+#include <vector>
+
+#include <QAbstractTableModel>
+#include <QVariant>
+
 #include "../../backend/binary_layouts/gam.h"
 
 

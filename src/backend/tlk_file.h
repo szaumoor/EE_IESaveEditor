@@ -26,6 +26,9 @@ public:
     [[nodiscard]] const std::string_view* begin() const;
     [[nodiscard]] const std::string_view* end() const;
 
+    [[nodiscard]]
+    std::vector<IEStringView> find( std::string_view text, bool case_sensitive = true ) const noexcept;
+
     using IEFile::IEFile;
 
 protected:

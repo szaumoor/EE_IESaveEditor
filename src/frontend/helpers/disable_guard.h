@@ -3,8 +3,6 @@
 
 #include <QWidget>
 
-#include "disable_guard.h"
-
 class UiDisableGuard : public QObject
 {
     Q_OBJECT

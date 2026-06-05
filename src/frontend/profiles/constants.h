@@ -6,30 +6,36 @@
 
 namespace consts
 {
-    inline QString kHomeDir              = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
-    constexpr auto kSettingsAuthor       = "Kaelyn";
-    constexpr auto kSettingsAppName      = "IE Save Editor";
-    constexpr auto kSettingsGameFolders  = "GameFolders";
-    constexpr auto kSettingsGameBGEE     = "GameBGEE";
-    constexpr auto kSettingsSavesBGEE    = "SavesBGEE";
-    constexpr auto kSettingsGameBG2EE    = "GameBG2EE";
-    constexpr auto kSettingsSavesBG2EE   = "SavesBG2EE";
-    constexpr auto kSettingsGameIWDEE    = "GameIWDEE";
-    constexpr auto kSettingsSavesIWDEE   = "SavesIWDEE";
-    constexpr auto kSettingsSelectedGame = "SelectedGame";
-    constexpr auto kSettingsGameLanguage = "GameLanguage";
+    namespace settings
+    {
+        constexpr auto kAuthor          = "Kaelyn";
+        constexpr auto kAppName         = "IE Save Editor";
+        constexpr auto kLocationFolders = "GameFolders";
+        constexpr auto kLocationBGEE    = "GameBGEE";
+        constexpr auto kLocationBG2EE   = "GameBG2EE";
+        constexpr auto kLocationIWDEE   = "GameIWDEE";
+        constexpr auto kSavesBGEE       = "SavesBGEE";
+        constexpr auto kSavesBG2EE      = "SavesBG2EE";
+        constexpr auto kSavesIWDEE      = "SavesIWDEE";
+        constexpr auto kSelectedGame    = "SelectedGame";
+        constexpr auto kLanguage        = "GameLanguage";
+    }
 
-    constexpr auto kGamFilename    = "BALDUR.gam";
-    constexpr auto kDialogTLK      = "dialog.tlk";
-    constexpr auto kLangEng        = "en_US";
-    constexpr auto kLangGerman     = "de_DE";
-    constexpr auto kLangEs         = "es_ES";
-    constexpr auto kLangFr         = "fr_FR";
-    constexpr auto kLangIt         = "it_IT";
-    constexpr auto kLangKorean     = "ko_KR";
-    constexpr auto kLangPortuguese = "pl_PL";
-    constexpr auto kLangRussian    = "ru_RU";
-    constexpr auto kLangChinese    = "zh_CN";
+    namespace files
+    {
+        inline const QString kHomeDir  = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+        constexpr auto kGam            = "BALDUR.gam";
+        constexpr auto kTLK            = "dialog.tlk";
+        constexpr auto kLangEnglish    = "en_US";
+        constexpr auto kLangGerman     = "de_DE";
+        constexpr auto kLangSpanish    = "es_ES";
+        constexpr auto kLangFrench     = "fr_FR";
+        constexpr auto kLangItalian    = "it_IT";
+        constexpr auto kLangKorean     = "ko_KR";
+        constexpr auto kLangPortuguese = "pt_PT";
+        constexpr auto kLangRussian    = "ru_RU";
+        constexpr auto kLangChinese    = "zh_CN";
+    }
 }
 
 #endif // CONSTANTS_H

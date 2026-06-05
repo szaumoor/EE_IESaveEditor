@@ -1,9 +1,12 @@
 #ifndef EE_SAVEEDITOR_UI_HELPERS_H
 #define EE_SAVEEDITOR_UI_HELPERS_H
 
+#include <initializer_list>
+
 #include <QFutureWatcher>
 #include <QProgressDialog>
 #include <QtConcurrentRun>
+#include <QDesktopServices>
 
 #include "disable_guard.h"
 

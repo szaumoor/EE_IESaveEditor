@@ -73,11 +73,9 @@ Possible<TlkFile> TlkFile::open( string_view path )
     file_handle.seekg( header.offset_to_str_data, std::ios::beg );
     tlk.m_string_data = vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
     tlk.m_cached_strings.reserve( tlk.length() );
-
     rng::for_each( entries, [&tlk]( const TlkFileEntry& entry ) {
         tlk.if_in_range( entry );
     } );
-
     return tlk;
 }
 
@@ -88,12 +86,43 @@ u32 TlkFile::length() const noexcept
 
 const std::string_view* TlkFile::begin() const
 {
-    return &m_cached_strings.front();
+    return m_cached_strings.data();
 }
 
 const std::string_view* TlkFile::end() const
 {
-    return &m_cached_strings.back();
+    return begin() + m_cached_strings.size();
+}
+
+std::vector<IEStringView> TlkFile::find( const std::string_view text, const bool case_sensitive ) const noexcept
+{
+    if ( text.empty() )
+        return {};
+
+    std::vector<IEStringView> entries;
+
+    u32 index = 0;
+    for (const auto& entry : m_cached_strings)
+    {
+        if (case_sensitive)
+        {
+            if (entry.find(text) != std::string_view::npos)
+                entries.push_back( IEStringView(entry, index) );
+        }
+        else
+        {
+            const auto match = not std::ranges::search(entry, text, []( const u8 a, const u8 b) {
+                return std::tolower(a) == std::tolower(b);
+            }).empty();
+
+            if (match)
+                entries.push_back( IEStringView(entry, index) );
+        }
+
+        ++index;
+    }
+
+    return entries;
 }
 
 void TlkFile::check_for_malformation() noexcept

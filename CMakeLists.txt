@@ -45,7 +45,7 @@ FetchContent_MakeAvailable(googletest)
 add_compile_definitions(TEST_RES_DIR="${CMAKE_SOURCE_DIR}/tests/res")
 
 set(TS_FILES
-    translations/EE_SaveEditor_en.ts
+    translations/EE_SaveEditor_es.ts
 )
 
 SET(RES_FILES
@@ -166,6 +166,7 @@ set(FRONTEND_SOURCES
         src/frontend/profiles/constants.h
         src/frontend/views/variable_table_model.cpp
         src/frontend/views/variable_table_model.h
+        src/frontend/views/css.h
 )
 
 add_executable(tlk_file_test
@@ -217,7 +218,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/frontend/views/savegamewidget.h src/frontend/views/savegamewidget.cpp src/frontend/views/savegamewidget.ui
     )
 
-    qt_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+    qt_add_translations(EE_SaveEditor
+        SOURCE_TARGETS EE_SaveEditor
+        TS_FILES ${TS_FILES}
+        RESOURCE_PREFIX "/translations"
+    )
 else()
     if(ANDROID)
         add_library(EE_SaveEditor SHARED
