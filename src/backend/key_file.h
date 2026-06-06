@@ -19,6 +19,8 @@ private:
     using IEFile::IEFile;
     KeyFileHeader m_header{};
     std::vector<BiffEntry> m_biff_entries;
+    std::vector<char> m_location_data;
+    std::vector<std::string_view> m_resource_names;
     std::vector<ResourceEntry> m_resource_entries;
 };
 

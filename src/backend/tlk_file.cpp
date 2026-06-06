@@ -166,5 +166,6 @@ bool TlkFile::string_data_in_range( const TlkFileEntry& entry) const noexcept
 void TlkFile::if_in_range( const TlkFileEntry& entry )
 {
     if ( string_data_in_range( entry ) ) [[likely]]
-        m_cached_strings.emplace_back( m_string_data.data()+entry.offset_to_string, entry.string_length );
+        m_cached_strings.emplace_back(
+            m_string_data.data()+entry.offset_to_string, entry.string_length );
 }
