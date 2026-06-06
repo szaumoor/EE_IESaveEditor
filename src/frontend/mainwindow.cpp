@@ -161,17 +161,22 @@ void MainWindow::reload_resources()
             tlk.emplace(get_tlk.value());
         }
 
-        if (biff) qInfo() << "BIFF OK";
-        if (key)  qInfo() << "KEY OK";
+        if (biff)
+            qInfo() << "BIFF OK";
+        if (key)
+            qInfo() << "KEY OK";
     });
 }
 
 void MainWindow::setup_tray_icon()
 {
     using ActivationReason = QSystemTrayIcon::ActivationReason;
+
     trayIcon = new QSystemTrayIcon(QIcon(":/img/shield.ico"), this);
+
     auto * trayMenu = new QMenu(this);
     auto* alwaysOnTop = trayMenu->addAction(tr("Always on top"));
+
     alwaysOnTop->setCheckable(true);
     connect(alwaysOnTop, &QAction::toggled, this, &MainWindow::set_always_on_top);
     trayMenu->addAction(tr("Quit"), this, &QApplication::quit);
@@ -194,8 +199,7 @@ void MainWindow::setup_tray_icon()
 
 void MainWindow::open_forum()
 {
-    if ( !open_url( "https://www.gibberlings3.net/forums/topic/41304-ee-save-editor-new-save-editor-unreleased/" ) )
-        qDebug() << "Error opening link to open mod forum!";
+    open_forum_profile();
 }
 
 void MainWindow::open_forum_profile()

@@ -54,6 +54,34 @@ enum class ResourceType : u16
 
 static_assert( sizeof( ResourceType ) == 2, "ResourceType size is incorrect" );
 
+namespace resource_locator
+{
+    static constexpr u32 kFileIndexMask = 0x00003fffu;
+    static constexpr u32 kTilesetIndexMask = 0x000fc000u;
+    static constexpr u32 kSourceIndexMask = 0xfff00000u;
+
+    static constexpr u32 kTilesetIndexShift = 14u;
+    static constexpr u32 kSourceIndexShift = 20u;
+
+    [[nodiscard]]
+    constexpr u16 file_index( const u32 locator ) noexcept
+    {
+        return static_cast<u16>( locator & kFileIndexMask );
+    }
+
+    [[nodiscard]]
+    constexpr u16 tileset_index( const u32 locator ) noexcept
+    {
+        return static_cast<u16>( ( locator & kTilesetIndexMask ) >> kTilesetIndexShift );
+    }
+
+    [[nodiscard]]
+    constexpr u16 source_index( const u32 locator ) noexcept
+    {
+        return static_cast<u16>( ( locator & kSourceIndexMask ) >> kSourceIndexShift );
+    }
+}
+
 #pragma pack(push, 1)
 
 struct BiffHeader
@@ -94,12 +122,47 @@ struct KeyFileHeader
     u32 offset_to_resource_entries;
 };
 
+enum struct BiffLocation : u8
+{
+    Error = 0,
+    Data  = 1u << 0,
+    Cache = 1u << 1
+};
+
 struct BiffEntry
 {
     u32 length_biff_file;
     u32 offset_to_biff_filename;
     u16 length_biff_filename_with_null;
     u16 location_file_bitfield;
+
+    [[nodiscard]]
+    constexpr BiffLocation location() const noexcept
+    {
+        if (is_in_data())
+            return BiffLocation::Data;
+
+        if (is_in_cache())
+            return BiffLocation::Cache;
+
+        return BiffLocation::Error;
+    }
+
+private:
+    static constexpr u16 kDataDirectoryFlag = 1u << 0;
+    static constexpr u16 kCacheDirectoryFlag = 1u << 1;
+
+    [[nodiscard]]
+    constexpr bool is_in_data() const noexcept
+    {
+        return (location_file_bitfield & kDataDirectoryFlag) != 0;
+    }
+
+    [[nodiscard]]
+    constexpr bool is_in_cache() const noexcept
+    {
+        return (location_file_bitfield & kCacheDirectoryFlag) != 0;
+    }
 };
 
 struct ResourceEntry
@@ -107,6 +170,24 @@ struct ResourceEntry
     Resref resource_name;
     ResourceType resource_type;
     u32 resource_locator;
+
+    [[nodiscard]]
+    constexpr u16 source_index() const noexcept
+    {
+        return resource_locator::source_index( resource_locator );
+    }
+
+    [[nodiscard]]
+    constexpr u16 tileset_index() const noexcept
+    {
+        return resource_locator::tileset_index( resource_locator );
+    }
+
+    [[nodiscard]]
+    constexpr u16 file_index() const noexcept
+    {
+        return resource_locator::file_index( resource_locator );
+    }
 };
 
 #pragma pack(pop)
