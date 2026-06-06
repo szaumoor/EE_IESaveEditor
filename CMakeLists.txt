@@ -46,6 +46,7 @@ add_compile_definitions(TEST_RES_DIR="${CMAKE_SOURCE_DIR}/tests/res")
 
 set(TS_FILES
     translations/EE_SaveEditor_es.ts
+    translations/EE_SaveEditor_zh_CN.ts
 )
 
 SET(RES_FILES
