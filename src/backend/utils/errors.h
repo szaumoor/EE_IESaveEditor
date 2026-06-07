@@ -42,6 +42,7 @@ public:
      * Returns the error type associated with the error.
      * @return IEErrorType associated with the error.
      */
+    [[nodiscard("Dont ignore error types")]]
     IEErrorType type() const noexcept;
 
 private:
@@ -49,6 +50,13 @@ private:
     std::string_view m_error_message;
 };
 
+
+/**
+ * Parametrized class that encapsulates a possible (std::expected) value along with a possible
+ * error message. Only IEFile classes or IEStringView may be used as parameter.
+ *
+ * @tparam T Type must be IEStringView or assignable to IEFile
+ */
 template<typename T>
 class [[nodiscard("Do not ignore a Possible (expected) value")]] Possible : public std::expected<T, IEError>
 {

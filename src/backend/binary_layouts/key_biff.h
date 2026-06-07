@@ -196,5 +196,7 @@ static_assert( sizeof( BiffHeader ) == 20, "BiffHeader size is incorrect" );
 static_assert( sizeof( BiffEntry ) == 12, "BiffEntry size is incorrect" );
 static_assert( sizeof( ResourceEntry ) == 14, "ResourceEntry size is incorrect" );
 static_assert( sizeof( KeyFileHeader ) == 24, "KeyFileHeader size is incorrect" );
+static_assert( sizeof(TileEntry) == 20, "TileEntry size is incorrect" );
+static_assert( sizeof(FileEntry) == 16, "TileEntry size is incorrect" );
 
 #endif //EESAVEEDITOR_KEY_BIFF_H

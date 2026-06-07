@@ -13,6 +13,12 @@
 class StructWriter
 {
 public:
+    /**
+     * Constructs a StructWriter object that takes an std::ifstream to determine where to extract
+     * data from.
+     *
+     * @param file_handle std::ifstream pointing to the binary file from which to read.
+     */
     explicit StructWriter( std::ifstream& file_handle ) noexcept : m_file_handle( file_handle ) { }
 
     /**
@@ -27,9 +33,7 @@ public:
     void into( Struct& st, const u32 offset = 0 ) const
     {
         if ( offset > 0 ) [[likely]]
-        {
             m_file_handle.seekg( offset, std::ios::beg );
-        }
 
         m_file_handle.read( reinterpret_cast<char*>(&st), sizeof( Struct ) );
     }
@@ -46,9 +50,7 @@ public:
     void into( std::vector<Struct>& st, const u32 offset = 0 ) const
     {
         if ( offset > 0 ) [[likely]]
-        {
             m_file_handle.seekg( offset, std::ios::beg );
-        }
 
         m_file_handle.read( reinterpret_cast<char*>(st.data()),
                           static_cast<std::streamsize>(st.size() * sizeof( Struct )) );
@@ -58,18 +60,33 @@ private:
     std::ifstream& m_file_handle;
 };
 
+/**
+ *  This class encapsulates casting struct data into binary files.
+ *  Mostly to hide the uglyness of that whole process.
+ */
 class BinaryWriter
 {
 public:
+    /**
+     * Constructs a BinaryWriter that uses a std::ofstream to handle casting data
+     * into binary files.
+     *
+     * @param file_handle std::ofstream with the file to which to cast the data to
+     */
     explicit BinaryWriter( std::ofstream& file_handle ) : m_file_handle( file_handle ) { }
 
+    /**
+     * Read the data in the struct and casts its bytes into the file at a specific offset.
+     *
+     * @tparam Struct The type of struct with the data to cast into the file.
+     * @param st The specific struct with the data to cast to a file
+     * @param offset The offset within the std::ofstream from the beginning of file.
+     */
     template<typename Struct>
     void out( Struct& st, const u32 offset = 0 ) const
     {
         if ( offset > 0 ) [[likely]]
-        {
             m_file_handle.seekp( offset, std::ios::beg );
-        }
 
         m_file_handle.write( reinterpret_cast<const char*>(&st), sizeof( Struct ) );
     }

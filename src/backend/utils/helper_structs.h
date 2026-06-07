@@ -3,8 +3,8 @@
 
 #include "../utils/aliases.h"
 
-#include <string>
 #include <algorithm>
+#include <string>
 
 #pragma pack(push, 1)
 
