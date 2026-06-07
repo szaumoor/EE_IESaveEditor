@@ -11,7 +11,17 @@
 
 #include "utils/io.h"
 
+
 using EffectVariant = std::variant<EmbeddedEffFileV1, EmbeddedEffFileV2>;
+
+struct Proficiency
+{
+    u16 proficiency;
+    u16 pips;
+
+    Proficiency( const u16 prof, const u16 p ) : proficiency( prof ), pips( p ) { }
+};
+
 
 /**
  *  This class abstracts away irrelevant info from the possible two variants of the
@@ -67,6 +77,25 @@ public:
             | transform([](auto el){ return std::get<1>(el);})
             | filter([](auto el) { return el.opcode == 187;})
             | transform([](auto el) { return GamLocalVariable(el.variable_name.to_string(), el.parameter1 ); });
+
+        return std::vector(vars.begin(), vars.end());
+    }
+
+    [[nodiscard]]
+    auto proficiencies() const noexcept
+    {
+        using std::views::transform;
+        using std::views::filter;
+
+        auto vars = effects()
+            | transform([](auto el){ return std::get<1>(el);})
+            | filter([](auto el) { return el.opcode == 233;})
+            | transform([](auto el) {
+                return Proficiency(
+                    static_cast<u16>(el.parameter2),
+                    static_cast<u16>(el.parameter1)
+                );
+            });
 
         return std::vector(vars.begin(), vars.end());
     }

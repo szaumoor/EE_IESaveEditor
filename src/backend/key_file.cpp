@@ -5,8 +5,6 @@
 #include "ie_files.h"
 #include "utils/io.h"
 
-#include <QDebug>
-
 using std::string_view;
 using std::vector;
 using std::ifstream;

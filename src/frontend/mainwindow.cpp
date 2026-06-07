@@ -147,7 +147,7 @@ void MainWindow::reload_resources()
     [] {
         return std::make_tuple(
             TlkFile::open(TEST_RES_DIR "/dialog.tlk"),
-            BiffFile::open(TEST_RES_DIR "/Spells.bif"),
+            BiffFile::open(TEST_RES_DIR "/Patch25.bif"),
             KeyFile::open(TEST_RES_DIR "/chitin.key")
         );
     },
@@ -165,6 +165,8 @@ void MainWindow::reload_resources()
             qInfo() << "BIFF OK";
         if (key)
             qInfo() << "KEY OK";
+
+
     });
 }
 

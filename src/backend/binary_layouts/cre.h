@@ -89,7 +89,7 @@ struct CreHeader
     u16 max_hit_points; // 0x26
     u32 animation_id; // 0x28
     CreColors colors; // 0x2C - 0x32
-    u8 eff_structure_version; // 0x33
+    u8 eff_struct_version; // 0x33
     Resref small_portrait; // 0x34
     Resref large_portrait; // 0x3C
     i8 reputation; // 0x44 Minimum value: 0

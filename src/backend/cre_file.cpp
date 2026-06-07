@@ -25,21 +25,21 @@ Effect Effect::from( const EmbeddedEffFileV2& eff )
 CreFile CreFile::read( std::ifstream& file, const u32 offset )
 {
     CreFile cre;
-    auto& header = cre.m_header;
+    auto& cre_header = cre.m_header;
     const StructWriter writer( file );
-    writer.into( header );
+    writer.into( cre_header );
 
     cre.resize_vecs();
 
     writer.into( cre.m_known_spells, offset + cre.m_header.known_spells_offset );
-    writer.into( cre.m_memorization_infos, offset + header.memorization_offset );
+    writer.into( cre.m_memorization_infos, offset + cre_header.memorization_offset );
     writer.into( cre.m_memorized_spells, offset + cre.m_header.memorized_offset );
     writer.into( cre.m_items, offset + cre.m_header.items_offset );
     writer.into( cre.m_item_slots, offset + cre.m_header.item_slots_offset );
 
     file.seekg( offset + cre.m_header.effects_offset, std::ios::beg );
 
-    switch ( header.eff_structure_version )
+    switch ( cre_header.eff_struct_version )
     {
         [[unlikely]] case 0:
             cre.read_effects<EmbeddedEffFileV1>( cre, writer );
