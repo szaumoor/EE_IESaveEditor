@@ -9,25 +9,28 @@
 #include <string_view>
 #include <vector>
 
-class BiffFile final : IEFile
+class BiffFile final
 {
 public:
     static Possible<BiffFile> open( std::string_view path );
-
-protected:
-    void check_for_malformation() noexcept override;
+    void check_for_malformation() noexcept;
+    [[nodiscard]] bool good() const noexcept { return m_good; }
+    [[nodiscard]] std::string_view path() const noexcept { return m_path; }
+    explicit operator bool() const noexcept { return m_good; }
 
 private:
-    using IEFile::IEFile;
-
-public:
+    explicit BiffFile(std::string_view path) : m_path(path) {}
     BiffHeader m_header{};
     std::vector<FileEntry> m_file_entries;
     std::vector<TileEntry> m_tile_entries;
-
     std::vector<SplHeader> m_spells;
     std::vector<std::string> m_ids_files;
     std::vector<std::string> m_ini_files;
+
+    bool m_good = false;
+    std::string m_path;
 };
+
+static_assert(IE_Openable<BiffFile>);
 
 #endif // BIFF_FILES_H
