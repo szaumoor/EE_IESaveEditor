@@ -1,46 +1,43 @@
 #include <QApplication>
-#include <QIcon>
 #include <QLocale>
 #include <QScreen>
 #include <QString>
-#include <QStringList>
 #include <QTranslator>
 
 #include "frontend/mainwindow.h"
+#include "frontend/profiles/constants.h"
 
-constexpr auto kAppName = "EE Save Editor";
 
-bool install_translation(QTranslator& translator)
+Game::Language::Instance detect_system_language()
 {
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    // const QStringList uiLanguages = {"es_ES" };
-    // const QStringList uiLanguages = {"zh_CN" };
-
-    for ( const QString& localeName : uiLanguages )
+    for (const QString& localeName : QLocale::system().uiLanguages())
     {
-        const QLocale locale( localeName );
+        const auto lang = Game::Language::lang_from_locale(QLocale(localeName));
 
-        if ( locale.language() == QLocale::English )
-            continue;
+        if (lang != Game::Language::Instance::English)
+            return lang;
+    }
 
-        const QString exactLocale = locale.name();
-        const QString language = exactLocale.section( '_', 0, 0 );
-        QStringList candidates { exactLocale };
+    return Game::Language::Instance::English;
+}
 
-        if ( language != exactLocale )
-            candidates << language;
+bool install_translation(QTranslator& translator, const Game::Language::Instance lang)
+{
+    if (lang == Game::Language::Instance::English)
+    {
+        qInfo() << "Using default English UI.";
+        return false;
+    }
 
-        for ( const QString& candidate : candidates )
-        {
-            const QString translation = QStringLiteral( ":/translations/EE_SaveEditor_%1" ).arg( candidate );
+    const QString code = Game::Language::code_for_lang(lang);
+    const QString translation =
+        QStringLiteral(":/translations/EE_SaveEditor_%1").arg(code);
 
-            if ( translator.load( translation ) )
-            {
-                QApplication::installTranslator( &translator );
-                qInfo() << "Loaded translation:" << translation;
-                return true;
-            }
-        }
+    if (translator.load(translation))
+    {
+        QApplication::installTranslator(&translator);
+        qInfo() << "Loaded translation:" << translation;
+        return true;
     }
 
     qInfo() << "Using default English UI.";
@@ -55,14 +52,13 @@ inline void center_window( MainWindow& window )
 int main( int argc, char* argv[] )
 {
     QApplication app( argc, argv );
-    QApplication::setApplicationName( kAppName );
-    QApplication::setApplicationDisplayName( kAppName );
+    QApplication::setApplicationName( consts::settings::kAppName );
+    QApplication::setApplicationDisplayName( consts::settings::kAppName );
     QApplication::setWindowIcon( QIcon( ":/img/shield.ico" ) );
-
     QTranslator translator;
-    install_translation( translator );
-
-    MainWindow window;
+    const auto language = detect_system_language();
+    install_translation( translator, language );
+    MainWindow window(language);
     center_window( window );
     window.show();
     return QApplication::exec();
