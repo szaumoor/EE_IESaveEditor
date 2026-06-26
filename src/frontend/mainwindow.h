@@ -1,6 +1,7 @@
 #ifndef EESAVEEDITOR_MAINWINDOW_H
 #define EESAVEEDITOR_MAINWINDOW_H
 
+#include <memory>
 #include <optional>
 
 #include <QMainWindow>
@@ -11,6 +12,9 @@
 #include "../backend/tlk_file.h"
 
 #include "helpers/dialogs.h"
+#include "profiles/games.h"
+
+using TlkRef = std::shared_ptr<const TlkFile>;
 
 QT_BEGIN_NAMESPACE
 
@@ -26,14 +30,14 @@ class MainWindow final : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow( QWidget* parent = nullptr );
+    explicit MainWindow( Game::Language::Instance lang, QWidget* parent = nullptr );
     ~MainWindow() override;
 
 protected:
     void closeEvent( QCloseEvent* event ) override;
 
 private:
-    std::optional<TlkFile> tlk;
+    TlkRef tlk;
     Ui::MainWindow* ui;
     std::optional<GamFile> savegame { std::nullopt  };
     void set_up_connections();
@@ -55,6 +59,7 @@ private slots:
     static void open_discord_ie();
     static void open_github_repo();
     static void open_discord_my_mods();
+    void manage_language_actions(Game::Language::Instance lang);
 };
 
 #endif //EESAVEEDITOR_MAINWINDOW_H

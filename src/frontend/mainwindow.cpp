@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
 #include <QCloseEvent>
@@ -18,9 +19,11 @@
 
 #include "../backend/biff_file.h"
 #include "../backend/key_file.h"
+#include "helpers/dialogs.h"
 
 #include "helpers/gui_helpers.h"
 #include "helpers/qt_io.h"
+#include "profiles/games.h"
 
 class KeyFile;
 class BiffFile;
@@ -31,7 +34,7 @@ using ResourceResults = std::tuple<
     Possible<KeyFile>
 >;
 
-MainWindow::MainWindow( QWidget* parent )
+MainWindow::MainWindow( const Game::Language::Instance lang, QWidget* parent )
     : QMainWindow( parent ), ui( new Ui::MainWindow ), dlg(this)
 {
     ui->setupUi( this );
@@ -39,6 +42,7 @@ MainWindow::MainWindow( QWidget* parent )
     ui->savegame_widget->setVisible( false );
     set_up_connections();
     set_up_shortcuts();
+    manage_language_actions( lang );
     QTimer::singleShot(0, this, &MainWindow::reload_resources);
 }
 
@@ -95,10 +99,13 @@ void MainWindow::set_up_shortcuts() const
 
 void MainWindow::load_ui() const
 {
-    if (!savegame)
+    if (!savegame || !tlk)
+    {
+        qWarning() << Q_FUNC_INFO <<  "-> Savegame or tlk weren't loaded!";
         return;
+    }
 
-    ui->savegame_widget->inject_data( savegame.value(), tlk.value() );
+    ui->savegame_widget->inject_data( savegame.value(), tlk);
     ui->savegame_widget->setVisible( true );
 }
 
@@ -130,13 +137,12 @@ void MainWindow::open_file()
     if ( path.isEmpty() )
         return;
 
-    const auto gamPath = extend_path( {path, "BALDUR.gam"} );
+    const auto gamPath = extend_path( { path, "BALDUR.gam" } );
 
     if (auto gam = GamFile::open( gamPath.toStdString() ))
     {
         savegame.emplace(gam.value());
     }
-
     load_ui();
 }
 
@@ -153,20 +159,20 @@ void MainWindow::reload_resources()
     },
     [this](ResourceResults results)
     {
-        auto [get_tlk, biff, key] = results;
+        auto& [get_tlk, biff, key] = results;
 
         if (get_tlk)
         {
             qInfo() << "TLK OK";
-            tlk.emplace(get_tlk.value());
+            tlk = std::make_shared<const TlkFile>(std::move(get_tlk).value());
+            if (tlk)
+                qInfo() << "For sure, TLK is OK!";
         }
 
         if (biff)
             qInfo() << "BIFF OK";
         if (key)
             qInfo() << "KEY OK";
-
-
     });
 }
 
@@ -241,4 +247,19 @@ void MainWindow::open_discord_my_mods()
 {
     if ( !open_url( "https://discord.gg/DER6Ma92X4" ) )
         qDebug() << "Error opening link to join discord!";
+}
+
+void MainWindow::manage_language_actions( Game::Language::Instance lang )
+{
+    auto* langGroup = new QActionGroup(this);
+    langGroup->setExclusive( true );
+    langGroup->addAction( ui->actionEnglish );
+    langGroup->addAction( ui->actionSpanish );
+    langGroup->addAction( ui->actionSChinese );
+    ui->actionEnglish->setCheckable( true );
+    ui->actionSpanish->setCheckable( true );
+    ui->actionSChinese->setCheckable( true );
+    ui->actionEnglish->setChecked( lang == Game::Language::Instance::English );
+    ui->actionSpanish->setChecked( lang == Game::Language::Instance::Spanish );
+    ui->actionSChinese->setChecked( lang == Game::Language::Instance::SChinese );
 }

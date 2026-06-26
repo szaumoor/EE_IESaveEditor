@@ -32,8 +32,8 @@ void run_task_with_progress(QWidget* parent, const std::initializer_list<QWidget
     QObject::connect(watcher, &QFutureWatcher<Result>::finished, parent,
     [watcher, progress, onFinished = std::forward<OnFinished>(onFinished), ui_guard] mutable
         {
-            Result result = watcher->result();
-            onFinished(result);
+            Result result = watcher->future().takeResult();
+            onFinished(std::move(result));
             progress->close();
             progress->deleteLater();
             watcher->deleteLater();
