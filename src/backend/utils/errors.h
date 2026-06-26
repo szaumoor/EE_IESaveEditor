@@ -1,7 +1,6 @@
 #ifndef EESAVEEDITOR_ERRORS_H
 #define EESAVEEDITOR_ERRORS_H
 
-#include <expected>
 #include <string_view>
 
 #include "aliases.h"
@@ -36,7 +35,7 @@ public:
      * @return std::string_view with the error message
      */
     [[nodiscard("Don't ignore error messages")]]
-    std::string_view what() const noexcept;
+    std::string what() const noexcept;
 
     /**
      * Returns the error type associated with the error.
@@ -47,21 +46,7 @@ public:
 
 private:
     const IEErrorType m_error_type;
-    std::string_view m_error_message;
-};
-
-
-/**
- * Parametrized class that encapsulates a possible (std::expected) value along with a possible
- * error message. Only IEFile classes or IEStringView may be used as parameter.
- *
- * @tparam T Type must be IEStringView or assignable to IEFile
- */
-template<typename T>
-class [[nodiscard("Do not ignore a Possible (expected) value")]] Possible : public std::expected<T, IEError>
-{
-    static_assert( std::is_base_of_v<IEFile, T> || std::same_as<T, IEStringView>);
-    using std::expected<T, IEError>::expected;
+    std::string m_error_message;
 };
 
 #endif //EESAVEEDITOR_ERRORS_H
