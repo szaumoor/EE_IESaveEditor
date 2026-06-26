@@ -3,18 +3,14 @@
 #include <fstream>
 #include <print>
 
-#include "ie_files.h"
 #include "utils/io.h"
 
-using std::ifstream;
+static constexpr auto kBiffSignature( "BIFF" );
+static constexpr auto kBiffFileVersion( "V1  " );
 
-static constexpr std::string_view kBiffSignature( "BIFF" );
-static constexpr std::string_view kBiffFileVersion( "V1  " );
-
-
-Possible<BiffFile> BiffFile::open( const std::string_view path )
+Possible<BiffFile> BiffFile::open( std::string_view path )
 {
-    ifstream file_handle( path.data(), std::ios::binary );
+    std::ifstream file_handle( path.data(), std::ios::binary );
 
     if ( not file_handle )
         return std::unexpected( IEError( IEErrorType::Unreadable ) );
@@ -80,40 +76,7 @@ Possible<BiffFile> BiffFile::open( const std::string_view path )
             case ResourceType::NotFound:
                 break;
 
-            case ResourceType::FileTypeAre:
-            case ResourceType::FileTypeBah:
-            case ResourceType::FileTypeBcs:
-            case ResourceType::FileTypeBio:
-            case ResourceType::FileTypeBs:
-            case ResourceType::FileTypeChr1:
-            case ResourceType::FileTypeWmap:
-            case ResourceType::FileTypeMve:
-            case ResourceType::FileTypeWav:
-            case ResourceType::FileTypeWfx:
-            case ResourceType::FileTypePlt:
-            case ResourceType::FileTypeWed:
-            case ResourceType::FileTypeChu:
-            case ResourceType::FileTypeTi:
-            case ResourceType::FileTypeMos:
-            case ResourceType::FileTypeCre:
-            case ResourceType::FileTypeDlg:
-            case ResourceType::FileTypeGam:
-            case ResourceType::FileTypeSto:
-            case ResourceType::FileTypeChr:
-            case ResourceType::FileTypeVvc:
-            case ResourceType::FileTypeVef:
-            case ResourceType::FileTypePro:
-            case ResourceType::FileTypeWbm:
-            case ResourceType::FileTypeFnt:
-            case ResourceType::FileTypeGui:
-            case ResourceType::FileTypeSql:
-            case ResourceType::FileTypePvrz:
-            case ResourceType::FileTypeGlsl:
-            case ResourceType::FileTypeTlk:
-            case ResourceType::FileTypeMenu:
-            case ResourceType::FileTypeMenu2:
-            case ResourceType::FileTypeTtf:
-            case ResourceType::FileTypeSrc:
+            default:
                 break;
         }
     }
