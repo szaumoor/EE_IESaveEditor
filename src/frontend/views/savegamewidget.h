@@ -12,6 +12,8 @@
 
 #include <QWidget>
 
+using TlkRef = std::shared_ptr<const TlkFile>;
+
 class GamFile;
 
 namespace Ui {
@@ -26,14 +28,14 @@ public:
     ~SaveGameWidget() override;
 
 public slots:
-    void inject_data(const GamFile& file, const TlkFile& tlk_file);
+    void inject_data(const GamFile& file, TlkRef);
 signals:
     void save_changed(const GamFile& file);
 
 private:
     Ui::SaveGameWidget* ui;
     std::optional<GamFile> gam { std:: nullopt };
-    std::optional<TlkFile> tlk { std::nullopt };
+    TlkRef tlk;
     Dialogs dlg;
     bool complete_ui(int index);
     VariableTableModel* m_global_model = nullptr;

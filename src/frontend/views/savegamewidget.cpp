@@ -73,7 +73,7 @@ SaveGameWidget::~SaveGameWidget()
     delete ui;
 }
 
-void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
+void SaveGameWidget::inject_data( const GamFile& file, TlkRef tlk_file )
 {
     gam.emplace( file );
 
@@ -83,7 +83,7 @@ void SaveGameWidget::inject_data( const GamFile& file, const TlkFile& tlk_file )
         return;
     }
 
-    tlk.emplace( tlk_file );
+    tlk = std::move(tlk_file);
 
     if (!tlk)
     {
