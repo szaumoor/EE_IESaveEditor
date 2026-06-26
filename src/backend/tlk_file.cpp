@@ -1,5 +1,4 @@
 #include "tlk_file.h"
-#include "ie_files.h"
 #include "utils/io.h"
 
 #include <algorithm>
@@ -10,50 +9,37 @@
 #include <string_view>
 #include <vector>
 
-using std::vector;
-using std::string_view;
-using std::ifstream;
+#include <print>
 
 namespace rng = std::ranges;
 
-static constexpr string_view kTlkFileSig( "TLK " );
-static constexpr string_view kTlkFileVersion( "V1  " );
+static constexpr auto kTlkFileSig( "TLK " );
+static constexpr auto kTlkFileVersion( "V1  " );
 
 TlkFile::TlkFile( const TlkFile& other ) :
-      IEFile( other.m_path ),
-      m_header( other.m_header ),
-      m_string_data( other.m_string_data )
+    m_header( other.m_header ),
+    m_string_data( other.m_string_data ),
+    m_path( other.m_path )
 
 {
+    std::println("Copy constructor of TLK running...");
     m_good = other.m_good;
     rebuild_cached_strings( other );
 }
 
 TlkFile::TlkFile( TlkFile&& other ) noexcept
-    : IEFile( other.m_path ),
-      m_header( other.m_header ),
+    : m_header( other.m_header ),
       m_string_data( std::move( other.m_string_data ) ),
-      m_cached_strings( std::move( other.m_cached_strings ) )
+      m_cached_strings( std::move( other.m_cached_strings ) ),
+      m_path( std::move(other.m_path) )
 {
+    std::println("Move constructor of TLK running...");
     m_good = other.m_good;
 }
 
-Possible<IEStringView> TlkFile::at( const strref index ) const noexcept
+Possible<TlkFile> TlkFile::open( std::string_view path )
 {
-    if ( index >= length() )
-        return std::unexpected( IEError( IEErrorType::OutOfBounds,
-                                         std::format( "TLK: Index {} is out of bounds [0-{}].", index, length()-1 ) ) );
-    return IEStringView(m_cached_strings[index], index);
-}
-
-Possible<IEStringView> TlkFile::operator[]( const strref index ) const noexcept
-{
-    return at( index );
-}
-
-Possible<TlkFile> TlkFile::open( string_view path )
-{
-    ifstream file_handle( path.data(), std::ios::binary );
+    std::ifstream file_handle( path.data(), std::ios::binary );
     if ( not file_handle )
         return std::unexpected( IEError( IEErrorType::Unreadable ) );
 
@@ -67,16 +53,29 @@ Possible<TlkFile> TlkFile::open( string_view path )
     if ( not tlk )
         return std::unexpected( IEError( IEErrorType::Malformed ) );
 
-    vector<TlkFileEntry> entries( tlk.length() );
+    std::vector<TlkFileEntry> entries( tlk.length() );
     writer.into( entries, sizeof( TlkFileHeader ) );
 
     file_handle.seekg( header.offset_to_str_data, std::ios::beg );
-    tlk.m_string_data = vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
+    tlk.m_string_data = std::vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
     tlk.m_cached_strings.reserve( tlk.length() );
     rng::for_each( entries, [&tlk]( const TlkFileEntry& entry ) {
         tlk.if_in_range( entry );
     } );
     return tlk;
+}
+
+Possible<IEStringView> TlkFile::at( const strref index ) const noexcept
+{
+    if ( index >= length() )
+        return std::unexpected( IEError( IEErrorType::OutOfBounds,
+                                         std::format( "TLK: Index {} is out of bounds [0-{}].", index, length()-1 ) ) );
+    return IEStringView(m_cached_strings[index], index);
+}
+
+Possible<IEStringView> TlkFile::operator[]( const strref index ) const noexcept
+{
+    return at( index );
 }
 
 u32 TlkFile::length() const noexcept

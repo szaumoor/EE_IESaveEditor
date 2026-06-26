@@ -25,5 +25,5 @@ IEError::IEError( const IEErrorType error_type, const std::string_view error_m )
 IEError::IEError( const IEErrorType error_type ) noexcept
     : m_error_type( error_type ), m_error_message( resolve_error_msg( m_error_type ) ) { }
 
-std::string_view IEError::what() const noexcept { return m_error_message; }
+std::string IEError::what() const noexcept { return m_error_message; }
 IEErrorType IEError::type() const noexcept { return m_error_type; }

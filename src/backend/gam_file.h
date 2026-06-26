@@ -7,13 +7,18 @@
 #include "cre_file.h"
 #include "ie_files.h"
 #include "binary_layouts/gam.h"
-#include "utils/errors.h"
 #include "utils/helper_structs.h"
 
-class GamFile final : public IEFile
+class GamFile final
 {
 public:
     static Possible<GamFile> open( std::string_view path );
+
+    [[nodiscard]] bool good() const noexcept { return m_good; }
+    [[nodiscard]] std::string_view path() const noexcept { return m_path; }
+
+    explicit operator bool() const noexcept { return m_good; }
+
     bool save_gam();
 
     [[nodiscard]]
@@ -28,10 +33,12 @@ public:
     [[nodiscard]]
     auto& globals() const noexcept{ return m_variables; }
 
-protected:
-    void check_for_malformation() noexcept override;
+    void check_for_malformation() noexcept;
 private:
-    using IEFile::IEFile;
+    explicit GamFile(std::string_view path) : m_path(path) {}
+
+    bool m_good = false;
+    std::string m_path;
 
     GamHeader m_header{};
     std::vector<GamCharacterData> m_party_members;
@@ -47,5 +54,7 @@ private:
     std::vector<Resref> m_familiar_extras;
     void prep_containers();
 };
+
+static_assert(IE_Openable<GamFile>);
 
 #endif // GAM_FILE_H

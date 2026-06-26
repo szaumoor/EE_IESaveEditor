@@ -3,14 +3,13 @@
 #include "utils/helper_structs.h"
 #include "utils/io.h"
 
-#include <algorithm>
+#include <format>
 #include <fstream>
 
 using std::string_view;
 using std::ifstream;
 using std::vector;
 using std::string_view;
-namespace rng = std::ranges;
 
 static constexpr string_view kGamFileSig( "GAME" );
 static constexpr string_view kGamFileVersion_2_0( "V2.0" );
@@ -24,33 +23,49 @@ Possible<GamFile> GamFile::open( const string_view path )
         return std::unexpected( IEError( IEErrorType::Unreadable ) );
 
     GamFile gam( path );
-    auto& header = gam.m_header;
+    auto& g_header = gam.m_header;
 
     const StructWriter writer( file_handle );
-    writer.into( header );
+    writer.into( g_header );
     gam.check_for_malformation();
 
     if ( not gam )
-        return std::unexpected( IEError( IEErrorType::Malformed ) );
+    {
+        return std::unexpected( IEError( IEErrorType::Malformed,
+        std::format("GAM is malformed, signature={}, version={}",
+        g_header.signature.to_string(), g_header.version.to_string()) ) );
+    }
 
     gam.prep_containers();
 
-    writer.into( gam.m_party_members, header.npc_party_offset );
-    rng::for_each( gam.m_party_members, [&]( const auto& member ) {
-        gam.m_party_cre_files.push_back( std::move( CreFile::read( file_handle, member.cre_offset ) ) );
-    } );
+    writer.into( gam.m_party_members, g_header.npc_party_offset );
+    for (const auto& member : gam.m_party_members) {
+        const auto cre = CreFile::read( file_handle, member.cre_offset );
+        if (!cre)
+        {
+            return std::unexpected(IEError(IEErrorType::Malformed,
+                std::format("GAM seems to be malformed: {}", cre.error().what())));
+        }
+        gam.m_party_cre_files.push_back( cre.value() );
+    }
 
-    writer.into( gam.m_non_party_members, header.npc_nonparty_offset );
-    rng::for_each( gam.m_non_party_members, [&]( const auto& member ) {
-        gam.m_non_party_cre_files.push_back( std::move( CreFile::read( file_handle, member.cre_offset ) ) );
-    } );
+    writer.into( gam.m_non_party_members, g_header.npc_nonparty_offset );
+    for (const auto& member : gam.m_non_party_members)   {
+        const auto cre = CreFile::read( file_handle, member.cre_offset );
+        if (!cre)
+        {
+            return std::unexpected(IEError(IEErrorType::Malformed,
+                std::format("GAM seems to be malformed: {}", cre.error().what())));
+        }
+        gam.m_non_party_cre_files.push_back( cre.value());
+    }
 
-    writer.into( gam.m_variables, header.global_vars_offset );
-    writer.into( gam.m_journal_entries, header.journal_offset );
-    writer.into( gam.m_stored_locations, header.stored_locs_offset );
-    writer.into( gam.m_pocket_plane_info, header.pocket_locs_offset );
-    writer.into( gam.m_familiar_info, header.familiar_info_offset );
-    writer.into( gam.m_familiar_extras, header.familiar_extra_offset );
+    writer.into( gam.m_variables, g_header.global_vars_offset );
+    writer.into( gam.m_journal_entries, g_header.journal_offset );
+    writer.into( gam.m_stored_locations, g_header.stored_locs_offset );
+    writer.into( gam.m_pocket_plane_info, g_header.pocket_locs_offset );
+    writer.into( gam.m_familiar_info, g_header.familiar_info_offset );
+    writer.into( gam.m_familiar_extras, g_header.familiar_extra_offset );
 
     return gam;
 }

@@ -1,68 +1,28 @@
 #ifndef CRE_FILE_H
 #define CRE_FILE_H
 
-#include "binary_layouts/cre.h"
-#include "binary_layouts/gam.h"
-#include "utils/aliases.h"
-
 #include <ranges>
 #include <variant>
 #include <vector>
 
+#include "ie_files.h"
+
+#include "binary_layouts/cre.h"
+#include "binary_layouts/gam.h"
+
+#include "utils/abstract_structs.h"
+#include "utils/aliases.h"
 #include "utils/io.h"
-
-
-using EffectVariant = std::variant<EmbeddedEffFileV1, EmbeddedEffFileV2>;
-
-struct Proficiency
-{
-    u16 proficiency;
-    u16 pips;
-
-    Proficiency( const u16 prof, const u16 p ) : proficiency( prof ), pips( p ) { }
-};
-
-
-/**
- *  This class abstracts away irrelevant info from the possible two variants of the
- *  effect embedded files in the gam files and keeps what matters for the purposes
- *  of the save editor. Since both versions differ quite significantly in presentation
- *  this provides a common interface to access the important data.
- */
-class Effect final
-{
-public:
-    static Effect from( const EmbeddedEffFileV1& eff );
-    static Effect from( const EmbeddedEffFileV2& eff );
-
-private:
-    Effect() = default;
-
-    template<typename EffectType>
-    static constexpr void common_mapping( Effect& effect, EffectType eff )
-    {
-        static_assert( std::is_same_v<EffectType, EmbeddedEffFileV1> || std::is_same_v<EffectType, EmbeddedEffFileV2> );
-
-        effect.opcode     = eff.opcode;
-        effect.duration   = eff.duration;
-        effect.parameter1 = eff.parameter1;
-        effect.parameter2 = eff.parameter2;
-        effect.timing     = eff.timing_mode;
-    }
-
-    u32 opcode     = 0;
-    u32 timing     = 0;
-    u32 duration   = 0;
-    i32 parameter1 = 0;
-    u32 parameter2 = 0;
-    Resref resource{};
-};
 
 class CreFile final
 {
 public:
-    static CreFile read( std::ifstream& file, u32 offset );
+    static Possible<CreFile> read( std::ifstream& file, u32 offset );
     std::vector<Effect> effects();
+
+    void check_for_malformation() noexcept;
+    [[nodiscard]] bool good() const noexcept { return m_good; }
+    explicit operator bool() const noexcept { return m_good;};
 
     [[nodiscard]]
     auto header() const noexcept { return m_header; }
@@ -108,10 +68,12 @@ private:
     std::vector<CreSpellMemorizedSpell> m_memorized_spells;
     std::vector<EffectVariant> m_effects;
     std::vector<CreInventoryItem> m_items;
-
     CreItemSlots m_item_slots{};
 
+    bool m_good = false;
+
     inline void resize_vecs() noexcept;
+
 
     template<typename T>
     void read_effects( CreFile& cre, const StructWriter& writer )
@@ -123,5 +85,7 @@ private:
         cre.m_effects.insert( cre.m_effects.end(), tmp.begin(), tmp.end() );
     }
 };
+
+static_assert(IE_Readable<CreFile>);
 
 #endif // CRE_FILE_H
