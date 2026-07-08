@@ -11,47 +11,47 @@
 
 struct BamV2Header
 {
-    CharArray<4>  signature;              // 0x0000  "BAM "
-    CharArray<4>  version;                // 0x0004  "V2  "
+    CharArray<4>  signature;              
+    CharArray<4>  version;                
 
-    u32           frame_count;             // 0x0008  number of frame entries
-    u32           cycle_count;             // 0x000C  number of cycle entries
-    u32           data_block_count;        // 0x0010  number of data blocks
+    u32           frame_count;             
+    u32           cycle_count;             
+    u32           data_block_count;        
 
-    u32           frame_entries_offset;    // 0x0014  from file start
-    u32           cycle_entries_offset;    // 0x0018  from file start
-    u32           data_blocks_offset;      // 0x001C  from file start
+    u32           frame_entries_offset;    
+    u32           cycle_entries_offset;    
+    u32           data_blocks_offset;      
 };
 
 struct BamV2FrameEntry
 {
-    u16  width;                            // 0x0000
-    u16  height;                           // 0x0002
+    u16  width;                            
+    u16  height;                           
 
-    i16  center_x;                         // 0x0004
-    i16  center_y;                         // 0x0006
+    i16  center_x;                         
+    i16  center_y;                         
 
-    u16  data_block_start;                // 0x0008  start index
-    u16  data_block_count;                // 0x000A  count
+    u16  data_block_start;                
+    u16  data_block_count;                
 };
 
 struct BamV2CycleEntry
 {
-    u16  frame_count;                     // 0x0000  frames in this cycle
-    u16  frame_start;                     // 0x0002  start index into frame table
+    u16  frame_count;                     
+    u16  frame_start;                     
 };
 
 struct BamV2DataBlock
 {
-    u32  pvrz_page;                       // 0x0000  MOSxxxx.PVRZ (xxxx = page)
+    u32  pvrz_page;                       
 
-    u32  src_x;                           // 0x0004
-    u32  src_y;                           // 0x0008
-    u32  width;                           // 0x000C
-    u32  height;                          // 0x0010
+    u32  src_x;                           
+    u32  src_y;                           
+    u32  width;                           
+    u32  height;                          
 
-    u32  dst_x;                           // 0x0014
-    u32  dst_y;                           // 0x0018
+    u32  dst_x;                           
+    u32  dst_y;                           
 };
 
 #pragma pack(pop)

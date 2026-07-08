@@ -54,14 +54,6 @@ enum class ResourceType : u16
     FileTypeSrc   = 0x0803
 };
 
-#pragma region Asserts
-
-static_assert( std::is_trivially_copyable_v<ResourceType> );
-static_assert( std::is_standard_layout_v<ResourceType> );
-static_assert( sizeof( ResourceType ) == 2, "ResourceType size is incorrect" );
-
-#pragma endregion
-
 namespace resource_locator
 {
     static constexpr u32 kFileIndexMask = 0x00003fffu;
@@ -94,8 +86,8 @@ namespace resource_locator
 
 struct BiffHeader
 {
-    CharArray<4> signature; // "BIFF"
-    CharArray<4> version; // "V1  "
+    CharArray<4> signature; 
+    CharArray<4> version; 
     u32 count_of_file_entries;
     u32 count_of_tile_entries;
     u32 offset_to_file_entries;
@@ -122,8 +114,8 @@ struct TileEntry
 
 struct KeyFileHeader
 {
-    CharArray<4> signature; // "KEY "
-    CharArray<4> version; // "V1  "
+    CharArray<4> signature; 
+    CharArray<4> version; 
     u32 biff_count;
     u32 resource_count;
     u32 offset_to_biff_entries;
@@ -201,6 +193,10 @@ struct ResourceEntry
 #pragma pack(pop)
 
 #pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<ResourceType> );
+static_assert( std::is_standard_layout_v<ResourceType> );
+static_assert( sizeof( ResourceType ) == 2, "ResourceType size is incorrect" );
 
 static_assert( std::is_trivially_copyable_v<BiffHeader> );
 static_assert( std::is_standard_layout_v<BiffHeader> );
