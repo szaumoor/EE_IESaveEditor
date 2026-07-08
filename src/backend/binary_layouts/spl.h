@@ -4,6 +4,8 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
+#include <type_traits>
+
 #pragma pack(push, 1)
 
 struct SplHeader
@@ -97,7 +99,16 @@ struct SplExtendedHeader
 
 #pragma pack(pop)
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<SplExtendedHeader> );
+static_assert( std::is_standard_layout_v<SplExtendedHeader> );
 static_assert(sizeof(SplExtendedHeader) == 0x28, "SplExtendedHeader size mismatch");
+
+static_assert( std::is_trivially_copyable_v<SplHeader> );
+static_assert( std::is_standard_layout_v<SplHeader> );
 static_assert(sizeof(SplHeader) == 0x72, "SplHeader size mismatch");
+
+#pragma endregion
 
 #endif //EE_SAVEEDITOR_SPL_H

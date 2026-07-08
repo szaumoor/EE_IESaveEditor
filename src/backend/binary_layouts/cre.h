@@ -4,6 +4,8 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
+#include <type_traits>
+
 #pragma pack(push, 1)
 
 struct CreArmorClass
@@ -281,19 +283,66 @@ struct EmbeddedEffFileV2
 
 #pragma pack(pop)
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<CreHeader> );
+static_assert( std::is_standard_layout_v<CreHeader> );
 static_assert( sizeof( CreHeader ) == 724, "CreHeader size is incorrect" );
+
+
+static_assert( std::is_trivially_copyable_v<CreArmorClass> );
+static_assert( std::is_standard_layout_v<CreArmorClass> );
 static_assert( sizeof( CreArmorClass ) == 12, "CreArmorClass size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreSavingThrows> );
+static_assert( std::is_standard_layout_v<CreSavingThrows> );
 static_assert( sizeof( CreSavingThrows ) == 5, "CreSavingThrows size is incorrect" );
+
+
+static_assert( std::is_trivially_copyable_v<CreResistances> );
+static_assert( std::is_standard_layout_v<CreResistances> );
 static_assert( sizeof( CreResistances ) == 11, "CreResistances size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreLegacyProficiencies> );
+static_assert( std::is_standard_layout_v<CreLegacyProficiencies> );
 static_assert( sizeof( CreLegacyProficiencies ) == 8, "CreLegacyProficiencies size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreColors> );
+static_assert( std::is_standard_layout_v<CreColors> );
 static_assert( sizeof( CreColors ) == 7, "CreColors size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreStats> );
+static_assert( std::is_standard_layout_v<CreStats> );
 static_assert( sizeof( CreStats ) == 7, "CreStats size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreKnownSpell> );
+static_assert( std::is_standard_layout_v<CreKnownSpell> );
 static_assert( sizeof( CreKnownSpell ) == 12, "CreKnownSpell size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreSpellMemorizationInfo> );
+static_assert( std::is_standard_layout_v<CreSpellMemorizationInfo> );
 static_assert( sizeof( CreSpellMemorizationInfo ) == 16, "CreSpellMemorizationInfo size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreSpellMemorizedSpell> );
+static_assert( std::is_standard_layout_v<CreSpellMemorizedSpell> );
 static_assert( sizeof( CreSpellMemorizedSpell ) == 12, "CreSpellMemorizedSpell size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreInventoryItem> );
+static_assert( std::is_standard_layout_v<CreInventoryItem> );
 static_assert( sizeof( CreInventoryItem ) == 20, "CreInventoryItem size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<CreItemSlots> );
+static_assert( std::is_standard_layout_v<CreItemSlots> );
 static_assert( sizeof( CreItemSlots ) == 80, "CreItemSlots size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<EmbeddedEffFileV1> );
+static_assert( std::is_standard_layout_v<EmbeddedEffFileV1> );
 static_assert( sizeof( EmbeddedEffFileV1 ) == 48, "EmbeddedEffFileV1 size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<EmbeddedEffFileV2> );
+static_assert( std::is_standard_layout_v<EmbeddedEffFileV2> );
 static_assert( sizeof( EmbeddedEffFileV2 ) == 264, "EmbeddedEffFileV2 size is incorrect" );
+
+#pragma endregion
 
 #endif //EESAVEEDITOR_CRE_H

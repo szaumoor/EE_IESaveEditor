@@ -4,6 +4,8 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
+#include <type_traits>
+
 #pragma pack(push, 1)
 
 struct GamHeader
@@ -154,13 +156,36 @@ struct GamLocationInfo
 
 #pragma pack(pop)
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<GamCharacterStats> );
+static_assert( std::is_standard_layout_v<GamCharacterStats> );
 static_assert( sizeof( GamCharacterStats ) == 116, "GamCharacterStats size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<GamHeader> );
+static_assert( std::is_standard_layout_v<GamHeader> );
 static_assert( sizeof( GamHeader )         == 180, "GamHeader size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<GamCharacterData> );
+static_assert( std::is_standard_layout_v<GamCharacterData> );
 static_assert( sizeof( GamCharacterData )  == 352, "GamCharacterData size is incorrect" );
-static_assert( sizeof( GamHeader )         == 180, "GamHeader size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<GamGlobalVariable> );
+static_assert( std::is_standard_layout_v<GamGlobalVariable> );
 static_assert( sizeof( GamGlobalVariable ) == 84, "GamGlobalVariable size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<GamJournalEntry> );
+static_assert( std::is_standard_layout_v<GamJournalEntry> );
 static_assert( sizeof( GamJournalEntry )   == 12, "GamJournalEntry size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<GamFamiliarInfo> );
+static_assert( std::is_standard_layout_v<GamFamiliarInfo> );
 static_assert( sizeof( GamFamiliarInfo )   == 400, "GamFamiliarInfo size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<GamLocationInfo> );
+static_assert( std::is_standard_layout_v<GamLocationInfo> );
 static_assert( sizeof( GamLocationInfo )   == 12, "GamLocationInfo size is incorrect" );
+
+#pragma endregion
 
 #endif //EESAVEEDITOR_GAM_H

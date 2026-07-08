@@ -4,6 +4,8 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
+#include <type_traits>
+
 #pragma pack(push, 1)
 
 enum struct BmpHeaderSize : u32
@@ -126,10 +128,28 @@ struct BmpV5Header
 
 #pragma pack(pop)
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<BmpFileHeader> );
+static_assert( std::is_standard_layout_v<BmpFileHeader> );
 static_assert(sizeof(BmpFileHeader) == 14);
+
+static_assert( std::is_trivially_copyable_v<BmpOs2Header> );
+static_assert( std::is_standard_layout_v<BmpOs2Header> );
 static_assert(sizeof(BmpOs2Header) == 12);
+
+static_assert( std::is_trivially_copyable_v<BmpV3Header> );
+static_assert( std::is_standard_layout_v<BmpV3Header> );
 static_assert(sizeof(BmpV3Header) == 40);
+
+static_assert( std::is_trivially_copyable_v<BmpV4Header> );
+static_assert( std::is_standard_layout_v<BmpV4Header> );
 static_assert(sizeof(BmpV4Header) == 108);
+
+static_assert( std::is_trivially_copyable_v<BmpV5Header> );
+static_assert( std::is_standard_layout_v<BmpV5Header> );
 static_assert(sizeof(BmpV5Header) == 124);
 
-#endif 
+#pragma endregion
+
+#endif

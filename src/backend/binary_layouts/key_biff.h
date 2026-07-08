@@ -4,6 +4,8 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
+#include <type_traits>
+
 enum class ResourceType : u16
 {
     NotFound      = 0x0000,
@@ -52,7 +54,13 @@ enum class ResourceType : u16
     FileTypeSrc   = 0x0803
 };
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<ResourceType> );
+static_assert( std::is_standard_layout_v<ResourceType> );
 static_assert( sizeof( ResourceType ) == 2, "ResourceType size is incorrect" );
+
+#pragma endregion
 
 namespace resource_locator
 {
@@ -192,11 +200,32 @@ struct ResourceEntry
 
 #pragma pack(pop)
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<BiffHeader> );
+static_assert( std::is_standard_layout_v<BiffHeader> );
 static_assert( sizeof( BiffHeader ) == 20, "BiffHeader size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<BiffEntry> );
+static_assert( std::is_standard_layout_v<BiffEntry> );
 static_assert( sizeof( BiffEntry ) == 12, "BiffEntry size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<ResourceEntry> );
+static_assert( std::is_standard_layout_v<ResourceEntry> );
 static_assert( sizeof( ResourceEntry ) == 14, "ResourceEntry size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<KeyFileHeader> );
+static_assert( std::is_standard_layout_v<KeyFileHeader> );
 static_assert( sizeof( KeyFileHeader ) == 24, "KeyFileHeader size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<TileEntry> );
+static_assert( std::is_standard_layout_v<TileEntry> );
 static_assert( sizeof(TileEntry) == 20, "TileEntry size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<FileEntry> );
+static_assert( std::is_standard_layout_v<FileEntry> );
 static_assert( sizeof(FileEntry) == 16, "TileEntry size is incorrect" );
+
+#pragma endregion
 
 #endif //EESAVEEDITOR_KEY_BIFF_H
