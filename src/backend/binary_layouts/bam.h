@@ -1,8 +1,11 @@
 #ifndef EE_SAVEEDITOR_BAM_H
 #define EE_SAVEEDITOR_BAM_H
 
+
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
+
+#include <type_traits>
 
 #pragma pack(push, 1)
 
@@ -54,9 +57,24 @@ struct BamV2DataBlock
 #pragma pack(pop)
 
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<BamV2CycleEntry> );
+static_assert( std::is_standard_layout_v<BamV2CycleEntry> );
 static_assert(sizeof(BamV2CycleEntry) == 0x04);
+
+static_assert( std::is_trivially_copyable_v<BamV2DataBlock> );
+static_assert( std::is_standard_layout_v<BamV2DataBlock> );
 static_assert(sizeof(BamV2DataBlock)  == 0x1C);
+
+static_assert( std::is_trivially_copyable_v<BamV2FrameEntry> );
+static_assert( std::is_standard_layout_v<BamV2FrameEntry> );
 static_assert(sizeof(BamV2FrameEntry) == 0x0C);
+
+static_assert( std::is_trivially_copyable_v<BamV2Header> );
+static_assert( std::is_standard_layout_v<BamV2Header> );
 static_assert(sizeof(BamV2Header)     == 0x20);
+
+#pragma endregion
 
 #endif //EE_SAVEEDITOR_BAM_H

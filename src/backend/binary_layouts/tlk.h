@@ -4,6 +4,8 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
+#include <type_traits>
+
 #pragma pack(push, 1)
 
 struct TlkFileHeader
@@ -27,7 +29,16 @@ struct TlkFileEntry
 
 #pragma pack(pop)
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<TlkFileHeader> );
+static_assert( std::is_standard_layout_v<TlkFileHeader> );
 static_assert( sizeof( TlkFileHeader ) == 18, "TlkFileHeader size is incorrect" );
+
+static_assert( std::is_trivially_copyable_v<TlkFileEntry> );
+static_assert( std::is_standard_layout_v<TlkFileEntry> );
 static_assert( sizeof( TlkFileEntry ) == 26, "TlkFileEntry size is incorrect" );
+
+#pragma endregion
 
 #endif //EESAVEEDITOR_TLK_H

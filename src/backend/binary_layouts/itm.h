@@ -4,6 +4,8 @@
 #include "../utils/aliases.h"
 #include "../utils/helper_structs.h"
 
+#include <type_traits>
+
 #pragma pack(push,1)
 
 struct ItmHeader {
@@ -42,6 +44,8 @@ struct ItmHeader {
 };
 #pragma pack(pop)
 
+#pragma region Asserts
+
 static_assert(offsetof(ItmHeader, signature) == 0x0000, "signature offset mismatch");
 static_assert(offsetof(ItmHeader, version) == 0x0004, "version offset mismatch");
 static_assert(offsetof(ItmHeader, replacement_item) == 0x0010, "replacement item offset mismatch");
@@ -52,6 +56,10 @@ static_assert(offsetof(ItmHeader, inventory_icon) == 0x003A, "inventory icon off
 static_assert(offsetof(ItmHeader, weight_dword) == 0x004C, "weight offset mismatch");
 static_assert(offsetof(ItmHeader, enchantment) == 0x0060, "enchantment offset mismatch");
 
+static_assert( std::is_trivially_copyable_v<ItmHeader> );
+static_assert( std::is_standard_layout_v<ItmHeader> );
 static_assert(sizeof(ItmHeader) == 100, "itm_header size mismatch");
+
+#pragma endregion
 
 #endif //EE_SAVEEDITOR_ITM_H
