@@ -8,9 +8,15 @@
 #include <string_view>
 #include <vector>
 
-#include "ie_string.h"
+#include "utils/ie_string.h"
 
-class TlkFile final
+enum struct TlkCase : u8
+{
+    Sensitive = 0,
+    Insensitive = 1
+};
+
+class TlkFile final : public IEClass
 {
 public:
     TlkFile( const TlkFile& other );
@@ -18,7 +24,9 @@ public:
 
     static Possible<TlkFile> open( std::string_view path );
 
-    Possible<IEStringView> at( strref index ) const noexcept; // NOLINT(*-use-nodiscard)
+    [[nodiscard]]
+    Possible<IEStringView> at( strref index ) const noexcept;
+
     Possible<IEStringView> operator[]( strref index ) const noexcept;
     explicit operator bool() const noexcept { return m_good; }
 
@@ -28,7 +36,7 @@ public:
     [[nodiscard]] bool good() const noexcept { return m_good; }
     [[nodiscard]] std::string_view path() const noexcept { return m_path; }
     [[nodiscard]] std::vector<IEStringView> find( std::string_view text,
-                            bool case_sensitive = true ) const noexcept;
+                  TlkCase cs = TlkCase::Sensitive, u32 stop_at = 0 ) const;
     void check_for_malformation() noexcept;
 
 private:
@@ -40,8 +48,6 @@ private:
     bool m_good = false;
 
     void rebuild_cached_strings( const TlkFile& other );
-    [[nodiscard]] bool string_data_in_range(const TlkFileEntry& entry) const noexcept;
-    void if_in_range( const TlkFileEntry& entry);
 };
 
 static_assert(IE_Openable<TlkFile>);
