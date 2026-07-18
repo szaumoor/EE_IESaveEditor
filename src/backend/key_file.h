@@ -8,7 +8,7 @@
 #include "binary_layouts/key_biff.h"
 #include "utils/errors.h"
 
-class KeyFile final
+class KeyFile final : public IEClass
 {
 public:
     static Possible<KeyFile> open( std::string_view path );

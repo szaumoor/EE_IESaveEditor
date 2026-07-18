@@ -9,7 +9,7 @@
 #include "binary_layouts/gam.h"
 #include "utils/helper_structs.h"
 
-class GamFile final
+class GamFile final : public IEClass
 {
 public:
     static Possible<GamFile> open( std::string_view path );

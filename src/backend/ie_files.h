@@ -4,11 +4,26 @@
 #include <concepts>
 #include <expected>
 #include <fstream>
+#include <string_view>
+#include <type_traits>
 
 #include "utils/errors.h"
+#include "utils/ie_class.h"
 
+
+/**
+ * This concept defines statically the basic API requirements to define a class to encapsulate
+ * a Infinity Engine binary file. Such class must obey the following requirements:
+ *
+ * - Must define a method such as check_for_malformation() -> void which should be used
+ *   to make sure the reading of the file has completed with the expected structure.
+ * - Must overload the bool operator
+ * - Must define a method called good(), which asserts whether the file read is in a good
+ * state or not.
+ **/
 template <typename T>
-concept IE = requires(T obj, const T& cobj) {
+concept IE = std::derived_from<std::remove_cvref_t<T>, IEClass> &&
+    requires(T obj, const T& cobj) {
     { obj.check_for_malformation() } noexcept -> std::same_as<void>;
     static_cast<bool(T::*)() const noexcept>(&T::operator bool);
     { cobj.good() } noexcept -> std::same_as<bool>;
@@ -21,10 +36,17 @@ concept IE = requires(T obj, const T& cobj) {
  * @tparam T Type must be IEStringView or assignable to IEFile
  */
 template<typename T>
-class [[nodiscard("Do not ignore a Possible (expected) value")]] Possible : public std::expected<T, IEError>
+class [[nodiscard("Do not ignore a Possible (expected) value")]]
+Possible : public std::expected<T, IEError>
 {
-    static_assert(IE<T> || std::same_as<T, IEStringView>);
+    static_assert(std::derived_from<std::remove_cvref_t<T>, IEClass>);
     using std::expected<T, IEError>::expected;
+};
+
+class [[nodiscard("Do not ignore a NotPossible (unexpected) value")]]
+NotPossible : public std::unexpected<IEError>
+{
+    using std::unexpected<IEError>::unexpected;
 };
 
 template <typename T>
@@ -37,7 +59,7 @@ concept IE_Openable = IE<T> && requires(const T& cobj, std::string_view path)
 template<typename T>
 concept IE_Readable = IE<T> && requires(std::ifstream file_handle, u32 offset)
 {
-  {T::read(file_handle, offset) } -> std::same_as<Possible<T>>;
+  { T::read(file_handle, offset) } -> std::same_as<Possible<T>>;
 };
 
 #endif // IE_FILES_H

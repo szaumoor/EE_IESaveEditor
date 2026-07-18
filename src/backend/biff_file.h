@@ -9,7 +9,7 @@
 #include <string_view>
 #include <vector>
 
-class BiffFile final
+class BiffFile final : public IEClass
 {
 public:
     static Possible<BiffFile> open( std::string_view path );

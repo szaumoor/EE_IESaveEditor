@@ -14,7 +14,7 @@
 #include "utils/aliases.h"
 #include "utils/io.h"
 
-class CreFile final
+class CreFile final : public IEClass
 {
 public:
     static Possible<CreFile> read( std::ifstream& file, u32 offset );

@@ -10,7 +10,7 @@
  * This provides an interface for the data that we care about in those effects
  * that add the proficiency.
  */
-struct Proficiency
+struct Proficiency : IEClass
 {
     u16 proficiency;
     u16 pips;
@@ -27,7 +27,7 @@ using EffectVariant = std::variant<EmbeddedEffFileV1, EmbeddedEffFileV2>;
  *  of the save editor. Since both versions differ quite significantly in presentation
  *  this provides a common interface to access the important data.
  */
-class Effect final
+class Effect final : public IEClass
 {
 public:
     static Effect from ( const EmbeddedEffFileV1& eff ) noexcept;
