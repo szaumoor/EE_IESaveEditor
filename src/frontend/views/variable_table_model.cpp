@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "../helpers/qt_strings.h"
+
 using std::in_range;
 
 VariableTableModel::VariableTableModel( QObject* parent )
@@ -34,7 +36,7 @@ QVariant VariableTableModel::data( const QModelIndex& index, int role ) const
     const auto col = index.column();
 
     const auto& var = m_variables[static_cast<size_t>(row)];
-    const auto name = QString::fromStdString(var.variable_name.to_string());
+    const auto name = str::from(var.variable_name);
     const auto value = var.int_value;
 
     if ( role == Qt::DisplayRole || role == Qt::EditRole )

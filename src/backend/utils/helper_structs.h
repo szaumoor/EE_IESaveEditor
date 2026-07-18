@@ -5,6 +5,8 @@
 
 #include <algorithm>
 #include <string>
+#include <string_view>
+#include <type_traits>
 
 #pragma pack(push, 1)
 
@@ -35,13 +37,13 @@ struct CharArray
     }
 
     [[nodiscard]]
-    static std::optional<CharArray> from_string(std::string_view text) noexcept
+    static std::optional<CharArray> from_string( const std::string_view text ) noexcept
     {
         if (text.size() > Length)
             return std::nullopt;
 
         CharArray result{};
-        std::copy(text.begin(), text.end(), result.value);
+        std::copy(text.cbegin(), text.cend(), result.value);
         return result;
     }
 
@@ -55,8 +57,6 @@ struct CharArray
         return true;
     }
 };
-
-static_assert( sizeof( CharArray<32> ) == 32, "CharArray should be packed to fit in one byte per character" );
 
 /**
  * Helper struct for the very commonly found 8-character resource reference in the IE files.
@@ -77,6 +77,16 @@ struct Resref
 
 #pragma pack(pop)
 
+#pragma region Asserts
+
+static_assert( std::is_trivially_copyable_v<CharArray<32>> );
+static_assert( std::is_standard_layout_v<CharArray<32>> );
+static_assert( sizeof( CharArray<32> ) == 32, "CharArray should be packed to fit in one byte per character" );
+
+static_assert( std::is_trivially_copyable_v<Resref> );
+static_assert( std::is_standard_layout_v<Resref> );
 static_assert( sizeof( Resref ) == 8, "Resref struct no longer matches the expected size of 8 bytes" );
+
+#pragma endregion
 
 #endif // HELPER_STRUCTS_H
