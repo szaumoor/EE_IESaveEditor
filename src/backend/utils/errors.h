@@ -1,12 +1,12 @@
 #ifndef EESAVEEDITOR_ERRORS_H
 #define EESAVEEDITOR_ERRORS_H
 
+#include "aliases.h"
+#include "ie_class.h"
+
+#include <string>
 #include <string_view>
 
-#include "aliases.h"
-#include "../ie_string.h"
-
-class IEFile;
 /**
  * Enum class that provide constants for different errors related to
  * interacting with the IE files.
@@ -24,7 +24,7 @@ enum struct [[nodiscard("Do not discard error types")]]
  * Class that encapsulates the possible errors associated with the various
  * error types that may arise when interacting with the IE files.
  */
-class IEError
+class IEError : public IEClass
 {
 public:
     explicit IEError( IEErrorType error_type, std::string_view error_m ) noexcept;

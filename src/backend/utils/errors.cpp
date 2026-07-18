@@ -2,7 +2,7 @@
 
 #include <utility>
 
-constexpr std::string_view resolve_error_msg( const IEErrorType t ) noexcept
+static constexpr std::string_view resolve_error_msg( const IEErrorType t ) noexcept
 {
     switch ( t )
     {

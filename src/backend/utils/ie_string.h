@@ -4,9 +4,10 @@
 #include <string>
 #include <string_view>
 
-#include "utils/aliases.h"
+#include "ie_class.h"
+#include "aliases.h"
 
-class IEStringView final
+class IEStringView final : public IEClass
 {
 public:
     friend constexpr bool operator==(const IEStringView& lhs, const std::string_view rhs) noexcept
@@ -19,13 +20,17 @@ public:
         return lhs == rhs.m_view;
     }
 
+    constexpr explicit operator std::string_view() const noexcept { return m_view; }
+    constexpr explicit operator std::string() const noexcept {return std::string(m_view);}
+
     [[nodiscard]] constexpr std::string_view std_view() const noexcept { return m_view; }
     [[nodiscard]] constexpr std::string std_string() const { return std::string( m_view ); }
+
     [[nodiscard]] constexpr u32 size() const { return static_cast<u32>(m_view.length()); }
     [[nodiscard]] constexpr strref tlk_index() const noexcept { return m_tlk_index; }
 private:
     friend class TlkFile;
-    explicit constexpr IEStringView( const std::string_view view, const strref tlk_index) noexcept
+    constexpr IEStringView( const std::string_view view, const strref tlk_index) noexcept
         : m_view(view), m_tlk_index( tlk_index ) {}
 
     std::string_view m_view;
