@@ -8,8 +8,8 @@ namespace consts
 {
     namespace settings
     {
-        constexpr auto kAuthor          = "Kaelyn";
-        constexpr auto kAppName         = "IE Save Editor";
+        constexpr auto kAuthor          = "szaumoor";
+        constexpr auto kAppName         = "EE Save Editor";
         constexpr auto kLocationFolders = "GameFolders";
         constexpr auto kLocationBGEE    = "GameBGEE";
         constexpr auto kLocationBG2EE   = "GameBG2EE";
