@@ -13,7 +13,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
+option(ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" ON)
 
 if (ENABLE_SANITIZERS)
     if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
@@ -76,9 +76,8 @@ set(BACKEND_SOURCES
     src/backend/utils/io.h
     src/backend/binary_layouts/spl.h
     src/backend/binary_layouts/bam.h
-    src/backend/game_resources.cpp
-    src/backend/game_resources.h
-        src/backend/ie_string.h
+        src/backend/utils/ie_string.h
+        src/backend/utils/abstract_structs.h
 )
 
 set(TEST_COMMON
@@ -109,6 +108,13 @@ set(STRING_TEST_SOURCES
     tests/string_tests.cpp
 )
 
+set(QT_STRING_TEST_SOURCES
+    ${TEST_COMMON}
+    tests/qt_string_tests.cpp
+    src/backend/tlk_file.cpp
+    src/backend/tlk_file.h
+)
+
 set(KEY_TEST_SOURCES
     ${TEST_COMMON}
     tests/key_file_tests.cpp
@@ -128,15 +134,16 @@ set(ALL_TEST_SOURCES
     ${KEY_TEST_SOURCES}
     ${GAM_TEST_SOURCES}
     ${STRING_TEST_SOURCES}
+    ${QT_STRING_TEST_SOURCES}
     ${BIFF_TEST_SOURCES}
     src/backend/binary_layouts/bmp.h
     tests/bitmap_tests.cpp
-    src/backend/game_resources.cpp
-    src/backend/game_resources.h
-    src/backend/binary_layouts/itm.h
-        src/backend/ie_string.h
+        src/backend/binary_layouts/itm.h
+        src/backend/utils/ie_string.h
         src/frontend/profiles/games.h
         src/frontend/profiles/constants.h
+        src/frontend/helpers/qt_strings.h
+        src/backend/utils/ie_class.h
 )
 
 set(PROJECT_SOURCES
@@ -168,6 +175,7 @@ set(FRONTEND_SOURCES
         src/frontend/views/variable_table_model.cpp
         src/frontend/views/variable_table_model.h
         src/frontend/views/css.h
+        src/frontend/helpers/qt_strings.h
 )
 
 add_executable(tlk_file_test
@@ -195,6 +203,10 @@ add_executable(string_tests
     ${STRING_TEST_SOURCES}
 )
 
+add_executable(qt_string_tests
+    ${QT_STRING_TEST_SOURCES}
+)
+
 add_executable(all_tests
     ${ALL_TEST_SOURCES}
 )
@@ -205,12 +217,16 @@ set(TEST_TARGETS
     gam_file_test
     biff_file_test
     string_tests
+    qt_string_tests
     all_tests
 )
 
 foreach(test_target IN LISTS TEST_TARGETS)
     target_link_libraries(${test_target} PRIVATE GTest::gtest_main project_warnings)
 endforeach()
+
+target_link_libraries(qt_string_tests PRIVATE Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(all_tests PRIVATE Qt${QT_VERSION_MAJOR}::Core)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(EE_SaveEditor

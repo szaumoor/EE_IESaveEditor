@@ -77,3 +77,32 @@ TEST( TlkFileTest, CopyOwnsItsCachedStrings )
     EXPECT_EQ( copied_lookup->std_view(), original_lookup->std_view() );
     EXPECT_NE( copied_lookup->std_view().data(), original_lookup->std_view().data() );
 }
+
+TEST(TlkFileTest, TlkFindReturnsEmptyVectorWhenSearchingEmptyString)
+{
+    const auto opened = TlkFile::open( kRealTlk );
+    ASSERT_TRUE( opened.has_value() );
+
+    const auto find = opened->find( "" );
+    ASSERT_TRUE(find.empty());
+}
+
+TEST(TlkFileTest, TlkFindRespectsCaseSensitivity)
+{
+    const auto opened = TlkFile::open( kRealTlk );
+    ASSERT_TRUE( opened.has_value() );
+
+    const auto charname_low = opened->find( "charname" );
+    EXPECT_TRUE(charname_low.empty());
+
+    const auto charname_mixed = opened->find( "ChaRnaMe" );
+    EXPECT_TRUE(charname_mixed.empty());
+
+    const auto charname_upp = opened->find( "CHARNAME",
+        TlkCase::Sensitive, 1 );
+    EXPECT_TRUE(charname_upp.size() == 1);
+
+    const auto charname_ins = opened->find( "dEmOn",
+        TlkCase::Insensitive, 1 );
+    EXPECT_TRUE(charname_upp.size() == 1);
+}

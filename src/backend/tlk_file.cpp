@@ -22,7 +22,6 @@ TlkFile::TlkFile( const TlkFile& other ) :
     m_path( other.m_path )
 
 {
-    std::println("Copy constructor of TLK running...");
     m_good = other.m_good;
     rebuild_cached_strings( other );
 }
@@ -33,7 +32,6 @@ TlkFile::TlkFile( TlkFile&& other ) noexcept
       m_cached_strings( std::move( other.m_cached_strings ) ),
       m_path( std::move(other.m_path) )
 {
-    std::println("Move constructor of TLK running...");
     m_good = other.m_good;
 }
 
@@ -41,7 +39,7 @@ Possible<TlkFile> TlkFile::open( std::string_view path )
 {
     std::ifstream file_handle( path.data(), std::ios::binary );
     if ( not file_handle )
-        return std::unexpected( IEError( IEErrorType::Unreadable ) );
+        return NotPossible( IEError( IEErrorType::Unreadable ) );
 
     TlkFile tlk( path );
     auto& header = tlk.m_header;
@@ -51,7 +49,7 @@ Possible<TlkFile> TlkFile::open( std::string_view path )
     tlk.check_for_malformation();
 
     if ( not tlk )
-        return std::unexpected( IEError( IEErrorType::Malformed ) );
+        return NotPossible( IEError( IEErrorType::Malformed ) );
 
     std::vector<TlkFileEntry> entries( tlk.length() );
     writer.into( entries, sizeof( TlkFileHeader ) );
@@ -59,17 +57,19 @@ Possible<TlkFile> TlkFile::open( std::string_view path )
     file_handle.seekg( header.offset_to_str_data, std::ios::beg );
     tlk.m_string_data = std::vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
     tlk.m_cached_strings.reserve( tlk.length() );
-    rng::for_each( entries, [&tlk]( const TlkFileEntry& entry ) {
-        tlk.if_in_range( entry );
-    } );
+    for (const auto& entry : entries)
+    {
+        tlk.m_cached_strings.emplace_back(
+            tlk.m_string_data.data()+entry.offset_to_string, entry.string_length );
+    }
     return tlk;
 }
 
 Possible<IEStringView> TlkFile::at( const strref index ) const noexcept
 {
     if ( index >= length() )
-        return std::unexpected( IEError( IEErrorType::OutOfBounds,
-                                         std::format( "TLK: Index {} is out of bounds [0-{}].", index, length()-1 ) ) );
+        return NotPossible( IEError( IEErrorType::OutOfBounds,
+                                         std::format( "Unknown index {}", index )));
     return IEStringView(m_cached_strings[index], index);
 }
 
@@ -93,34 +93,50 @@ const std::string_view* TlkFile::end() const
     return begin() + m_cached_strings.size();
 }
 
-std::vector<IEStringView> TlkFile::find( const std::string_view text, const bool case_sensitive ) const noexcept
+std::vector<IEStringView> TlkFile::find( const std::string_view text,
+    const TlkCase cs, const u32 stop_at ) const
 {
     if ( text.empty() )
         return {};
 
     std::vector<IEStringView> entries;
+    if (stop_at > 0)
+        entries.reserve( std::min<u32>(stop_at, static_cast<u32>(m_cached_strings.size())) ) ;
 
-    u32 index = 0;
-    for (const auto& entry : m_cached_strings)
+    if (cs == TlkCase::Sensitive)
     {
-        if (case_sensitive)
+        for (u32 i = 0; i < m_cached_strings.size(); ++i)
         {
-            if (entry.find(text) != std::string_view::npos)
-                entries.push_back( IEStringView(entry, index) );
+            if ( const auto& entry = m_cached_strings[i];
+                 entry.find(text) != std::string_view::npos)
+            {
+                entries.push_back( IEStringView(entry, i) );
+            }
+
+            if (stop_at > 0 and entries.size() >= stop_at)
+                break;
         }
-        else
+    }
+    else if (cs == TlkCase::Insensitive)
+    {
+        for (u32 i = 0; i < m_cached_strings.size(); ++i)
         {
+            const auto& entry = m_cached_strings[i];
+
+            if (entry.size() < text.size())
+                continue;
+
             const auto match = not std::ranges::search(entry, text, []( const u8 a, const u8 b) {
-                return std::tolower(a) == std::tolower(b);
-            }).empty();
+                    return std::tolower(a) == std::tolower(b);
+                }).empty();
 
             if (match)
-                entries.push_back( IEStringView(entry, index) );
+                entries.push_back( IEStringView(entry, i) );
+
+            if (stop_at > 0 and entries.size() >= stop_at)
+                break;
         }
-
-        ++index;
     }
-
     return entries;
 }
 
@@ -154,17 +170,4 @@ void TlkFile::rebuild_cached_strings( const TlkFile& other )
         const auto offset = static_cast<size_t>( view.data() - old_base );
         m_cached_strings.emplace_back( new_base + offset, view.size() );
     }
-}
-
-bool TlkFile::string_data_in_range( const TlkFileEntry& entry) const noexcept
-{
-    const u32 string_bytes = entry.offset_to_string+entry.string_length;
-    return string_bytes <= m_string_data.size();
-}
-
-void TlkFile::if_in_range( const TlkFileEntry& entry )
-{
-    if ( string_data_in_range( entry ) ) [[likely]]
-        m_cached_strings.emplace_back(
-            m_string_data.data()+entry.offset_to_string, entry.string_length );
 }
