@@ -38,20 +38,26 @@ protected:
 
 private:
     TlkRef tlk;
-    Ui::MainWindow* ui;
     std::optional<GamFile> savegame { std::nullopt  };
+
+    #pragma region UiSetup
+    Dialogs dlg;
+    QSystemTrayIcon* trayIcon = nullptr;
+    Ui::MainWindow* ui;
     void set_up_connections();
     void set_up_shortcuts() const;
     void load_ui() const;
+    void manage_language_actions(Game::Language::Instance lang);
     void set_always_on_top(bool enabled);
-    Dialogs dlg;
-    QSystemTrayIcon* trayIcon = nullptr;
+    void setup_tray_icon();
+    #pragma endregion
 
 private slots:
-    void show_about() const;
     void open_file();
     void reload_resources();
-    void setup_tray_icon();
+
+    #pragma region Actions
+    void show_about() const;
     static void open_forum();
     static void open_forum_profile();
     static void open_my_mods();
@@ -59,7 +65,7 @@ private slots:
     static void open_discord_ie();
     static void open_github_repo();
     static void open_discord_my_mods();
-    void manage_language_actions(Game::Language::Instance lang);
+    #pragma endregion
 };
 
 #endif //EESAVEEDITOR_MAINWINDOW_H

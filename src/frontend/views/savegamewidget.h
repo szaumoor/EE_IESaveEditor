@@ -33,13 +33,32 @@ signals:
     void save_changed(const GamFile& file);
 
 private:
-    Ui::SaveGameWidget* ui;
-    std::optional<GamFile> gam { std:: nullopt };
     TlkRef tlk;
-    Dialogs dlg;
+    std::optional<GamFile> gam { std:: nullopt };
+
+    #pragma region UiSetup
+    void update_member_slider() const;
     bool complete_ui(int index);
+    void setup_tables();
+    void setup_slider();
+    void setup_style() const;
+    Ui::SaveGameWidget* ui;
+    Dialogs dlg;
     VariableTableModel* m_global_model = nullptr;
-    VariableTableModel* m_local_model = nullptr;
+    VariableTableModel* m_local_model  = nullptr;
+    #pragma endregion
+
+    #pragma region PopulationMethods
+    void populate_stats( const CreHeader& cre_header ) const;
+    void populate_combat_stats( const CreHeader& cre_header ) const;
+    void populate_misc_data( const CreHeader& cre_header ) const;
+    void populate_armor_class( const CreHeader& cre_header ) const;
+    void populate_resistances( const CreHeader& cre_header ) const;
+    void populate_saving_throws( const CreHeader& cre_header ) const;
+    void populate_thief_skills( const CreHeader& cre_header ) const;
+    void populate_character_data( const GamCharacterData& char_data) const;
+    void populate_party_metrics() const;
+    #pragma endregion
 };
 
 #endif // SAVEGAMEWIDGET_H
