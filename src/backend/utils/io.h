@@ -10,7 +10,7 @@
  * This class encapsulates casting binary data into the structs easily.
  * Mostly to hide the ugliness of that whole process.
  */
-class StructWriter
+class StructWriter final
 {
 public:
     /**
@@ -64,7 +64,7 @@ private:
  *  This class encapsulates casting struct data into binary files.
  *  Mostly to hide the uglyness of that whole process.
  */
-class BinaryWriter
+class BinaryWriter final
 {
 public:
     /**
