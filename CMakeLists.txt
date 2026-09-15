@@ -54,53 +54,53 @@ SET(RES_FILES
 )
 
 set(BACKEND_SOURCES
-    src/backend/biff_file.h
-    src/backend/tlk_file.h
-    src/backend/tlk_file.cpp
-    src/backend/gam_file.h
-    src/backend/gam_file.cpp
-    src/backend/cre_file.h
-    src/backend/utils/helper_structs.h
-    src/backend/utils/aliases.h
-    src/backend/ie_files.h
-    src/backend/cre_file.cpp
-    src/backend/key_file.h
-    src/backend/key_file.cpp
-    src/backend/biff_file.cpp
-    src/backend/binary_layouts/cre.h
-    src/backend/binary_layouts/gam.h
-    src/backend/binary_layouts/key_biff.h
-    src/backend/binary_layouts/tlk.h
-    src/backend/utils/errors.h
-    src/backend/utils/errors.cpp
-    src/backend/utils/io.h
-    src/backend/binary_layouts/spl.h
-    src/backend/binary_layouts/bam.h
-        src/backend/utils/ie_string.h
-        src/backend/utils/abstract_structs.h
+        src/backend/biff_file.hpp
+        src/backend/tlk_file.hpp
+        src/backend/tlk_file.cpp
+        src/backend/gam_file.hpp
+        src/backend/gam_file.cpp
+        src/backend/cre_file.hpp
+        src/backend/utils/helper_structs.hpp
+        src/backend/utils/aliases.hpp
+        src/backend/ie_files.hpp
+        src/backend/cre_file.cpp
+        src/backend/key_file.hpp
+        src/backend/key_file.cpp
+        src/backend/biff_file.cpp
+        src/backend/binary_layouts/cre.hpp
+        src/backend/binary_layouts/gam.hpp
+        src/backend/binary_layouts/key_biff.hpp
+        src/backend/binary_layouts/tlk.hpp
+        src/backend/utils/errors.hpp
+        src/backend/utils/errors.cpp
+        src/backend/utils/io.hpp
+        src/backend/binary_layouts/spl.hpp
+        src/backend/binary_layouts/bam.hpp
+        src/backend/utils/ie_string.hpp
+        src/backend/utils/abstract_structs.hpp
 )
 
 set(TEST_COMMON
-    src/backend/utils/errors.h
-    src/backend/utils/errors.cpp
+        src/backend/utils/errors.hpp
+        src/backend/utils/errors.cpp
     tests/utils/tests_helper.h
     tests/utils/tests_helper.cpp
-    src/backend/utils/helper_structs.h
+        src/backend/utils/helper_structs.hpp
 )
 
 set(GAM_TEST_SOURCES
     ${TEST_COMMON}
     tests/gam_file_tests.cpp
-    src/backend/gam_file.cpp
-    src/backend/gam_file.h
-    src/backend/cre_file.cpp
+        src/backend/gam_file.cpp
+        src/backend/gam_file.hpp
+        src/backend/cre_file.cpp
 )
 
 set(TLK_TEST_SOURCES
     ${TEST_COMMON}
     tests/tlk_file_tests.cpp
-    src/backend/tlk_file.cpp
-    src/backend/tlk_file.h
+        src/backend/tlk_file.cpp
+        src/backend/tlk_file.hpp
 )
 
 set(STRING_TEST_SOURCES
@@ -111,22 +111,22 @@ set(STRING_TEST_SOURCES
 set(QT_STRING_TEST_SOURCES
     ${TEST_COMMON}
     tests/qt_string_tests.cpp
-    src/backend/tlk_file.cpp
-    src/backend/tlk_file.h
+        src/backend/tlk_file.cpp
+        src/backend/tlk_file.hpp
 )
 
 set(KEY_TEST_SOURCES
     ${TEST_COMMON}
     tests/key_file_tests.cpp
-    src/backend/key_file.cpp
-    src/backend/key_file.h
+        src/backend/key_file.cpp
+        src/backend/key_file.hpp
 )
 
 set(BIFF_TEST_SOURCES
     ${TEST_COMMON}
     tests/biff_file_tests.cpp
-    src/backend/biff_file.cpp
-    src/backend/biff_file.h
+        src/backend/biff_file.cpp
+        src/backend/biff_file.hpp
 )
 
 set(ALL_TEST_SOURCES
@@ -136,14 +136,16 @@ set(ALL_TEST_SOURCES
     ${STRING_TEST_SOURCES}
     ${QT_STRING_TEST_SOURCES}
     ${BIFF_TEST_SOURCES}
-    src/backend/binary_layouts/bmp.h
+        src/backend/binary_layouts/bmp.hpp
     tests/bitmap_tests.cpp
-        src/backend/binary_layouts/itm.h
-        src/backend/utils/ie_string.h
-        src/frontend/profiles/games.h
-        src/frontend/profiles/constants.h
-        src/frontend/helpers/qt_strings.h
-        src/backend/utils/ie_class.h
+        src/backend/binary_layouts/itm.hpp
+        src/backend/utils/ie_string.hpp
+        src/frontend/profiles/games.hpp
+        src/frontend/profiles/constants.hpp
+        src/frontend/helpers/qt_strings.hpp
+        src/backend/utils/ie_class.hpp
+        src/frontend/resources/resource_repository.cpp
+        src/frontend/resources/resource_repository.hpp
 )
 
 set(PROJECT_SOURCES
@@ -155,7 +157,7 @@ set(PROJECT_SOURCES
 
 
 add_library (backend ${BACKEND_SOURCES}
-        src/backend/binary_layouts/itm.h)
+        src/backend/binary_layouts/itm.hpp)
 target_link_libraries(backend PRIVATE project_warnings)
 
 set(FRONTEND_SOURCES
@@ -165,17 +167,19 @@ set(FRONTEND_SOURCES
     src/frontend/mainwindow.h
     src/frontend/mainwindow.ui
     ${RES_FILES}
-    src/frontend/helpers/gui_helpers.h
-    src/frontend/helpers/disable_guard.h
-    src/frontend/helpers/qt_io.h
-    src/frontend/helpers/dialogs.h
+        src/frontend/helpers/gui_helpers.hpp
+        src/frontend/helpers/disable_guard.hpp
+        src/frontend/helpers/qt_io.hpp
+        src/frontend/helpers/dialogs.hpp
         src/frontend/profiles/settings.cpp
-        src/frontend/profiles/games.h
-        src/frontend/profiles/constants.h
+        src/frontend/profiles/games.hpp
+        src/frontend/profiles/constants.hpp
         src/frontend/views/variable_table_model.cpp
         src/frontend/views/variable_table_model.h
         src/frontend/views/css.h
-        src/frontend/helpers/qt_strings.h
+        src/frontend/helpers/qt_strings.hpp
+        src/frontend/resources/resource_repository.cpp
+        src/frontend/resources/resource_repository.hpp
 )
 
 add_executable(tlk_file_test

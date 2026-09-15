@@ -4,9 +4,9 @@
 #include <string_view>
 #include <vector>
 
-#include "ie_files.h"
-#include "binary_layouts/key_biff.h"
-#include "utils/errors.h"
+#include "ie_files.hpp"
+#include "binary_layouts/key_biff.hpp"
+#include "utils/errors.hpp"
 
 class KeyFile final : public IEClass
 {

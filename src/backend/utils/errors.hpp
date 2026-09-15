@@ -1,8 +1,8 @@
 #ifndef EESAVEEDITOR_ERRORS_H
 #define EESAVEEDITOR_ERRORS_H
 
-#include "aliases.h"
-#include "ie_class.h"
+#include "aliases.hpp"
+#include "ie_class.hpp"
 
 #include <string>
 #include <string_view>
@@ -17,7 +17,8 @@ enum struct [[nodiscard("Do not discard error types")]]
     NotFound    = 0,
     Unreadable  = 1,
     Malformed   = 2,
-    OutOfBounds = 3
+    OutOfBounds = 3,
+    Unknown     = 4
 };
 
 /**
@@ -41,7 +42,6 @@ public:
      * Returns the error type associated with the error.
      * @return IEErrorType associated with the error.
      */
-    [[nodiscard("Dont ignore error types")]]
     IEErrorType type() const noexcept;
 
 private:

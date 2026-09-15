@@ -5,9 +5,9 @@
 #include <string>
 #include <string_view>
 
-#include "../../backend/utils/errors.h"
-#include "../../backend/utils/helper_structs.h"
-#include "../../backend/utils/ie_string.h"
+#include "../../backend/utils/errors.hpp"
+#include "../../backend/utils/helper_structs.hpp"
+#include "../../backend/utils/ie_string.hpp"
 
 namespace str
 {

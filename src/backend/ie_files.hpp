@@ -7,8 +7,8 @@
 #include <string_view>
 #include <type_traits>
 
-#include "utils/errors.h"
-#include "utils/ie_class.h"
+#include "utils/errors.hpp"
+#include "utils/ie_class.hpp"
 
 
 /**

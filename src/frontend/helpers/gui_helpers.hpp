@@ -8,7 +8,7 @@
 #include <QtConcurrentRun>
 #include <QDesktopServices>
 
-#include "disable_guard.h"
+#include "disable_guard.hpp"
 
 inline auto infinite_progress_dialog( QWidget* parent, const QString& message )
 {
@@ -19,10 +19,16 @@ inline auto infinite_progress_dialog( QWidget* parent, const QString& message )
     return progress;
 }
 
-template <typename Result, typename Task, typename OnFinished>
-void run_task_with_progress(QWidget* parent, const std::initializer_list<QWidget*> managed_widgets,
-                            const QString& message, Task&& task, OnFinished&& onFinished)
+template <typename Task, typename OnFinished>
+void run_task_with_progress(
+    QWidget* parent,
+    const std::initializer_list<QWidget*> managed_widgets,
+    const QString& message,
+    Task&& task,
+    OnFinished&& onFinished)
 {
+    using Result = std::invoke_result_t<std::decay_t<Task>>;
+
     auto* ui_guard = new UiDisableGuard(parent, managed_widgets);
     auto* progress = infinite_progress_dialog(parent, message);
     progress->show();

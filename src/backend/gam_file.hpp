@@ -4,10 +4,10 @@
 #include <string_view>
 #include <vector>
 
-#include "cre_file.h"
-#include "ie_files.h"
-#include "binary_layouts/gam.h"
-#include "utils/helper_structs.h"
+#include "cre_file.hpp"
+#include "ie_files.hpp"
+#include "binary_layouts/gam.hpp"
+#include "utils/helper_structs.hpp"
 
 class GamFile final : public IEClass
 {

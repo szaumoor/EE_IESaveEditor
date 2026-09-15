@@ -1,7 +1,7 @@
 #ifndef EE_SAVEEDITOR_ABSTRACT_STRUCTS_H
 #define EE_SAVEEDITOR_ABSTRACT_STRUCTS_H
 
-#include "aliases.h"
+#include "aliases.hpp"
 
 /**
  * Encapsulates a non-legacy proficiency. Non-legacy proficiencies

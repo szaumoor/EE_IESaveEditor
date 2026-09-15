@@ -2,16 +2,18 @@
 #define GAMES_H
 
 #include <expected>
+#include <QLocale>
 
 #include <QMap>
 #include <QString>
 
-#include "../../backend/utils/aliases.h"
+#include "constants.hpp"
+#include "../../backend/utils/aliases.hpp"
 
 class Game final
 {
 public:
-    enum struct Instance : i8 { Bgee=0, Bg2ee=1,Iwdee=2 };
+    enum struct Instance : i8 { Bgee=0, Bg2ee=1, Iwdee=2 };
 
     class Language final
     {
@@ -31,24 +33,22 @@ public:
             return static_cast<Instance>( language );
         }
 
+        static Instance lang_from_locale(const QLocale& locale)
+        {
+            switch (locale.language())
+            {
+                case QLocale::Spanish:
+                    return Instance::Spanish;
+                case QLocale::Chinese:
+                    return Instance::SChinese;
+                case QLocale::English:
+                default:
+                    return Instance::English;
+            }
+        }
+
         static i8 to_code( Instance lang ) { return static_cast<i8>( lang ); }
 
-        static QString to_str ( const Instance lang )
-        {
-            switch ( lang )
-            {
-                case Instance::English:    return "English";
-                case Instance::French:     return "French";
-                case Instance::German:     return "German";
-                case Instance::Italian:    return "Italian";
-                case Instance::Korean:     return "Korean";
-                case Instance::Portuguese: return "Portuguese";
-                case Instance::Russian:    return "Russian";
-                case Instance::Spanish:    return "Spanish";
-                case Instance::SChinese:   return "Simplified Chinese";
-            }
-            return {};
-        }
         static QString code_for_lang( const Instance lang )
         {
             static QMap<Instance, QString> lang_map = create_map();
