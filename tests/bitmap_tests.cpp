@@ -4,8 +4,8 @@
 #include <fstream>
 #include <string_view>
 
-#include "../src/backend/binary_layouts/bmp.h"
-#include "../src/backend/utils/io.h"
+#include "../src/backend/binary_layouts/bmp.hpp"
+#include "../src/backend/utils/io.hpp"
 
 static constexpr std::string_view kRealBmp(TEST_RES_DIR "/sample_bitmap.bmp");
 

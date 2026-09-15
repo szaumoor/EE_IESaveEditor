@@ -2,9 +2,9 @@
 
 #include <string_view>
 
-#include "../src/backend/biff_file.h"
+#include "../src/backend/biff_file.hpp"
 // #include "../src/backend/tlk_file.h"
-#include "../src/backend/utils/errors.h"
+#include "../src/backend/utils/errors.hpp"
 
 #include "utils/tests_helper.h"
 

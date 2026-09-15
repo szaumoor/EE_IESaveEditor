@@ -2,8 +2,8 @@
 
 #include <string_view>
 
-#include "../src/backend/key_file.h"
-#include "../src/backend/utils/errors.h"
+#include "../src/backend/key_file.hpp"
+#include "../src/backend/utils/errors.hpp"
 
 #include "utils/tests_helper.h"
 

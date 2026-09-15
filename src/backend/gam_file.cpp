@@ -1,7 +1,7 @@
-#include "gam_file.h"
-#include "ie_files.h"
-#include "utils/helper_structs.h"
-#include "utils/io.h"
+#include "gam_file.hpp"
+#include "ie_files.hpp"
+#include "utils/helper_structs.hpp"
+#include "utils/io.hpp"
 
 #include <format>
 #include <fstream>

@@ -5,7 +5,8 @@
 #include <QTranslator>
 
 #include "frontend/mainwindow.h"
-#include "frontend/profiles/constants.h"
+#include "frontend/profiles/constants.hpp"
+#include "frontend/resources/resource_repository.hpp"
 
 
 Game::Language::Instance detect_system_language()
