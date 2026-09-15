@@ -6,7 +6,7 @@
 #include <QAbstractTableModel>
 #include <QVariant>
 
-#include "../../backend/binary_layouts/gam.h"
+#include "../../backend/binary_layouts/gam.hpp"
 
 
 class VariableTableModel : public QAbstractTableModel

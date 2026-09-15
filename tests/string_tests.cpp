@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "../src/backend/utils/helper_structs.h"
+#include "../src/backend/utils/helper_structs.hpp"
 
 TEST(StringTests, EmptyCharArrayConvertsToEmptyString)
 {

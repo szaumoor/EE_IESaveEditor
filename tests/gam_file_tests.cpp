@@ -4,8 +4,8 @@
 #include <fstream>
 #include <string_view>
 
-#include "../src/backend/gam_file.h"
-#include "../src/backend/utils/errors.h"
+#include "../src/backend/gam_file.hpp"
+#include "../src/backend/utils/errors.hpp"
 
 #include "utils/tests_helper.h"
 

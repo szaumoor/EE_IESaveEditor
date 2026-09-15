@@ -4,8 +4,8 @@
 #include <string>
 #include <string_view>
 
-#include "../src/backend/tlk_file.h"
-#include "../src/frontend/helpers/qt_strings.h"
+#include "../src/backend/tlk_file.hpp"
+#include "../src/frontend/helpers/qt_strings.hpp"
 
 namespace
 {

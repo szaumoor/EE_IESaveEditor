@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "../helpers/qt_strings.h"
+#include "../helpers/qt_strings.hpp"
 
 using std::in_range;
 
