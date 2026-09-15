@@ -83,8 +83,8 @@ set(BACKEND_SOURCES
 set(TEST_COMMON
         src/backend/utils/errors.hpp
         src/backend/utils/errors.cpp
-    tests/utils/tests_helper.h
-    tests/utils/tests_helper.cpp
+    tests/utils/tests_helper.hpp
+        tests/utils/tests_helper.cpp
         src/backend/utils/helper_structs.hpp
 )
 
@@ -151,7 +151,7 @@ set(ALL_TEST_SOURCES
 set(PROJECT_SOURCES
     main.cpp
     mainwindow.cpp
-    mainwindow.h
+    mainwindow.hpp
     ${TS_FILES}
 )
 
@@ -163,8 +163,8 @@ target_link_libraries(backend PRIVATE project_warnings)
 set(FRONTEND_SOURCES
     ${BACKEND_SOURCES}
     src/main.cpp
-    src/frontend/mainwindow.cpp
-    src/frontend/mainwindow.h
+        src/frontend/mainwindow.cpp
+        src/frontend/mainwindow.hpp
     src/frontend/mainwindow.ui
     ${RES_FILES}
         src/frontend/helpers/gui_helpers.hpp
@@ -175,8 +175,8 @@ set(FRONTEND_SOURCES
         src/frontend/profiles/games.hpp
         src/frontend/profiles/constants.hpp
         src/frontend/views/variable_table_model.cpp
-        src/frontend/views/variable_table_model.h
-        src/frontend/views/css.h
+        src/frontend/views/variable_table_model.hpp
+        src/frontend/views/css.hpp
         src/frontend/helpers/qt_strings.hpp
         src/frontend/resources/resource_repository.cpp
         src/frontend/resources/resource_repository.hpp
@@ -236,7 +236,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(EE_SaveEditor
         MANUAL_FINALIZATION
         ${FRONTEND_SOURCES}
-        src/frontend/views/savegamewidget.h src/frontend/views/savegamewidget.cpp src/frontend/views/savegamewidget.ui
+            src/frontend/views/savegamewidget.hpp src/frontend/views/savegamewidget.cpp src/frontend/views/savegamewidget.ui
     )
 
     qt_add_translations(EE_SaveEditor

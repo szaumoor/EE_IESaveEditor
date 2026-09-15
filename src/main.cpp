@@ -4,7 +4,7 @@
 #include <QString>
 #include <QTranslator>
 
-#include "frontend/mainwindow.h"
+#include "frontend/mainwindow.hpp"
 #include "frontend/profiles/constants.hpp"
 #include "frontend/resources/resource_repository.hpp"
 

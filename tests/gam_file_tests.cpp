@@ -7,7 +7,7 @@
 #include "../src/backend/gam_file.hpp"
 #include "../src/backend/utils/errors.hpp"
 
-#include "utils/tests_helper.h"
+#include "utils/tests_helper.hpp"
 
 static constexpr std::string_view kRealGam(TEST_RES_DIR "/BALDUR.gam");
 
