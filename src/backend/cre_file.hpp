@@ -5,14 +5,14 @@
 #include <variant>
 #include <vector>
 
-#include "ie_files.h"
+#include "ie_files.hpp"
 
-#include "binary_layouts/cre.h"
-#include "binary_layouts/gam.h"
+#include "binary_layouts/cre.hpp"
+#include "binary_layouts/gam.hpp"
 
-#include "utils/abstract_structs.h"
-#include "utils/aliases.h"
-#include "utils/io.h"
+#include "utils/abstract_structs.hpp"
+#include "utils/aliases.hpp"
+#include "utils/io.hpp"
 
 class CreFile final : public IEClass
 {

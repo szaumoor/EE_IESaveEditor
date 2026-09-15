@@ -1,8 +1,8 @@
 #ifndef EESAVEEDITOR_KEY_BIFF_H
 #define EESAVEEDITOR_KEY_BIFF_H
 
-#include "../utils/aliases.h"
-#include "../utils/helper_structs.h"
+#include "../utils/aliases.hpp"
+#include "../utils/helper_structs.hpp"
 
 #include <type_traits>
 
@@ -86,8 +86,8 @@ namespace resource_locator
 
 struct BiffHeader
 {
-    CharArray<4> signature; 
-    CharArray<4> version; 
+    CharArray<4> signature;
+    CharArray<4> version;
     u32 count_of_file_entries;
     u32 count_of_tile_entries;
     u32 offset_to_file_entries;
@@ -114,8 +114,8 @@ struct TileEntry
 
 struct KeyFileHeader
 {
-    CharArray<4> signature; 
-    CharArray<4> version; 
+    CharArray<4> signature;
+    CharArray<4> version;
     u32 biff_count;
     u32 resource_count;
     u32 offset_to_biff_entries;

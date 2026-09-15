@@ -4,7 +4,7 @@
 #include <fstream>
 #include <vector>
 
-#include "aliases.h"
+#include "aliases.hpp"
 
 /**
  * This class encapsulates casting binary data into the structs easily.

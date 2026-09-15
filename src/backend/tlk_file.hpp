@@ -1,14 +1,14 @@
 #ifndef TLK_FILE_H
 #define TLK_FILE_H
 
-#include "ie_files.h"
-#include "binary_layouts/tlk.h"
-#include "utils/aliases.h"
+#include "ie_files.hpp"
+#include "binary_layouts/tlk.hpp"
+#include "utils/aliases.hpp"
 
 #include <string_view>
 #include <vector>
 
-#include "utils/ie_string.h"
+#include "utils/ie_string.hpp"
 
 enum struct TlkCase : u8
 {

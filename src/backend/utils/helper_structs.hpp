@@ -1,7 +1,7 @@
 #ifndef HELPER_STRUCTS_H
 #define HELPER_STRUCTS_H
 
-#include "../utils/aliases.h"
+#include "../utils/aliases.hpp"
 
 #include <algorithm>
 #include <string>

@@ -1,8 +1,8 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "constants.h"
-#include "games.h"
+#include "constants.hpp"
+#include "games.hpp"
 
 namespace sett
 {
@@ -12,10 +12,10 @@ namespace sett
         GamePaths() = delete;
         GamePaths(GamePaths& other) = delete;
         GamePaths(GamePaths&& other) = delete;
-    
+
         explicit GamePaths( Game::Instance game );
         GamePaths( QString game_path, QString save_path );
-    
+
         [[nodiscard]]
         bool both_filled() const { return !m_game.isEmpty() && !m_save.isEmpty(); }
 
@@ -24,7 +24,7 @@ namespace sett
 
         [[nodiscard]]
         QString save() const { return m_save; }
-    
+
     private:
         const QString m_game;
         const QString m_save;
@@ -38,6 +38,7 @@ namespace sett
     void write_save_paths( const GamePaths& bgeePaths, const GamePaths& bg2eePaths, const GamePaths& iwdeePaths );
     void write_game_lang( Game::Language::Instance lang );
     Game::Language::Instance game_lang();
+    bool clear_settings();
 }
 
 #endif // SETTINGS_H

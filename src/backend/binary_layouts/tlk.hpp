@@ -1,8 +1,8 @@
 #ifndef EESAVEEDITOR_TLK_H
 #define EESAVEEDITOR_TLK_H
 
-#include "../utils/aliases.h"
-#include "../utils/helper_structs.h"
+#include "../utils/aliases.hpp"
+#include "../utils/helper_structs.hpp"
 
 #include <type_traits>
 
@@ -10,8 +10,8 @@
 
 struct TlkFileHeader
 {
-    CharArray<4> signature; 
-    CharArray<4> version; 
+    CharArray<4> signature;
+    CharArray<4> version;
     u16 language_id;
     u32 entry_count;
     u32 offset_to_str_data;
