@@ -1,7 +1,7 @@
 #include <filesystem>
 #include <fstream>
 
-#include "tests_helper.h"
+#include "tests_helper.hpp"
 
 using std::string_view;
 using std::ofstream;

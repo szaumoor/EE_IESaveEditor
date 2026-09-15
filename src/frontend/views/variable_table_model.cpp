@@ -1,4 +1,4 @@
-#include "variable_table_model.h"
+#include "variable_table_model.hpp"
 
 #include <algorithm>
 

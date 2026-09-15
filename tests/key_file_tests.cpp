@@ -5,7 +5,7 @@
 #include "../src/backend/key_file.hpp"
 #include "../src/backend/utils/errors.hpp"
 
-#include "utils/tests_helper.h"
+#include "utils/tests_helper.hpp"
 
 
 static constexpr std::string_view kRealKey( TEST_RES_DIR "/chitin.key" );
