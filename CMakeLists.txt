@@ -30,7 +30,6 @@ if(ENABLE_SANITIZERS)
     endif()
 endif()
 
-# SOURCE_TARGETS in qt_add_translations requires Qt 6.7 or newer.
 find_package(Qt6 6.7 REQUIRED COMPONENTS Widgets Concurrent LinguistTools)
 
 add_library(backend STATIC
@@ -69,8 +68,6 @@ target_link_libraries(backend
 )
 set_target_properties(backend PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-# Each target builds its own PCH with its own flags and definitions.
-# Configure with -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON to check ordinary includes.
 target_precompile_headers(backend PRIVATE pch/backend.hpp)
 
 qt_add_executable(EE_SaveEditor MANUAL_FINALIZATION
@@ -186,10 +183,6 @@ if(BUILD_TESTING)
     )
     target_link_libraries(all_tests PRIVATE Qt6::Core)
 
-    # Only the aggregate has enough test sources to amortize a separate test PCH.
     target_precompile_headers(all_tests PRIVATE pch/common.hpp <gtest/gtest.h>)
-
-    # Run the aggregate once. Some cases share temporary filenames, so keep them
-    # in a single process even when CTest is invoked with parallel execution.
     add_test(NAME all_tests COMMAND all_tests)
 endif()
