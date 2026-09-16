@@ -9,30 +9,35 @@
 #include "frontend/resources/resource_repository.hpp"
 
 
-Game::Language::Instance detect_system_language()
+Language detect_system_language()
 {
     for (const QString& localeName : QLocale::system().uiLanguages())
     {
-        const auto lang = Game::Language::lang_from_locale(QLocale(localeName));
+        const auto lang = lang_from_locale(QLocale(localeName));
 
-        if (lang != Game::Language::Instance::English)
+        if (lang != Language::English)
             return lang;
     }
 
-    return Game::Language::Instance::English;
+    return Language::English;
 }
 
-bool install_translation(QTranslator& translator, const Game::Language::Instance lang)
+bool install_translation(QTranslator& translator, const Language lang)
 {
-    if (lang == Game::Language::Instance::English)
+    if (lang == Language::English)
     {
         qInfo() << "Using default English UI.";
         return false;
     }
 
-    const QString code = Game::Language::code_for_lang(lang);
+    const auto code = code_for_lang(lang);
+    if (!code) {
+        qInfo() << "Language not recognized, defaulting to English UI";
+        return false;
+    }
+
     const QString translation =
-        QStringLiteral(":/translations/EE_SaveEditor_%1").arg(code);
+        QStringLiteral(":/translations/EE_SaveEditor_%1").arg(*code);
 
     if (translator.load(translation))
     {
@@ -41,7 +46,6 @@ bool install_translation(QTranslator& translator, const Game::Language::Instance
         return true;
     }
 
-    qInfo() << "Using default English UI.";
     return false;
 }
 
