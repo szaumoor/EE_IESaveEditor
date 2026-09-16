@@ -4,8 +4,8 @@
 #include <string>
 #include <string_view>
 
-#include "ie_class.hpp"
 #include "aliases.hpp"
+#include "ie_class.hpp"
 
 class IEStringView final : public IEClass
 {

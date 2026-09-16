@@ -2,14 +2,13 @@
 #define BIFF_FILES_H
 
 #include "ie_files.hpp"
+#include "binary_layouts/itm.hpp"
 #include "binary_layouts/key_biff.hpp"
 #include "binary_layouts/spl.hpp"
-#include "utils/errors.hpp"
 
 #include <string_view>
 #include <vector>
 
-#include "binary_layouts/itm.hpp"
 
 class BiffFile final : public IEClass
 {
