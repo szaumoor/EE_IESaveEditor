@@ -1,28 +1,16 @@
 cmake_minimum_required(VERSION 3.20)
 
-if (POLICY CMP0135)
- cmake_policy(SET CMP0135 NEW)
+if(POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
 endif()
 
 project(EE_SaveEditor VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" ON)
-
-if (ENABLE_SANITIZERS)
-    if (CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
-        add_compile_options(-fsanitize=address,undefined -fno-omit-frame-pointer)
-        add_link_options(-fsanitize=address,undefined)
-    else()
-        message(WARNING "ENABLE_SANITIZERS is only supported with Clang or GCC")
-    endif()
-endif()
 
 add_library(project_warnings INTERFACE)
 target_compile_options(project_warnings INTERFACE
@@ -30,254 +18,114 @@ target_compile_options(project_warnings INTERFACE
     "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/W4>"
 )
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets LinguistTools)
-find_package(Qt6 REQUIRED COMPONENTS Concurrent)
-
-enable_testing()
-
-include(GoogleTest)
-include(FetchContent)
-FetchContent_Declare(googletest URL https://github.com/google/googletest/archive/refs/heads/main.zip)
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
-add_compile_definitions(TEST_RES_DIR="${CMAKE_SOURCE_DIR}/tests/res")
-
-set(TS_FILES
-    translations/EE_SaveEditor_es.ts
-    translations/EE_SaveEditor_zh_CN.ts
-)
-
-SET(RES_FILES
-  resources/resource.qrc
-)
-
-set(BACKEND_SOURCES
-        src/backend/biff_file.hpp
-        src/backend/tlk_file.hpp
-        src/backend/tlk_file.cpp
-        src/backend/gam_file.hpp
-        src/backend/gam_file.cpp
-        src/backend/cre_file.hpp
-        src/backend/utils/helper_structs.hpp
-        src/backend/utils/aliases.hpp
-        src/backend/ie_files.hpp
-        src/backend/cre_file.cpp
-        src/backend/key_file.hpp
-        src/backend/key_file.cpp
-        src/backend/biff_file.cpp
-        src/backend/binary_layouts/cre.hpp
-        src/backend/binary_layouts/gam.hpp
-        src/backend/binary_layouts/key_biff.hpp
-        src/backend/binary_layouts/tlk.hpp
-        src/backend/utils/errors.hpp
-        src/backend/utils/errors.cpp
-        src/backend/utils/io.hpp
-        src/backend/binary_layouts/spl.hpp
-        src/backend/binary_layouts/bam.hpp
-        src/backend/utils/ie_string.hpp
-        src/backend/utils/abstract_structs.hpp
-)
-
-set(TEST_COMMON
-        src/backend/utils/errors.hpp
-        src/backend/utils/errors.cpp
-    tests/utils/tests_helper.hpp
-        tests/utils/tests_helper.cpp
-        src/backend/utils/helper_structs.hpp
-)
-
-set(GAM_TEST_SOURCES
-    ${TEST_COMMON}
-    tests/gam_file_tests.cpp
-        src/backend/gam_file.cpp
-        src/backend/gam_file.hpp
-        src/backend/cre_file.cpp
-)
-
-set(TLK_TEST_SOURCES
-    ${TEST_COMMON}
-    tests/tlk_file_tests.cpp
-        src/backend/tlk_file.cpp
-        src/backend/tlk_file.hpp
-)
-
-set(STRING_TEST_SOURCES
-    ${TEST_COMMON}
-    tests/string_tests.cpp
-)
-
-set(QT_STRING_TEST_SOURCES
-    ${TEST_COMMON}
-    tests/qt_string_tests.cpp
-        src/backend/tlk_file.cpp
-        src/backend/tlk_file.hpp
-)
-
-set(KEY_TEST_SOURCES
-    ${TEST_COMMON}
-    tests/key_file_tests.cpp
-        src/backend/key_file.cpp
-        src/backend/key_file.hpp
-)
-
-set(BIFF_TEST_SOURCES
-    ${TEST_COMMON}
-    tests/biff_file_tests.cpp
-        src/backend/biff_file.cpp
-        src/backend/biff_file.hpp
-)
-
-set(ALL_TEST_SOURCES
-    ${TLK_TEST_SOURCES}
-    ${KEY_TEST_SOURCES}
-    ${GAM_TEST_SOURCES}
-    ${STRING_TEST_SOURCES}
-    ${QT_STRING_TEST_SOURCES}
-    ${BIFF_TEST_SOURCES}
-        src/backend/binary_layouts/bmp.hpp
-    tests/bitmap_tests.cpp
-        src/backend/binary_layouts/itm.hpp
-        src/backend/utils/ie_string.hpp
-        src/frontend/profiles/games.hpp
-        src/frontend/profiles/constants.hpp
-        src/frontend/helpers/qt_strings.hpp
-        src/backend/utils/ie_class.hpp
-        src/frontend/resources/resource_repository.cpp
-        src/frontend/resources/resource_repository.hpp
-)
-
-set(PROJECT_SOURCES
-    main.cpp
-    mainwindow.cpp
-    mainwindow.hpp
-    ${TS_FILES}
-)
-
-
-add_library (backend ${BACKEND_SOURCES}
-        src/backend/binary_layouts/itm.hpp)
-target_link_libraries(backend PRIVATE project_warnings)
-
-set(FRONTEND_SOURCES
-    ${BACKEND_SOURCES}
-    src/main.cpp
-        src/frontend/mainwindow.cpp
-        src/frontend/mainwindow.hpp
-    src/frontend/mainwindow.ui
-    ${RES_FILES}
-        src/frontend/helpers/gui_helpers.hpp
-        src/frontend/helpers/disable_guard.hpp
-        src/frontend/helpers/qt_io.hpp
-        src/frontend/helpers/dialogs.hpp
-        src/frontend/profiles/settings.cpp
-        src/frontend/profiles/games.hpp
-        src/frontend/profiles/constants.hpp
-        src/frontend/views/variable_table_model.cpp
-        src/frontend/views/variable_table_model.hpp
-        src/frontend/views/css.hpp
-        src/frontend/helpers/qt_strings.hpp
-        src/frontend/resources/resource_repository.cpp
-        src/frontend/resources/resource_repository.hpp
-)
-
-add_executable(tlk_file_test
-    tests/tlk_file_tests.cpp
-    ${TLK_TEST_SOURCES}
-)
-
-add_executable(key_file_test
-    tests/key_file_tests.cpp
-    ${KEY_TEST_SOURCES}
-)
-
- add_executable(gam_file_test
-    tests/gam_file_tests.cpp
-    ${GAM_TEST_SOURCES}
- )
-
-add_executable(biff_file_test
-    tests/biff_file_tests.cpp
-    ${BIFF_TEST_SOURCES}
-)
-
-add_executable(string_tests
-    tests/string_tests.cpp
-    ${STRING_TEST_SOURCES}
-)
-
-add_executable(qt_string_tests
-    ${QT_STRING_TEST_SOURCES}
-)
-
-add_executable(all_tests
-    ${ALL_TEST_SOURCES}
-)
-
-set(TEST_TARGETS
-    tlk_file_test
-    key_file_test
-    gam_file_test
-    biff_file_test
-    string_tests
-    qt_string_tests
-    all_tests
-)
-
-foreach(test_target IN LISTS TEST_TARGETS)
-    target_link_libraries(${test_target} PRIVATE GTest::gtest_main project_warnings)
-endforeach()
-
-target_link_libraries(qt_string_tests PRIVATE Qt${QT_VERSION_MAJOR}::Core)
-target_link_libraries(all_tests PRIVATE Qt${QT_VERSION_MAJOR}::Core)
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(EE_SaveEditor
-        MANUAL_FINALIZATION
-        ${FRONTEND_SOURCES}
-            src/frontend/views/savegamewidget.hpp src/frontend/views/savegamewidget.cpp src/frontend/views/savegamewidget.ui
-    )
-
-    qt_add_translations(EE_SaveEditor
-        SOURCE_TARGETS EE_SaveEditor
-        TS_FILES ${TS_FILES}
-        RESOURCE_PREFIX "/translations"
-    )
-else()
-    if(ANDROID)
-        add_library(EE_SaveEditor SHARED
-            ${BACKEND_SOURCES}
+add_library(project_sanitizers INTERFACE)
+if(ENABLE_SANITIZERS)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
+        target_compile_options(project_sanitizers INTERFACE
+            -fsanitize=address,undefined -fno-omit-frame-pointer
         )
+        target_link_options(project_sanitizers INTERFACE -fsanitize=address,undefined)
     else()
-        add_executable(EE_SaveEditor
-            ${BACKEND_SOURCES}
-        )
+        message(WARNING "ENABLE_SANITIZERS is only supported with Clang or GCC")
     endif()
-
-    qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
 endif()
 
+# SOURCE_TARGETS in qt_add_translations requires Qt 6.7 or newer.
+find_package(Qt6 6.7 REQUIRED COMPONENTS Widgets Concurrent LinguistTools)
+
+add_library(backend STATIC
+    src/backend/biff_file.cpp
+    src/backend/biff_file.hpp
+    src/backend/cre_file.cpp
+    src/backend/cre_file.hpp
+    src/backend/gam_file.cpp
+    src/backend/gam_file.hpp
+    src/backend/ie_files.hpp
+    src/backend/key_file.cpp
+    src/backend/key_file.hpp
+    src/backend/tlk_file.cpp
+    src/backend/tlk_file.hpp
+    src/backend/binary_layouts/bam.hpp
+    src/backend/binary_layouts/bmp.hpp
+    src/backend/binary_layouts/cre.hpp
+    src/backend/binary_layouts/gam.hpp
+    src/backend/binary_layouts/itm.hpp
+    src/backend/binary_layouts/key_biff.hpp
+    src/backend/binary_layouts/spl.hpp
+    src/backend/binary_layouts/tlk.hpp
+    src/backend/utils/abstract_structs.hpp
+    src/backend/utils/aliases.hpp
+    src/backend/utils/errors.cpp
+    src/backend/utils/errors.hpp
+    src/backend/utils/helper_structs.hpp
+    src/backend/utils/ie_class.hpp
+    src/backend/utils/ie_string.hpp
+    src/backend/utils/io.hpp
+)
+target_compile_features(backend PUBLIC cxx_std_23)
+target_link_libraries(backend
+    PUBLIC project_sanitizers
+    PRIVATE project_warnings
+)
+set_target_properties(backend PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Each target builds its own PCH with its own flags and definitions.
+# Configure with -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON to check ordinary includes.
+target_precompile_headers(backend PRIVATE pch/backend.hpp)
+
+qt_add_executable(EE_SaveEditor MANUAL_FINALIZATION
+    src/main.cpp
+    src/frontend/mainwindow.cpp
+    src/frontend/mainwindow.hpp
+    src/frontend/mainwindow.ui
+    src/frontend/helpers/dialogs.hpp
+    src/frontend/helpers/disable_guard.hpp
+    src/frontend/helpers/gui_helpers.hpp
+    src/frontend/helpers/qt_io.hpp
+    src/frontend/helpers/qt_strings.hpp
+    src/frontend/profiles/constants.hpp
+    src/frontend/profiles/games.hpp
+    src/frontend/profiles/games.cpp
+    src/frontend/profiles/settings.cpp
+    src/frontend/profiles/settings.hpp
+    src/frontend/resources/resource_repository.cpp
+    src/frontend/resources/resource_repository.hpp
+    src/frontend/views/css.hpp
+    src/frontend/views/savegamewidget.cpp
+    src/frontend/views/savegamewidget.hpp
+    src/frontend/views/savegamewidget.ui
+    src/frontend/views/variable_table_model.cpp
+    src/frontend/views/variable_table_model.hpp
+    resources/resource.qrc
+)
 target_link_libraries(EE_SaveEditor PRIVATE
-    Qt${QT_VERSION_MAJOR}::Widgets
+    backend
+    Qt6::Widgets
     Qt6::Concurrent
     project_warnings
 )
-target_include_directories(EE_SaveEditor
-    PRIVATE
-    ${CMAKE_SOURCE_DIR}/src/frontend/views
+target_include_directories(EE_SaveEditor PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/frontend/views"
 )
-
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.EE_SaveEditor)
-endif()
+target_precompile_headers(EE_SaveEditor PRIVATE pch/frontend.hpp)
 set_target_properties(EE_SaveEditor PROPERTIES
-    ${BUNDLE_ID_OPTION}
+    AUTOMOC ON
+    AUTOUIC ON
+    AUTORCC ON
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+qt_add_translations(EE_SaveEditor
+    SOURCE_TARGETS EE_SaveEditor
+    TS_FILES
+        translations/EE_SaveEditor_es.ts
+        translations/EE_SaveEditor_zh_CN.ts
+    RESOURCE_PREFIX "/translations"
+)
+qt_finalize_executable(EE_SaveEditor)
 
 include(GNUInstallDirs)
 install(TARGETS EE_SaveEditor
@@ -286,6 +134,62 @@ install(TARGETS EE_SaveEditor
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(EE_SaveEditor)
+include(CTest)
+if(BUILD_TESTING)
+    include(FetchContent)
+    FetchContent_Declare(googletest
+        URL https://github.com/google/googletest/archive/refs/tags/v1.18.0.tar.gz
+        URL_HASH SHA256=6e3191c1455468b3fc35a417fb565c1c5071aee1b7e7f85e30cf48a98d37d8b5
+    )
+    set(BUILD_GMOCK OFF)
+    set(INSTALL_GTEST OFF)
+    if(MSVC)
+        set(gtest_force_shared_crt ON CACHE BOOL "Use the shared MSVC runtime for GoogleTest" FORCE)
+    endif()
+    FetchContent_MakeAvailable(googletest)
+
+    add_library(test_support STATIC
+        tests/utils/tests_helper.cpp
+        tests/utils/tests_helper.hpp
+    )
+    target_link_libraries(test_support PRIVATE project_warnings project_sanitizers)
+
+    function(add_editor_test target)
+        add_executable(${target} ${ARGN})
+        target_link_libraries(${target} PRIVATE
+            backend
+            test_support
+            GTest::gtest_main
+            project_warnings
+        )
+        target_compile_definitions(${target} PRIVATE
+            TEST_RES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/res"
+        )
+    endfunction()
+
+    add_editor_test(tlk_file_test tests/tlk_file_tests.cpp)
+    add_editor_test(key_file_test tests/key_file_tests.cpp)
+    add_editor_test(gam_file_test tests/gam_file_tests.cpp)
+    add_editor_test(biff_file_test tests/biff_file_tests.cpp)
+    add_editor_test(string_tests tests/string_tests.cpp)
+    add_editor_test(qt_string_tests tests/qt_string_tests.cpp)
+    target_link_libraries(qt_string_tests PRIVATE Qt6::Core)
+
+    add_editor_test(all_tests
+        tests/biff_file_tests.cpp
+        tests/bitmap_tests.cpp
+        tests/gam_file_tests.cpp
+        tests/key_file_tests.cpp
+        tests/qt_string_tests.cpp
+        tests/string_tests.cpp
+        tests/tlk_file_tests.cpp
+    )
+    target_link_libraries(all_tests PRIVATE Qt6::Core)
+
+    # Only the aggregate has enough test sources to amortize a separate test PCH.
+    target_precompile_headers(all_tests PRIVATE pch/common.hpp <gtest/gtest.h>)
+
+    # Run the aggregate once. Some cases share temporary filenames, so keep them
+    # in a single process even when CTest is invoked with parallel execution.
+    add_test(NAME all_tests COMMAND all_tests)
 endif()
