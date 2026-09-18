@@ -8,13 +8,13 @@
 #include <QSystemTrayIcon>
 #include <QWidget>
 
-#include "../backend/gam_file.h"
-#include "../backend/tlk_file.h"
+#include "../backend/gam_file.hpp"
 
-#include "helpers/dialogs.h"
-#include "profiles/games.h"
+#include "helpers/dialogs.hpp"
+#include "profiles/games.hpp"
+#include "resources/resource_repository.hpp"
 
-using TlkRef = std::shared_ptr<const TlkFile>;
+using ResourceRef = std::unique_ptr<ResourceRepository>;
 
 QT_BEGIN_NAMESPACE
 
@@ -30,25 +30,29 @@ class MainWindow final : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow( Game::Language::Instance lang, QWidget* parent = nullptr );
+    explicit MainWindow( Language language, QWidget* parent = nullptr );
     ~MainWindow() override;
 
 protected:
     void closeEvent( QCloseEvent* event ) override;
 
 private:
-    TlkRef tlk;
+    ResourceRef resources;
     std::optional<GamFile> savegame { std::nullopt  };
+    Language lang;
 
     #pragma region UiSetup
     Dialogs dlg;
     QSystemTrayIcon* trayIcon = nullptr;
+    QMenu* trayMenu = nullptr;
+    QAction* trayAlwaysOnTop = nullptr;
     Ui::MainWindow* ui;
     void set_up_connections();
     void set_up_shortcuts() const;
     void load_ui() const;
-    void manage_language_actions(Game::Language::Instance lang);
-    void set_always_on_top(bool enabled);
+    void manage_language_actions(Language new_lang);
+
+    void set_always_on_top_connections();
     void setup_tray_icon();
     #pragma endregion
 
@@ -65,6 +69,7 @@ private slots:
     static void open_discord_ie();
     static void open_github_repo();
     static void open_discord_my_mods();
+    void always_on_top(bool enabled);
     #pragma endregion
 };
 

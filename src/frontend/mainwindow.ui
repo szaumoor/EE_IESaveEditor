@@ -120,7 +120,31 @@
     <addaction name="actionGitHub"/>
     <addaction name="actionMyMods"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <widget class="QMenu" name="menuLanguage">
+     <property name="title">
+      <string>Language</string>
+     </property>
+     <addaction name="actionEnglish"/>
+     <addaction name="actionSpanish"/>
+     <addaction name="actionSChinese"/>
+     <addaction name="actionContribute"/>
+    </widget>
+    <addaction name="menuLanguage"/>
+    <addaction name="actionProfiles"/>
+   </widget>
+   <widget class="QMenu" name="menuView_2">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionAlwaysOnTop"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuView_2"/>
+   <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
@@ -348,12 +372,42 @@
     <string>Kaelyn's Mods...</string>
    </property>
   </action>
+  <action name="actionProfiles">
+   <property name="text">
+    <string>Profiles...</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionSpanish">
+   <property name="text">
+    <string>Spanish</string>
+   </property>
+  </action>
+  <action name="actionSChinese">
+   <property name="text">
+    <string>Simplified Chinese</string>
+   </property>
+  </action>
+  <action name="actionContribute">
+   <property name="text">
+    <string>Contribute...</string>
+   </property>
+  </action>
+  <action name="actionAlwaysOnTop">
+   <property name="text">
+    <string>Always On Top</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>SaveGameWidget</class>
    <extends>QWidget</extends>
-   <header>savegamewidget.h</header>
+   <header>savegamewidget.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
