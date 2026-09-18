@@ -182,6 +182,10 @@ if(BUILD_TESTING)
         tests/tlk_file_tests.cpp
     )
     target_link_libraries(all_tests PRIVATE Qt6::Core)
+    target_compile_definitions(EE_SaveEditor PRIVATE
+            "$<$<CONFIG:Release>:QT_NO_DEBUG_OUTPUT>"
+            "$<$<CONFIG:Release>:QT_NO_INFO_OUTPUT>"
+    )
 
     target_precompile_headers(all_tests PRIVATE pch/common.hpp <gtest/gtest.h>)
     add_test(NAME all_tests COMMAND all_tests)
