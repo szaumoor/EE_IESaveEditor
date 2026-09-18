@@ -13,7 +13,7 @@ namespace sett
         GamePaths(GamePaths& other) = delete;
         GamePaths(GamePaths&& other) = delete;
 
-        explicit GamePaths( Game::Instance game );
+        explicit GamePaths( GameInstance game );
         GamePaths( QString game_path, QString save_path );
 
         [[nodiscard]]
@@ -30,14 +30,14 @@ namespace sett
         const QString m_save;
     };
 
-    QString game_path( Game::Instance game );
-    QString selected_game_path();
-    QString save_path( Game::Instance game );
+    QString game_path( GameInstance game );
+    std::optional<QString> selected_game_path();
+    QString save_path( GameInstance game );
     i8 selected_game_index();
-    Game::Instance selected_game();
+    std::optional<GameInstance> selected_game();
     void write_save_paths( const GamePaths& bgeePaths, const GamePaths& bg2eePaths, const GamePaths& iwdeePaths );
-    void write_game_lang( Game::Language::Instance lang );
-    Game::Language::Instance game_lang();
+    void write_game_lang( Language lang );
+    Language game_lang();
     bool clear_settings();
 }
 
