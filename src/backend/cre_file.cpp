@@ -90,6 +90,37 @@ void CreFile::check_for_malformation() noexcept
 
     m_good = valid_signature && valid_version;
 }
+std::vector<GamGlobalVariable> CreFile::locals() const noexcept
+{
+    using std::views::transform;
+    using std::views::filter;
+
+    auto vars = effects()
+        | transform([](auto el){ return std::get<1>(el);})
+        | filter([](auto el) { return el.opcode == 187;})
+        | transform([](auto el) {
+          return GamLocalVariable(el.variable_name.to_string(), el.parameter1 );
+    });
+
+    return { vars.begin(), vars.end() };
+}
+std::vector<Proficiency> CreFile::proficiencies() const noexcept
+{
+    using std::views::transform;
+    using std::views::filter;
+
+    auto vars = effects()
+        | transform([](auto el){ return std::get<1>(el);})
+        | filter([](auto el) { return el.opcode == 233;})
+        | transform([](auto el) {
+            return Proficiency(
+                static_cast<u16>(el.parameter2),
+                static_cast<u16>(el.parameter1)
+            );
+        });
+
+    return { vars.begin(), vars.end() };
+}
 
 void CreFile::resize_vecs() noexcept
 {
