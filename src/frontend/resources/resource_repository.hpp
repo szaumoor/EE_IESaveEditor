@@ -15,7 +15,7 @@ class ResourceRepository final : public IEClass
 {
 public:
     [[nodiscard]]
-    static Possible<ResourceRepository> open( std::filesystem::path path, Game::Language::Instance lang );
+    static Possible<ResourceRepository> open( std::filesystem::path path, Language lang );
 
     [[nodiscard]]
     const TlkFile& tlk() const { return m_tlk.value();  }
@@ -40,15 +40,6 @@ private:
 
     std::filesystem::path m_root_path;
     bool m_good = true;
-
-    static constexpr std::array<std::string_view, 5> biffs
-    {
-        "25Items.bif",
-        "25Spells.bif",
-        "Items.bif",
-        "Spells.bif",
-        "Patch25.bif"
-    };
 };
 
 
