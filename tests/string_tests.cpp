@@ -53,7 +53,6 @@ TEST(StringTests, FromStringZeroFillsUnusedCharacters)
 TEST(StringTests, FromStringRejectsTextLargerThanCapacity)
 {
     const auto array = CharArray<4>::from_string("Imoen");
-
     EXPECT_FALSE(array.has_value());
 }
 
@@ -85,7 +84,9 @@ TEST(StringTests, FailedAssignStringLeavesExistingValueUnchanged)
 
 TEST(StringTests, ResrefConvertsUsingItsCharArrayValue)
 {
-    constexpr Resref resref{CharArray<8>{'S', 'W', '1', 'F', 'I', 'R', 'E', '\0'}};
+    constexpr Resref resref{
+        {'S', 'W', '1', 'F', 'I', 'R', 'E', '\0'}
+    };
 
     EXPECT_EQ(resref.to_string(), "SW1FIRE");
 }

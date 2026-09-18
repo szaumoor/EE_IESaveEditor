@@ -56,7 +56,6 @@ struct BamV2DataBlock
 
 #pragma pack(pop)
 
-
 #pragma region Asserts
 
 static_assert( std::is_trivially_copyable_v<BamV2CycleEntry> );

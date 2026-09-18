@@ -96,7 +96,7 @@ struct GamCharacterData
 
 struct GamGlobalVariable
 {
-    CharArray<32> variable_name = {};
+    CharArray<32> variable_name {};
     u16 type = 0;
     u16 unused0 = 0;
     u32 unused1 = 0;

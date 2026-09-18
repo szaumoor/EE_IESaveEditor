@@ -71,6 +71,7 @@ TEST( TlkFileTest, CopyOwnsItsCachedStrings )
 
     ASSERT_TRUE( original_lookup.has_value() );
     ASSERT_TRUE( copied_lookup.has_value() );
+
     EXPECT_EQ( copied_lookup->std_view(), original_lookup->std_view() );
     EXPECT_NE( copied_lookup->std_view().data(), original_lookup->std_view().data() );
 }

@@ -15,7 +15,7 @@ inline QString extend_path( const std::initializer_list<QString> steps)
         return {};
     }
 
-    QString path;
+    QString path {};
     for ( const auto& step : steps )
     {
         path.append( step )

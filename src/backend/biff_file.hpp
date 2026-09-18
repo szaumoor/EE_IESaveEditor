@@ -22,7 +22,7 @@ public:
 private:
     explicit BiffFile(std::string_view path) : m_path(path) {}
 
-    BiffHeader m_header{};
+    BiffHeader m_header {};
     std::vector<FileEntry> m_file_entries;
     std::vector<TileEntry> m_tile_entries;
 
@@ -31,7 +31,7 @@ private:
     std::vector<std::string> m_ids_files;
     std::vector<std::string> m_ini_files;
 
-    bool m_good = false;
+    bool m_good { false };
     std::string m_path;
 };
 
