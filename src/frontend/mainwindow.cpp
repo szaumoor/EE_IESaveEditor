@@ -74,7 +74,7 @@ void MainWindow::reload_resources()
 #endif
 
     gui::run_task_with_progress(this,
-    {ui->menubar, ui->toolBar, ui->savegame_widget},
+    { ui->menubar, ui->toolBar, ui->savegame_widget },
     tr("Loading resources..."),
     [root_path, this] {
         return ResourceRepository::open(std::filesystem::path(root_path), lang);
@@ -84,6 +84,10 @@ void MainWindow::reload_resources()
         if (!results)
         {
             dlg.error(QString::fromStdString( results.error().what() ));
+            ui->openFromToolbar->setEnabled( false );
+            ui->actionOpen->setEnabled( false );
+            ui->saveFromToolbar->setEnabled( false );
+            ui->actionSave->setEnabled( false );
             return;
         }
 
@@ -91,6 +95,11 @@ void MainWindow::reload_resources()
             std::move(results.value())
         );
         qInfo() << "Resources loaded OK";
+
+        ui->openFromToolbar->setEnabled( true );
+        ui->saveFromToolbar->setEnabled( true );
+        ui->actionOpen->setEnabled( true );
+        ui->actionSave->setEnabled( true );
     });
 
 }

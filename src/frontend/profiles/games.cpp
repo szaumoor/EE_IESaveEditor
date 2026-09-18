@@ -75,7 +75,7 @@ Language lang_from_locale( const QLocale& locale )
 std::optional<QString> code_for_lang( const Language lang )
 {
     const auto lang_code = id_from_lang( lang );
-    if ( !lang_code )
+    if ( lang_code >= game_languages.size() )
         return std::nullopt;
 
     return str::from( game_languages[lang_code].locale_code );

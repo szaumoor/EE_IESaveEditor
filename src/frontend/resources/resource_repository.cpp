@@ -2,6 +2,8 @@
 
 #include "../../backend/utils/errors.hpp"
 
+#include "../helpers/qt_strings.hpp"
+
 constexpr std::array<std::string_view, 5> biffs
 {
     "25Items.bif",
@@ -15,14 +17,21 @@ Possible<ResourceRepository>
 ResourceRepository::open( std::filesystem::path path, Language lang )
 {
     ResourceRepository repo( std::move(path) );
+    const auto code_lang = code_for_lang(lang);
+    if (not code_lang)
+    {
+        qWarning() << "Using a language that is unsupported by the game!";
+        return NotPossible(IEError(IEErrorType::Unknown,
+            "Attempted to load resources for a nonexistent language."));
+    }
 
-    const auto tlk_path = repo.m_root_path/ "lang"/ "en_US"/ "dialog.tlk";
+    const auto tlk_path = repo.m_root_path/ "lang"/ str::from(*code_lang) / "dialog.tlk";
     auto tlkFile = TlkFile::open( tlk_path.string() );
     if ( not tlkFile )
     {
         return NotPossible(IEError(IEErrorType::Unknown,
-            std::format("Tlk failed to load. Error seems to be '{}'",
-                    tlkFile.error().what() )));
+            std::format("Tlk failed to load at path {}. Error seems to be '{}'",
+                    tlk_path.string(), tlkFile.error().what() )));
     }
 
     repo.m_tlk.emplace( std::move(tlkFile.value()) );
