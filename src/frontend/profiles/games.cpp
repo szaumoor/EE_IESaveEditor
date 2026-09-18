@@ -1,85 +1,89 @@
-#include "games.hpp"
-#include "../../../pch/frontend.hpp"
 #include "../helpers/qt_strings.hpp"
+
 #include "constants.hpp"
+#include "games.hpp"
+
 
 constexpr auto fHardLimitCodeAllowedLanguages = 8;
-constexpr std::array game_languages {
-    GameLanguageInfo {
+constexpr std::array game_languages{
+    GameLanguageInfo{
         .language = Language::English,
         .locale_code = consts::files::kLangEnglish
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::German,
         .locale_code = consts::files::kLangGerman
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::French,
         .locale_code = consts::files::kLangFrench
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::Italian,
         .locale_code = consts::files::kLangItalian
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::Spanish,
         .locale_code = consts::files::kLangSpanish
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::Korean,
         .locale_code = consts::files::kLangKorean
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::Portuguese,
         .locale_code = consts::files::kLangPortuguese
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::Russian,
         .locale_code = consts::files::kLangRussian
     },
-    GameLanguageInfo {
+    GameLanguageInfo{
         .language = Language::SimplifiedChinese,
         .locale_code = consts::files::kLangChinese
     },
 };
 
-std::optional<Language> lang_from_id(const u8 id)
+u8 id_from_lang( const Language lang )
 {
-    if (id > fHardLimitCodeAllowedLanguages) {
+    return std::to_underlying( lang );
+}
+
+std::optional<Language> lang_from_id( const u8 id )
+{
+    if ( id > fHardLimitCodeAllowedLanguages )
+    {
         return std::nullopt;
     }
     return static_cast<Language>(id);
 }
 
-u8 id_from_lang(const Language lang)
+Language lang_from_locale( const QLocale& locale )
 {
-    return std::to_underlying(lang);
-}
-
-Language lang_from_locale(const QLocale& locale)
-{
-    switch (locale.language()) {
-    case QLocale::Spanish:
-        return Language::Spanish;
-    case QLocale::Chinese:
-        return Language::SimplifiedChinese;
-    case QLocale::English:
-    default:
-        return Language::English;
+    switch ( locale.language() )
+    {
+        case QLocale::Spanish:
+            return Language::Spanish;
+        case QLocale::Chinese:
+            return Language::SimplifiedChinese;
+        case QLocale::English:
+        default:
+            return Language::English;
     }
 }
-std::optional<QString> code_for_lang(Language lang)
+
+std::optional<QString> code_for_lang( const Language lang )
 {
-    const auto lang_code = id_from_lang(lang);
-    if (!lang_code)
+    const auto lang_code = id_from_lang( lang );
+    if ( !lang_code )
         return std::nullopt;
 
-    return str::from(game_languages[lang_code].locale_code);
+    return str::from( game_languages[lang_code].locale_code );
 }
 
-std::optional<GameInstance> game_from_id(const int game)
+std::optional<GameInstance> game_from_id( const int game )
 {
-    if (game < 0 || game > 2)
+    if ( game < 0 || game > 2 )
         return std::nullopt;
 
     return static_cast<GameInstance>(game);
