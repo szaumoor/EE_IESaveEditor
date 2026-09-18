@@ -1,9 +1,5 @@
-#include "biff_file.h"
-
-#include <fstream>
-#include <print>
-
-#include "utils/io.h"
+#include "biff_file.hpp"
+#include "utils/io.hpp"
 
 static constexpr auto kBiffSignature( "BIFF" );
 static constexpr auto kBiffFileVersion( "V1  " );
@@ -68,13 +64,20 @@ Possible<BiffFile> BiffFile::open( std::string_view path )
                 break;
             }
 
+            case ResourceType::FileTypeItm:
+            {
+                ItmHeader itm_header{};
+                writer.into(itm_header, entry.offset);
+                biff.m_itms.push_back( itm_header );
+                break;
+            }
             case ResourceType::FileTypeBmp:
             case ResourceType::FileTypeBam:
-            case ResourceType::FileTypeItm:
             case ResourceType::FileType2da:
             case ResourceType::FileTypePng:
             case ResourceType::NotFound:
                 break;
+
 
             default:
                 break;

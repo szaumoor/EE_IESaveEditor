@@ -7,51 +7,62 @@
 #include <QFutureWatcher>
 #include <QProgressDialog>
 #include <QtConcurrentRun>
+#include <QUrl>
 
 #include <initializer_list>
 
-inline auto infinite_progress_dialog( QWidget* parent, const QString& message )
+namespace gui
 {
-    auto* progress = new QProgressDialog(message, QString(), 0, 0, parent);
-    progress->setWindowModality(Qt::ApplicationModal);
-    progress->setCancelButton(nullptr);
-    progress->setMinimumDuration(0);
-    return progress;
-}
+    inline auto infinite_progress_dialog( QWidget* parent, const QString& message )
+    {
+        auto* progress = new QProgressDialog(message, QString(),
+                                     0, 0, parent);
+        progress->setWindowModality(Qt::ApplicationModal);
+        progress->setCancelButton(nullptr);
+        progress->setMinimumDuration(0);
+        return progress;
+    }
 
-template <typename Task, typename OnFinished>
-void run_task_with_progress(
-    QWidget* parent,
-    const std::initializer_list<QWidget*> managed_widgets,
-    const QString& message,
-    Task&& task,
-    OnFinished&& onFinished)
-{
-    using Result = std::invoke_result_t<std::decay_t<Task>>;
+    template <typename Task, typename OnFinished>
+    void run_task_with_progress(
+        QWidget* parent,
+        const std::initializer_list<QWidget*> managed_widgets,
+        const QString& message,
+        Task&& task,
+        OnFinished&& onFinished)
+    {
+        using Result = std::invoke_result_t<std::decay_t<Task>>;
 
-    auto* ui_guard = new UiDisableGuard(parent, managed_widgets);
-    auto* progress = infinite_progress_dialog(parent, message);
-    progress->show();
+        auto* ui_guard = new UiDisableGuard(parent, managed_widgets);
+        auto* progress = infinite_progress_dialog(parent, message);
+        progress->show();
 
-    auto future = QtConcurrent::run(std::forward<Task>(task));
-    auto* watcher = new QFutureWatcher<Result>(parent);
-    QObject::connect(watcher, &QFutureWatcher<Result>::finished, parent,
-    [watcher, progress, onFinished = std::forward<OnFinished>(onFinished), ui_guard]
-        {
-            Result result = watcher->future().takeResult();
-            onFinished(std::move(result));
-            progress->close();
-            progress->deleteLater();
-            watcher->deleteLater();
-            ui_guard->deleteLater();
-        }
-    );
-    watcher->setFuture(future);
-}
+        auto future = QtConcurrent::run(std::forward<Task>(task));
+        auto* watcher = new QFutureWatcher<Result>(parent);
+        QObject::connect(watcher, &QFutureWatcher<Result>::finished, parent,
+        [watcher, progress, onFinished = std::forward<OnFinished>(onFinished), ui_guard]
+            {
+                Result result = watcher->future().takeResult();
+                onFinished(std::move(result));
+                progress->close();
+                progress->deleteLater();
+                watcher->deleteLater();
+                ui_guard->deleteLater();
+            }
+        );
+        watcher->setFuture(future);
+    }
 
-inline bool open_url( const QString& url )
-{
-    return QDesktopServices::openUrl( QUrl(url));
+    inline bool open_url( const QString& url )
+    {
+        return QDesktopServices::openUrl( QUrl(url));
+    }
+
+    inline void center_window( MainWindow& window )
+    {
+        window.move( window.screen()->geometry().center() -
+                    window.rect().center() );
+    }
 }
 
 #endif //EE_SAVEEDITOR_UI_HELPERS_H

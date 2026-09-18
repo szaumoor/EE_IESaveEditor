@@ -4,11 +4,11 @@
 #include "ie_files.hpp"
 #include "binary_layouts/tlk.hpp"
 #include "utils/aliases.hpp"
+#include "utils/ie_string.hpp"
 
 #include <string_view>
 #include <vector>
 
-#include "utils/ie_string.hpp"
 
 enum struct TlkCase : u8
 {
@@ -26,26 +26,30 @@ public:
 
     [[nodiscard]]
     Possible<IEStringView> at( strref index ) const noexcept;
+    Possible<IEStringView> operator[]( const strref index ) const noexcept
+    {
+        return at(index);
+    }
 
-    Possible<IEStringView> operator[]( strref index ) const noexcept;
+    [[nodiscard]] bool good() const noexcept { return m_good; }
     explicit operator bool() const noexcept { return m_good; }
 
-    [[nodiscard]] u32 length() const noexcept;
+    [[nodiscard]] u32 length() const noexcept { return m_header.entry_count; }
+    [[nodiscard]] std::string_view path() const noexcept { return m_path; }
+
     [[nodiscard]] const std::string_view* begin() const;
     [[nodiscard]] const std::string_view* end() const;
-    [[nodiscard]] bool good() const noexcept { return m_good; }
-    [[nodiscard]] std::string_view path() const noexcept { return m_path; }
     [[nodiscard]] std::vector<IEStringView> find( std::string_view text,
-                  TlkCase cs = TlkCase::Sensitive, u32 stop_at = 0 ) const;
+                                                  TlkCase cs = TlkCase::Sensitive, u32 stop_at = 0 ) const;
     void check_for_malformation() noexcept;
 
 private:
-    explicit TlkFile(std::string_view path) : m_path{ path } {}
-    TlkFileHeader m_header{};
+    explicit TlkFile( const std::string_view path) : m_path{ path } {}
+    TlkFileHeader m_header {};
     std::vector<char> m_string_data;
     std::vector<std::string_view> m_cached_strings;
     std::string m_path;
-    bool m_good = false;
+    bool m_good { false };
 
     void rebuild_cached_strings( const TlkFile& other );
 };

@@ -6,6 +6,7 @@
 
 #include "cre_file.hpp"
 #include "ie_files.hpp"
+
 #include "binary_layouts/gam.hpp"
 #include "utils/helper_structs.hpp"
 
@@ -15,9 +16,9 @@ public:
     static Possible<GamFile> open( std::string_view path );
 
     [[nodiscard]] bool good() const noexcept { return m_good; }
-    [[nodiscard]] std::string_view path() const noexcept { return m_path; }
-
     explicit operator bool() const noexcept { return m_good; }
+
+    [[nodiscard]] std::string_view path() const noexcept { return m_path; }
 
     bool save_gam();
 
@@ -37,7 +38,7 @@ public:
 private:
     explicit GamFile(std::string_view path) : m_path(path) {}
 
-    bool m_good = false;
+    bool m_good { false };
     std::string m_path;
 
     GamHeader m_header{};

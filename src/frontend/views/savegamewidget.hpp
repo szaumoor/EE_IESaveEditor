@@ -3,16 +3,15 @@
 
 #include <optional>
 
-#include "variable_table_model.h"
+#include "variable_table_model.hpp"
 
-#include "../../backend/gam_file.h"
-#include "../../backend/tlk_file.h"
+#include "../../backend/gam_file.hpp"
 
-#include "../helpers/dialogs.h"
+#include "../helpers/dialogs.hpp"
+
+#include "../resources/resource_repository.hpp"
 
 #include <QWidget>
-
-using TlkRef = std::shared_ptr<const TlkFile>;
 
 class GamFile;
 
@@ -28,12 +27,12 @@ public:
     ~SaveGameWidget() override;
 
 public slots:
-    void inject_data(const GamFile& file, TlkRef);
+    void inject_data(const GamFile& file, ResourceRepository* res);
 signals:
     void save_changed(const GamFile& file);
 
 private:
-    TlkRef tlk;
+    ResourceRepository* resources;
     std::optional<GamFile> gam { std:: nullopt };
 
     #pragma region UiSetup

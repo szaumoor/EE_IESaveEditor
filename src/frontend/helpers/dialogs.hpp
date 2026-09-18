@@ -4,7 +4,6 @@
 #include <QCoreApplication>
 #include <QMessageBox>
 #include <QString>
-#include <QWidget>
 
 class Dialogs
 {

@@ -1,8 +1,6 @@
 #include "key_file.hpp"
 #include "utils/io.hpp"
 
-namespace rng = std::ranges;
-
 static constexpr auto kKeyFileSig( "KEY " );
 static constexpr auto kKeyFileVersion( "V1  " );
 
@@ -36,7 +34,7 @@ Possible<KeyFile> KeyFile::open( std::string_view path )
     key.m_location_data = std::vector( std::istreambuf_iterator( file_handle ), std::istreambuf_iterator<char>() );
     key.m_resource_names.reserve( key.m_biff_entries.size() );
 
-    rng::for_each( key.m_biff_entries, [&key,filename_offset]( const auto& entry ) {
+    std::ranges::for_each( key.m_biff_entries, [&key,filename_offset]( const auto& entry ) {
        const auto relative_offset = entry.offset_to_biff_filename - filename_offset;
        key.m_resource_names.emplace_back(
            key.m_location_data.data() + relative_offset,

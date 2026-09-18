@@ -1,17 +1,5 @@
-#include "tlk_file.h"
-#include "utils/io.h"
-
-#include <algorithm>
-#include <expected>
-#include <format>
-#include <fstream>
-#include <iterator>
-#include <string_view>
-#include <vector>
-
-#include <print>
-
-namespace rng = std::ranges;
+#include "tlk_file.hpp"
+#include "utils/io.hpp"
 
 static constexpr auto kTlkFileSig( "TLK " );
 static constexpr auto kTlkFileVersion( "V1  " );
@@ -20,7 +8,6 @@ TlkFile::TlkFile( const TlkFile& other ) :
     m_header( other.m_header ),
     m_string_data( other.m_string_data ),
     m_path( other.m_path )
-
 {
     m_good = other.m_good;
     rebuild_cached_strings( other );
@@ -59,8 +46,17 @@ Possible<TlkFile> TlkFile::open( std::string_view path )
     tlk.m_cached_strings.reserve( tlk.length() );
     for (const auto& entry : entries)
     {
-        tlk.m_cached_strings.emplace_back(
-            tlk.m_string_data.data()+entry.offset_to_string, entry.string_length );
+        const auto offset = static_cast<std::size_t>(entry.offset_to_string);
+        const auto str_length = static_cast<std::size_t>(entry.string_length);
+
+        if ( const auto data_size = tlk.m_string_data.size();
+            offset > data_size || str_length > data_size - offset)
+        {
+            return NotPossible( IEError( IEErrorType::OutOfBounds,
+                "A string reference in the TLK goes out of bounds."));
+        }
+
+        tlk.m_cached_strings.emplace_back( tlk.m_string_data.data()+ offset, str_length );
     }
     return tlk;
 }
@@ -71,16 +67,6 @@ Possible<IEStringView> TlkFile::at( const strref index ) const noexcept
         return NotPossible( IEError( IEErrorType::OutOfBounds,
                                          std::format( "Unknown index {}", index )));
     return IEStringView(m_cached_strings[index], index);
-}
-
-Possible<IEStringView> TlkFile::operator[]( const strref index ) const noexcept
-{
-    return at( index );
-}
-
-u32 TlkFile::length() const noexcept
-{
-    return m_header.entry_count;
 }
 
 const std::string_view* TlkFile::begin() const

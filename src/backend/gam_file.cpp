@@ -4,18 +4,13 @@
 #include "utils/helper_structs.hpp"
 #include "utils/io.hpp"
 
-using std::string_view;
-using std::ifstream;
-using std::vector;
-using std::string_view;
+static constexpr std::string_view kGamFileSig( "GAME" );
+static constexpr std::string_view kGamFileVersion_2_0( "V2.0" );
+static constexpr std::string_view kGamFileVersion_2_1( "V2.1" );
 
-static constexpr string_view kGamFileSig( "GAME" );
-static constexpr string_view kGamFileVersion_2_0( "V2.0" );
-static constexpr string_view kGamFileVersion_2_1( "V2.1" );
-
-Possible<GamFile> GamFile::open( const string_view path )
+Possible<GamFile> GamFile::open( const std::string_view path )
 {
-    ifstream file_handle( path.data(), std::ios::binary );
+    std::ifstream file_handle( path.data(), std::ios::binary );
 
     if ( not file_handle )
         return std::unexpected( IEError( IEErrorType::Unreadable ) );

@@ -1,12 +1,13 @@
-#include "savegamewidget.h"
+#include "savegamewidget.hpp"
 #include "ui_savegamewidget.h"
-#include "css.h"
+#include "css.hpp"
 
-#include "../../backend/tlk_file.h"
+#include "../../backend/tlk_file.hpp"
 
 #include <QShortcut>
 
-#include "../helpers/qt_strings.h"
+#include "../helpers/qt_strings.hpp"
+#include "../resources/resource_repository.hpp"
 
 using std::in_range;
 
@@ -24,7 +25,7 @@ SaveGameWidget::~SaveGameWidget()
     delete ui;
 }
 
-void SaveGameWidget::inject_data( const GamFile& file, TlkRef tlk_file )
+void SaveGameWidget::inject_data( const GamFile& file, ResourceRepository* res )
 {
     gam.emplace( file );
 
@@ -34,11 +35,11 @@ void SaveGameWidget::inject_data( const GamFile& file, TlkRef tlk_file )
         return;
     }
 
-    tlk = std::move(tlk_file);
+    this->resources = res;
 
-    if (!tlk)
+    if (!resources)
     {
-        dlg.error(tr("Error loading TLK file"));
+        dlg.error(tr("Error loading resources!"));
         return;
     }
 
@@ -86,7 +87,7 @@ bool SaveGameWidget::complete_ui(const int index)
     if (cre_header.short_name == static_cast<u32>(-1))
         ui->name_label->setText( str::from(party_member.character_name) );
     else {
-        const auto str_ref = tlk->at( cre_header.short_name );
+        const auto str_ref = resources->tlk().at( cre_header.short_name );
         const auto exists = str_ref.has_value();
         ui->name_label->setText( exists ?
             str::from( str_ref.value()) : str::from(str_ref.error())
@@ -295,7 +296,7 @@ void SaveGameWidget::populate_thief_skills( const CreHeader& cre_header ) const
 void SaveGameWidget::populate_character_data( const GamCharacterData& char_data ) const
 {
     ui->stat_strongest_xp->setValue( static_cast<i32>(char_data.character_stats.most_powerful_vanquished_xp) );
-    if ( const auto strongest_killed = tlk->at( char_data.character_stats.most_powerful_vanquished_name))
+    if ( const auto strongest_killed = resources->tlk().at( char_data.character_stats.most_powerful_vanquished_name))
         ui->label_strongest_name->setPlainText( QString::fromStdString( strongest_killed->std_string() ));
 }
 
