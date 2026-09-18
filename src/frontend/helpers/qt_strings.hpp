@@ -11,6 +11,11 @@
 
 namespace str
 {
+    inline std::string from(const QString& str) noexcept
+    {
+        return str.toStdString();
+    }
+
     inline QString from(const std::string& str) noexcept
     {
         return QString::fromStdString(str);

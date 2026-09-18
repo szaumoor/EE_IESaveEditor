@@ -16,6 +16,12 @@ TEST(QtStringTests, EmptyStdStringConvertsToEmptyQString)
     EXPECT_TRUE(str::from(input).isEmpty());
 }
 
+TEST(QtStringTests, EmptyQStringConvertsToEmptyStdString)
+{
+    const QString input;
+    EXPECT_TRUE(str::from(input).empty());
+}
+
 TEST(QtStringTests, StdStringConvertsAsciiText)
 {
     const std::string input = "Baldur's Gate";
