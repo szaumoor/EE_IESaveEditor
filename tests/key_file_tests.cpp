@@ -1,7 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <string_view>
-
 #include "../src/backend/key_file.hpp"
 #include "../src/backend/utils/errors.hpp"
 

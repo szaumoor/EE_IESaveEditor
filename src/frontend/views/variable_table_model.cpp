@@ -1,7 +1,5 @@
 #include "variable_table_model.hpp"
 
-#include <algorithm>
-
 #include "../helpers/qt_strings.hpp"
 
 using std::in_range;

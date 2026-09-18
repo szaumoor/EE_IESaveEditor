@@ -1,10 +1,8 @@
 #include "gam_file.hpp"
 #include "ie_files.hpp"
+
 #include "utils/helper_structs.hpp"
 #include "utils/io.hpp"
-
-#include <format>
-#include <fstream>
 
 using std::string_view;
 using std::ifstream;

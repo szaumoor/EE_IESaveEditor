@@ -1,9 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <filesystem>
-#include <fstream>
-#include <string_view>
-
 #include "../src/backend/binary_layouts/bmp.hpp"
 #include "../src/backend/utils/io.hpp"
 

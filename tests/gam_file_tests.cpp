@@ -1,9 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <filesystem>
-#include <fstream>
-#include <string_view>
-
 #include "../src/backend/gam_file.hpp"
 #include "../src/backend/utils/errors.hpp"
 

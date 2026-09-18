@@ -1,14 +1,14 @@
 #ifndef EE_SAVEEDITOR_UI_HELPERS_H
 #define EE_SAVEEDITOR_UI_HELPERS_H
 
-#include <initializer_list>
+#include "disable_guard.hpp"
 
+#include <QDesktopServices>
 #include <QFutureWatcher>
 #include <QProgressDialog>
 #include <QtConcurrentRun>
-#include <QDesktopServices>
 
-#include "disable_guard.hpp"
+#include <initializer_list>
 
 inline auto infinite_progress_dialog( QWidget* parent, const QString& message )
 {

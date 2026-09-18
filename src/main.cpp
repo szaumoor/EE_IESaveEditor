@@ -1,7 +1,4 @@
-#include <QApplication>
-#include <QLocale>
 #include <QScreen>
-#include <QString>
 #include <QTranslator>
 
 #include "frontend/mainwindow.hpp"
@@ -9,20 +6,18 @@
 #include "frontend/resources/resource_repository.hpp"
 
 
-Language detect_system_language()
+static Language detect_system_language()
 {
     for (const QString& localeName : QLocale::system().uiLanguages())
     {
         const auto lang = lang_from_locale(QLocale(localeName));
-
         if (lang != Language::English)
             return lang;
     }
-
     return Language::English;
 }
 
-bool install_translation(QTranslator& translator, const Language lang)
+static bool install_translation(QTranslator& translator, const Language lang)
 {
     if (lang == Language::English)
     {
@@ -49,7 +44,7 @@ bool install_translation(QTranslator& translator, const Language lang)
     return false;
 }
 
-inline void center_window( MainWindow& window )
+static void center_window( MainWindow& window )
 {
     window.move( window.screen()->geometry().center() - window.rect().center() );
 }

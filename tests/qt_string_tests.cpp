@@ -1,8 +1,6 @@
 #include <gtest/gtest.h>
 
 #include <array>
-#include <string>
-#include <string_view>
 
 #include "../src/backend/tlk_file.hpp"
 #include "../src/frontend/helpers/qt_strings.hpp"
@@ -15,21 +13,18 @@ namespace
 TEST(QtStringTests, EmptyStdStringConvertsToEmptyQString)
 {
     const std::string input;
-
     EXPECT_TRUE(str::from(input).isEmpty());
 }
 
 TEST(QtStringTests, StdStringConvertsAsciiText)
 {
     const std::string input = "Baldur's Gate";
-
     EXPECT_EQ(str::from(input), QStringLiteral("Baldur's Gate"));
 }
 
 TEST(QtStringTests, StdStringConvertsUtf8Text)
 {
     const std::string input = "Espa\xc3\xb1ol";
-
     EXPECT_EQ(str::from(input), QStringLiteral("Espa\u00f1ol"));
 }
 
@@ -54,7 +49,7 @@ TEST(QtStringTests, NullCharPointerConvertsToNullQString)
 
 TEST(QtStringTests, CharPointerConvertsUtf8Text)
 {
-    constexpr const char* input = "caf\xc3\xa9";
+    constexpr auto input = "caf\xc3\xa9";
 
     EXPECT_EQ(str::from(input), QStringLiteral("caf\u00e9"));
 }
@@ -111,20 +106,18 @@ TEST(QtStringTests, IEStringViewConvertsTextFromTlkFile)
     const auto input = tlk->at(1);
     ASSERT_TRUE(input.has_value());
     EXPECT_EQ(str::from(*input),
-              QStringLiteral("No, I'm sorry, none of them sound familiar."));
+    QStringLiteral("No, I'm sorry, none of them sound familiar."));
 }
 
 TEST(QtStringTests, EmptyCharArrayConvertsToEmptyQString)
 {
     constexpr CharArray<8> input{};
-
     EXPECT_TRUE(str::from(input).isEmpty());
 }
 
 TEST(QtStringTests, NullPaddedCharArrayConvertsUntilFirstNull)
 {
     constexpr CharArray<8> input{'M', 'i', 'n', 's', 'c', '\0', '\0', '\0'};
-
     EXPECT_EQ(str::from(input), QStringLiteral("Minsc"));
 }
 
